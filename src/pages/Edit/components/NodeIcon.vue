@@ -1,7 +1,7 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图标" width="500">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图标">
     <div class="item" v-for="item in nodeIconList" :key="item.name">
-      <div class="title">{{  item.name  }}</div>
+      <div class="title">{{ item.name }}</div>
       <div class="list">
         <div class="icon" v-for="icon in item.list" :key="icon.name" v-html="icon.icon" :class="{
           selected: iconList.includes(item.type + '_' + icon.name)

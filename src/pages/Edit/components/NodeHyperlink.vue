@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="超链接" width="500">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="超链接">
     <div class="item">
       <span class="name">链接</span>
       <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>

@@ -8,14 +8,20 @@
       </div>
       <div v-if="value" class="uploadInfoBox">
         <div class="previewBox" :style="{ backgroundImage: `url('${value}')` }"></div>
-        <span class="delBtn el-icon-close" @click="deleteImg"></span>
+        <el-icon class="delBtn" @click="deleteImg">
+          <Close />
+        </el-icon>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Close } from "@element-plus/icons-vue";
 export default {
+  components: {
+    Close,
+  },
   name: "ImgUpload",
   model: {
     prop: "value",

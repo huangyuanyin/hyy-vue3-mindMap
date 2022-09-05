@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="标签" width="500">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="标签">
     <el-input v-model="tag" @keyup.native.enter="add" :disabled="tagArr.length >= max" placeholder="请按回车键添加">
     </el-input>
     <div class="tagList">
@@ -7,7 +7,7 @@
         backgroundColor: tagColorList[index].background,
         color: tagColorList[index].color,
       }">
-        {{  item  }}
+        {{ item }}
         <div class="delBtn" @click="del(index)">
           <span class="iconfont iconshanchu"></span>
         </div>

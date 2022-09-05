@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图片" width="500">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图片">
     <ImgUpload ref="ImgUpload" v-model="img" @changeImg="onchange" :value="img"></ImgUpload>
     <div class="imgTitleBox">
       <span class="title">图片标题</span>
@@ -16,8 +16,7 @@
 import ImgUpload from "@/components/ImgUpload";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:45
+ * @Author: 黄原寅
  * @Desc: 节点图片内容设置
  */
 export default {
@@ -54,8 +53,7 @@ export default {
       this.img = src;
     },
     /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
+     * @Author: 黄原寅
      * @Desc: 取消
      */
     cancel() {
@@ -64,8 +62,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
+     * @Author: 黄原寅
      * @Desc:  确定
      */
     async confirm() {
