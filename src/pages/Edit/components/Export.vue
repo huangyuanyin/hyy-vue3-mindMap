@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导出" width="500">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导出">
     <div>
       <div class="nameInputBox">
         <span class="name">导出文件名称</span>
@@ -24,8 +24,7 @@
 <script>
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
+ * @Author: 黄原寅
  * @Desc: 导出
  */
 export default {
@@ -44,8 +43,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
+     * @Author: 黄原寅
      * @Desc: 取消
      */
     cancel() {
@@ -53,8 +51,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
+     * @Author: 黄原寅
      * @Desc:  确定
      */
     confirm() {

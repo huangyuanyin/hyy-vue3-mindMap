@@ -1,5 +1,5 @@
 <template>
-    <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导入" width="500">
+    <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导入">
         <el-upload ref="upload" action="x" :file-list="fileList" :auto-upload="false" :multiple="false"
             :on-change="onChange" :limit="1" :on-exceed="onExceed">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -16,8 +16,7 @@
 import bus from "@/utils/bus.js"
 
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
+ * @Author: 黄原寅
  * @Desc: 导入
  */
 export default {
@@ -42,8 +41,7 @@ export default {
     },
     methods: {
         /**
-         * @Author: 王林
-         * @Date: 2021-08-03 22:48:42
+         * @Author: 黄原寅
          * @Desc: 文件选择
          */
         onChange(file) {
@@ -57,8 +55,7 @@ export default {
         },
 
         /**
-         * @Author: 王林
-         * @Date: 2021-08-03 22:48:47
+         * @Author: 黄原寅
          * @Desc: 数量超出限制
          */
         onExceed() {
@@ -66,8 +63,7 @@ export default {
         },
 
         /**
-         * @Author: 王林
-         * @Date: 2021-06-22 22:08:11
+         * @Author: 黄原寅
          * @Desc: 取消
          */
         cancel() {
@@ -75,8 +71,7 @@ export default {
         },
 
         /**
-         * @Author: 王林
-         * @Date: 2021-06-06 22:28:20
+         * @Author: 黄原寅
          * @Desc:  确定
          */
         confirm() {

@@ -1,8 +1,10 @@
 <template>
   <div class="sidebarContainer" @click.stop :class="{ show: show }" :style="{ zIndex: zIndex }">
-    <span class="closeBtn el-icon-close" @click="show = false"></span>
+    <el-icon class="closeBtn" @click="show = false">
+      <Close />
+    </el-icon>
     <div class="sidebarHeader" v-if="title">
-      {{  title  }}
+      {{ title }}
     </div>
     <div class="sidebarContent">
       <slot></slot>
@@ -12,14 +14,17 @@
 
 <script>
 import { store } from "@/config";
+import { Close } from "@element-plus/icons-vue";
 
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:25
+ * @Author: 黄原寅
  * @Desc: 侧边栏容器
  */
 export default {
   name: "Sidebar",
+  components: {
+    Close,
+  },
   props: {
     title: {
       type: String,

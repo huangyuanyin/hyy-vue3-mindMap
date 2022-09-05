@@ -6,7 +6,7 @@
         <div class="imgBox">
           <img :src="item.img" alt="" />
         </div>
-        <div class="name">{{  item.name  }}</div>
+        <div class="name">{{ item.name }}</div>
       </div>
     </div>
   </Sidebar>
@@ -18,8 +18,7 @@ import { layoutList } from "simple-mind-map/src/utils/constant";
 import { storeConfig } from "@/api";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:14
+ * @Author: 黄原寅
  * @Desc: 结构
  */
 export default {
@@ -49,8 +48,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-06-24 23:04:38
+     * @Author: 黄原寅
      * @Desc: 使用主题
      */
     useLayout(layout) {

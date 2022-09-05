@@ -1,23 +1,31 @@
 <template>
   <div class="scaleContainer">
     <el-tooltip class="item" effect="dark" content="缩小" placement="top">
-      <div class="btn el-icon-minus" @click="narrow"></div>
+      <el-icon class="btn" @click="narrow">
+        <Minus />
+      </el-icon>
     </el-tooltip>
     <div class="scaleInfo">{{ scaleNum }}%</div>
     <el-tooltip class="item" effect="dark" content="放大" placement="top">
-      <div class="btn el-icon-plus" @click="enlarge"></div>
+      <el-icon class="btn" @click="enlarge">
+        <Plus />
+      </el-icon>
     </el-tooltip>
   </div>
 </template>
 
 <script>
+import { Plus, Minus } from "@element-plus/icons-vue";
+
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
+ * @Author: 黄原寅
  * @Desc: 放大缩小
  */
 export default {
   name: "Scale",
+  components: {
+    Plus, Minus
+  },
   props: {
     mindMap: {
       type: Object,
@@ -40,8 +48,7 @@ export default {
   },
   methods: {
     /** 
-     * @Author: 王林25 
-     * @Date: 2021-11-25 14:20:16 
+     * @Author: 黄原寅 
      * @Desc: 转换成百分数 
      */
     toPer(scale) {
@@ -49,8 +56,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-04 17:10:34
+     * @Author: 黄原寅
      * @Desc: 缩小
      */
     narrow() {
@@ -58,8 +64,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-04 17:10:41
+     * @Author: 黄原寅
      * @Desc: 放大
      */
     enlarge() {
@@ -79,9 +84,9 @@ export default {
   }
 
   .scaleInfo {
-		width: 40px;
-		text-align: center;
-    margin: 0 20px;
+    width: 40px;
+    text-align: center;
+    margin: 0 5px;
   }
 }
 </style>
