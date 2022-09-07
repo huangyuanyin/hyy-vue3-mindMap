@@ -15,8 +15,7 @@
 import { nodeIconList } from "simple-mind-map/src/svg/icons";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:33
+ * @Author: 黄原寅
  * @Desc: 节点图标内容设置
  */
 export default {
@@ -45,8 +44,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-06-23 23:16:56
+     * @Author: 黄原寅
      * @Desc: 设置icon
      */
     setIcon(type, name) {

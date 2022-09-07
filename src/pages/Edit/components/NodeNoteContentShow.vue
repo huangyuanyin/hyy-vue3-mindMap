@@ -8,8 +8,7 @@ import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
+ * @Author: 黄原寅
  * @Desc: 节点备注内容显示
  */
 export default {
@@ -38,8 +37,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林25
-     * @Date: 2022-05-09 11:37:05
+     * @Author: 黄原寅
      * @Desc: 初始化编辑器
      */
     initEditor() {

@@ -29,8 +29,7 @@ import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:56:17
+ * @Author: 黄原寅
  * @Desc: 编辑区域
  */
 export default {
@@ -117,8 +116,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-03 22:11:37
+     * @Author: 黄原寅
      * @Desc: 获取思维导图数据，实际应该调接口获取
      */
     getData() {
@@ -128,8 +126,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-08-01 10:19:07
+     * @Author: 黄原寅
      * @Desc: 存储数据当数据有变时
      */
     bindSaveEvent() {
@@ -147,8 +144,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-08-02 23:19:52
+     * @Author: 黄原寅
      * @Desc: 手动保存
      */
     manualSave() {
@@ -164,8 +160,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-04-10 15:01:01
+     * @Author: 黄原寅
      * @Desc: 初始化
      */
     init() {
@@ -216,8 +211,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-08-03 23:01:13
+     * @Author: 黄原寅
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
@@ -226,8 +220,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 13:32:11
+     * @Author: 黄原寅
      * @Desc: 重新渲染
      */
     reRender() {
@@ -235,8 +228,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-04 13:08:28
+     * @Author: 黄原寅
      * @Desc: 执行命令
      */
     execCommand(...args) {
@@ -244,8 +236,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-01 22:33:02
+     * @Author: 黄原寅
      * @Desc: 导出
      */
     async export(...args) {

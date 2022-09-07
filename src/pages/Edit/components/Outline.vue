@@ -8,8 +8,7 @@
 import Sidebar from "./Sidebar";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:14
+ * @Author: 黄原寅
  * @Desc: 大纲内容
  */
 export default {
@@ -42,4 +41,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 </style>

@@ -2,11 +2,11 @@
   <div class="countContainer">
     <div class="item">
       <span class="name">字数</span>
-      <span class="value">{{  words  }}</span>
+      <span class="value">{{ words }}</span>
     </div>
     <div class="item">
       <span class="name">节点</span>
-      <span class="value">{{  num  }}</span>
+      <span class="value">{{ num }}</span>
     </div>
   </div>
 </template>
@@ -14,8 +14,7 @@
 <script>
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
+ * @Author: 黄原寅
  * @Desc: 字数及节点数量统计
  */
 export default {
@@ -36,8 +35,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-06-30 22:13:07
+     * @Author: 黄原寅
      * @Desc: 遍历
      */
     walk(data) {

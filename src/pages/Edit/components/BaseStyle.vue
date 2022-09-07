@@ -184,8 +184,7 @@ import ImgUpload from "@/components/ImgUpload";
 import { storeConfig } from "@/api";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:52:56
+ * @Author: 黄原寅
  * @Desc: 基础样式
  */
 export default {
@@ -239,8 +238,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 14:02:12
+     * @Author: 黄原寅
      * @Desc: 初始样式
      */
     initStyle() {
@@ -267,8 +265,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-03 22:27:32
+     * @Author: 黄原寅
      * @Desc: margin初始值
      */
     initMarginStyle() {
@@ -279,8 +276,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 14:05:40
+     * @Author: 黄原寅
      * @Desc: 更新配置
      */
     update(key, value) {
@@ -300,8 +296,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-03 22:08:12
+     * @Author: 黄原寅
      * @Desc: 设置margin
      */
     updateMargin(type, value) {

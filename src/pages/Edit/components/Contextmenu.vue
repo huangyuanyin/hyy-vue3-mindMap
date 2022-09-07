@@ -54,8 +54,7 @@
 <script>
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
+ * @Author: 黄原寅
  * @Desc: 右键菜单
  */
 export default {
@@ -131,8 +130,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-07-14 21:38:50
+     * @Author: 黄原寅
      * @Desc: 节点右键显示
      */
     show(e, node) {
@@ -144,8 +142,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-16 13:27:48
+     * @Author: 黄原寅
      * @Desc: 鼠标按下事件
      */
     onMousedown(e) {
@@ -158,8 +155,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-16 13:27:53
+     * @Author: 黄原寅
      * @Desc: 鼠标松开事件
      */
     onMouseup(e) {
@@ -175,8 +171,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-15 22:54:08
+     * @Author: 黄原寅
      * @Desc: 画布右键显示
      */
     show2(e) {
@@ -187,8 +182,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-14 21:37:55
+     * @Author: 黄原寅
      * @Desc: 隐藏
      */
     hide() {
@@ -199,8 +193,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-07-14 23:27:54
+     * @Author: 黄原寅
      * @Desc: 执行命令
      */
     exec(key, disabled) {

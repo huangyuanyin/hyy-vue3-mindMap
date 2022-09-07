@@ -1,21 +1,12 @@
 <template>
   <div>
     <div class="colorList">
-      <span
-        class="colorItem"
-        v-for="item in colorList"
-        :style="{ backgroundColor: item }"
-        :key="item"
-        @click="clickColorItem(item)"
-      ></span>
+      <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item"
+        @click="clickColorItem(item)"></span>
     </div>
     <div class="moreColor">
       <span>更多颜色</span>
-      <el-color-picker
-        size="small"
-        v-model="selectColor"
-        @change="changeColor"
-      ></el-color-picker>
+      <el-color-picker size="small" v-model="selectColor" @change="changeColor"></el-color-picker>
     </div>
   </div>
 </template>
@@ -24,8 +15,7 @@
 import { colorList } from "@/config";
 
 /** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:53:10 
+ * @Author: 黄原寅
  * @Desc: 颜色选择器 
  */
 export default {
@@ -52,8 +42,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:38:06
+     * @Author: 黄原寅
      * @Desc: 点击预设颜色
      */
     clickColorItem(color) {
@@ -61,8 +50,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:17:26
+     * @Author: 黄原寅
      * @Desc: 修改颜色
      */
     changeColor() {

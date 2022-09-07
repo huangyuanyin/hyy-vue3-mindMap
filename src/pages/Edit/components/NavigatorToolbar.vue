@@ -1,12 +1,7 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
-      <el-switch
-        v-model="isReadonly"
-        active-text="只读模式"
-        inactive-text="编辑模式"
-        @change="readonlyChange"
-      >
+      <el-switch v-model="isReadonly" active-text="只读模式" inactive-text="编辑模式" @change="readonlyChange">
       </el-switch>
     </div>
     <div class="item">
@@ -23,8 +18,7 @@ import Scale from "./Scale";
 import Fullscreen from "./Fullscreen";
 
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
+ * @Author: 黄原寅
  * @Desc: 导航器工具栏
  */
 export default {
@@ -38,7 +32,7 @@ export default {
       type: Object,
     },
   },
-  data () {
+  data() {
     return {
       isReadonly: false
     }

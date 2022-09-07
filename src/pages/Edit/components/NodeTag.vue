@@ -24,8 +24,7 @@
 import { tagColorList } from "simple-mind-map/src/utils/constant";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:03
+ * @Author: 黄原寅
  * @Desc: 节点标签内容设置
  */
 export default {
@@ -58,8 +57,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-06-24 21:48:14
+     * @Author: 黄原寅
      * @Desc: 添加
      */
     add() {
@@ -68,8 +66,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-24 21:57:53
+     * @Author: 黄原寅
      * @Desc: 删除
      */
     del(index) {
@@ -77,8 +74,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
+     * @Author: 黄原寅
      * @Desc: 取消
      */
     cancel() {
@@ -87,8 +83,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
+     * @Author: 黄原寅
      * @Desc:  确定
      */
     confirm() {

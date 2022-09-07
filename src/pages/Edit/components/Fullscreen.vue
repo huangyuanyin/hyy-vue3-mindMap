@@ -10,8 +10,7 @@
 import { fullscrrenEvent, fullScreen } from "@/utils";
 
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
+ * @Author: 黄原寅
  * @Desc: 全屏
  */
 export default {
@@ -39,8 +38,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-07-11 21:14:30
+     * @Author: 黄原寅
      * @Desc: 准备全屏
      */
     toFullscreen() {

@@ -2,12 +2,12 @@
   <Sidebar ref="sidebar" title="快捷键">
     <div class="box">
       <div v-for="item in shortcutKeyList" :key="item.type">
-        <div class="title">{{  item.type  }}</div>
+        <div class="title">{{ item.type }}</div>
         <div class="list" v-for="item2 in item.list" :key="item2.value">
           <div class="item">
             <span v-if="item2.icon" class="icon iconfont" :class="[item2.icon]"></span>
-            <span class="name">{{  item2.name  }}</span>
-            <div class="value">{{  item2.value  }}</div>
+            <span class="name">{{ item2.name }}</span>
+            <div class="value">{{ item2.value }}</div>
           </div>
         </div>
       </div>
@@ -20,8 +20,7 @@ import Sidebar from "./Sidebar";
 import { shortcutKeyList } from "@/config";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:14
+ * @Author: 黄原寅
  * @Desc: 快捷键
  */
 export default {

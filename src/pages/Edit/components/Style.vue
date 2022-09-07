@@ -163,8 +163,7 @@ import {
 } from "@/config";
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:47
+ * @Author: 黄原寅
  * @Desc: 节点样式设置
  */
 export default {
@@ -214,8 +213,7 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 11:42:32
+     * @Author: 黄原寅
      * @Desc: tab切换
      */
     handleTabClick() {
@@ -223,8 +221,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:48:52
+     * @Author: 黄原寅
      * @Desc: 初始节点样式
      */
     initNodeStyle() {
@@ -257,8 +254,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-04 22:08:16
+     * @Author: 黄原寅
      * @Desc: 修改样式
      */
     update(prop) {
@@ -268,8 +264,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:41:34
+     * @Author: 黄原寅
      * @Desc: 切换加粗样式
      */
     toggleFontWeight() {
@@ -282,8 +277,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:46:39
+     * @Author: 黄原寅
      * @Desc: 切换字体样式
      */
     toggleFontStyle() {
@@ -296,8 +290,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
+     * @Author: 黄原寅
      * @Desc: 修改字体颜色
      */
     changeFontColor(color) {
@@ -306,8 +299,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
+     * @Author: 黄原寅
      * @Desc: 修改边框颜色
      */
     changeBorderColor(color) {
@@ -316,8 +308,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
+     * @Author: 黄原寅
      * @Desc: 修改背景颜色
      */
     changeFillColor(color) {

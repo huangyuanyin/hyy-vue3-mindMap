@@ -21,8 +21,7 @@ import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import bus from "@/utils/bus.js"
 /**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
+ * @Author: 黄原寅
  * @Desc: 节点备注内容设置
  */
 export default {
@@ -55,8 +54,7 @@ export default {
   },
   methods: {
     /** 
-     * @Author: 王林25 
-     * @Date: 2022-05-09 11:37:05 
+     * @Author: 黄原寅
      * @Desc: 初始化编辑器 
      */
     initEditor() {
@@ -72,8 +70,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
+     * @Author: 黄原寅
      * @Desc: 取消
      */
     cancel() {
@@ -82,8 +79,7 @@ export default {
     },
 
     /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
+     * @Author: 黄原寅
      * @Desc:  确定
      */
     confirm() {
