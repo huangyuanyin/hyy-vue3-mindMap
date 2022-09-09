@@ -13,35 +13,32 @@
   </div>
 </template>
 
-<script>
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 导航器工具栏
+*/
+import { ref, defineProps } from "vue"
 import Scale from "./Scale";
 import Fullscreen from "./Fullscreen";
 
-/**
- * @Author: 黄原寅
- * @Desc: 导航器工具栏
- */
+const props = defineProps({
+  mindMap: {
+    type: Object,
+  },
+})
+
+const isReadonly = ref(false)
+
+const readonlyChange = (value) => {
+  props.mindMap.setMode(value ? 'readonly' : 'edit')
+}
+
+</script>
+
+<script>
 export default {
   name: "NavigatorToolbar",
-  components: {
-    Scale,
-    Fullscreen,
-  },
-  props: {
-    mindMap: {
-      type: Object,
-    },
-  },
-  data() {
-    return {
-      isReadonly: false
-    }
-  },
-  methods: {
-    readonlyChange(value) {
-      this.mindMap.setMode(value ? 'readonly' : 'edit')
-    }
-  }
 };
 </script>
 

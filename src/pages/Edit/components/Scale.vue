@@ -14,63 +14,60 @@
   </div>
 </template>
 
-<script>
-import { Plus, Minus } from "@element-plus/icons-vue";
-
+<script setup>
 /**
  * @Author: 黄原寅
  * @Desc: 放大缩小
  */
+import { ref, defineProps, watch } from 'vue'
+import { Plus, Minus } from "@element-plus/icons-vue";
+
+const props = defineProps({
+  mindMap: {
+    type: Object,
+  },
+})
+
+const scaleNum = ref(100)
+
+watch(() => props.mindMap, (val, oldVal) => {
+  if (val && !oldVal) {
+    props.mindMap.on("scale", (scale) => {
+      scaleNum.value = toPer(scale);
+    });
+    scaleNum.value = toPer(props.mindMap.view.scale)
+  }
+})
+
+/** 
+* @Author: 黄原寅 
+* @Desc: 转换成百分数 
+*/
+const toPer = (scale) => {
+  return (scale * 100).toFixed(0)
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 缩小
+ */
+
+const narrow = () => {
+  props.mindMap.view.narrow();
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 放大
+*/
+const enlarge = () => {
+  props.mindMap.view.enlarge();
+}
+</script>
+
+<script>
 export default {
   name: "Scale",
-  components: {
-    Plus, Minus
-  },
-  props: {
-    mindMap: {
-      type: Object,
-    },
-  },
-  data() {
-    return {
-      scaleNum: 100,
-    };
-  },
-  watch: {
-    mindMap(val, oldVal) {
-      if (val && !oldVal) {
-        this.mindMap.on("scale", (scale) => {
-          this.scaleNum = this.toPer(scale);
-        });
-        this.scaleNum = this.toPer(this.mindMap.view.scale)
-      }
-    },
-  },
-  methods: {
-    /** 
-     * @Author: 黄原寅 
-     * @Desc: 转换成百分数 
-     */
-    toPer(scale) {
-      return (scale * 100).toFixed(0)
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc: 缩小
-     */
-    narrow() {
-      this.mindMap.view.narrow();
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc: 放大
-     */
-    enlarge() {
-      this.mindMap.view.enlarge();
-    },
-  },
 };
 </script>
 

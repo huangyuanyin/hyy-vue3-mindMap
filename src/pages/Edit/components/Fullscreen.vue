@@ -6,45 +6,44 @@
   </div>
 </template>
 
-<script>
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 全屏
+*/
+import { defineProps, onMounted, watch } from "vue"
 import { fullscrrenEvent, fullScreen } from "@/utils";
+
+const props = defineProps({
+  mindMap: {
+    type: Object,
+  },
+})
+
+watch(() => props.mindMap, (val, oldVal) => {
+  if (val && !oldVal) { }
+})
 
 /**
  * @Author: 黄原寅
- * @Desc: 全屏
+ * @Desc: 准备全屏
  */
+const toFullscreen = () => {
+  fullScreen(props.mindMap.el)
+}
+
+onMounted(() => {
+  document[fullscrrenEvent] = (e) => {
+    setTimeout(() => {
+      props.mindMap.resize();
+    }, 1000);
+  };
+})
+</script>
+
+<script>
 export default {
   name: "Fullscreen",
-  props: {
-    mindMap: {
-      type: Object,
-    },
-  },
-  data() {
-    return {};
-  },
-  watch: {
-    mindMap(val, oldVal) {
-      if (val && !oldVal) {
-      }
-    },
-  },
-  created() {
-    document[fullscrrenEvent] = (e) => {
-      setTimeout(() => {
-        this.mindMap.resize();
-      }, 1000);
-    };
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 准备全屏
-     */
-    toFullscreen() {
-      fullScreen(this.mindMap.el);
-    },
-  },
 };
 </script>
 
