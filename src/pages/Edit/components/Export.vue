@@ -21,48 +21,51 @@
   </el-dialog>
 </template>
 
-<script>
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 导出功能
+*/
+import { onMounted, ref } from 'vue'
 import bus from "@/utils/bus.js"
+import { ElNotification } from 'element-plus'
+
+const dialogVisible = ref(false)
+const exportType = ref("smm")
+const fileName = ref("思维导图")
+
+onMounted(() => {
+  bus.on("showExport", () => {
+    dialogVisible.value = true;
+  });
+})
+
 /**
  * @Author: 黄原寅
- * @Desc: 导出
+ * @Desc: 取消导出
  */
+const cancel = () => {
+  dialogVisible.value = false;
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc:  确定导出
+ */
+const confirm = () => {
+  bus.emit("export", exportType.value, true, fileName.value);
+  cancel();
+  ElNotification({
+    title: '消息',
+    message: '如果没有触发下载，请检查是否被浏览器拦截了',
+    type: 'warning',
+  })
+}
+</script>
+
+<script>
 export default {
   name: "Export",
-  data() {
-    return {
-      dialogVisible: false,
-      exportType: "smm",
-      fileName: '思维导图'
-    };
-  },
-  created() {
-    bus.on("showExport", () => {
-      this.dialogVisible = true;
-    });
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 取消
-     */
-    cancel() {
-      this.dialogVisible = false;
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc:  确定
-     */
-    confirm() {
-      bus.emit("export", this.exportType, true, this.fileName);
-      this.$notify.info({
-        title: '消息',
-        message: '如果没有触发下载，请检查是否被浏览器拦截了'
-      });
-      this.cancel();
-    },
-  },
 };
 </script>
 

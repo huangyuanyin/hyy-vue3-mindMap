@@ -15,32 +15,31 @@
   </Sidebar>
 </template>
 
-<script>
-import Sidebar from "./Sidebar";
-import { shortcutKeyList } from "@/config";
-import bus from "@/utils/bus.js"
+<script setup>
 /**
- * @Author: 黄原寅
- * @Desc: 快捷键
- */
+* @Author: 黄原寅
+* @Desc: 快捷键功能
+*/
+import { ref, onMounted, nextTick } from 'vue'
+import Sidebar from "./Sidebar"
+import { shortcutKeyList } from "@/config"
+import bus from "@/utils/bus.js"
+
+const sidebar = ref(null) // 声明一个 ref 来存放该元素的引用   必须和模板里的 ref 同名
+
+onMounted(() => {
+  bus.on("showShortcutKey", () => {
+    sidebar.value.show = false;
+    nextTick(() => {
+      sidebar.value.show = true;
+    });
+  });
+})
+</script>
+
+<script>
 export default {
   name: "ShortcutKey",
-  components: {
-    Sidebar,
-  },
-  data() {
-    return {
-      shortcutKeyList,
-    };
-  },
-  created() {
-    bus.on("showShortcutKey", () => {
-      this.$refs.sidebar.show = false;
-      this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-      });
-    });
-  },
 };
 </script>
 
