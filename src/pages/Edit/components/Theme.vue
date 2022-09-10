@@ -12,57 +12,50 @@
   </Sidebar>
 </template>
 
-<script>
-import Sidebar from "./Sidebar";
-import { themeList } from "simple-mind-map/src/utils/constant";
-import { storeConfig } from "@/api";
-import bus from "@/utils/bus.js"
+<script setup>
 /**
  * @Author: 黄原寅寅
  * @Desc: 主题
  */
-export default {
-  name: "Theme",
-  components: {
-    Sidebar,
-  },
-  props: {
-    mindMap: {
-      type: Object,
-    },
-  },
-  data() {
-    return {
-      themeList,
-      theme: "",
-    };
-  },
-  created() {
-    bus.on("showTheme", () => {
-      this.$refs.sidebar.show = false;
-      this.$nextTick(() => {
-        this.theme = this.mindMap.getTheme();
-        this.$refs.sidebar.show = true;
-      });
+import { ref, defineProps, onMounted, nextTick } from 'vue';
+import Sidebar from "./Sidebar";
+import { themeList } from "simple-mind-map/src/utils/constant";
+import { storeConfig } from "@/api";
+import bus from "@/utils/bus.js"
+
+const props = defineProps({
+  mindMap: {
+    type: Object,
+  }
+})
+
+const sidebar = ref(null)
+const theme = ref("")
+
+onMounted(() => {
+  bus.on("showTheme", () => {
+    sidebar.value.show = false;
+    nextTick(() => {
+      theme.value = props.mindMap.getTheme();
+      sidebar.value.show = true;
     });
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅寅
-     * @Desc: 使用主题
-     */
-    useTheme(theme) {
-      this.theme = theme.value;
-      this.mindMap.setTheme(theme.value);
-      storeConfig({
-        theme: {
-          "template": theme.value,
-          "config": this.mindMap.getCustomThemeConfig()
-        }
-      });
-    },
-  },
-};
+  });
+})
+
+/**
+ * @Author: 黄原寅寅
+ * @Desc: 使用主题
+ */
+const useTheme = (item) => {
+  theme.value = item.value;
+  props.mindMap.setTheme(theme.value);
+  storeConfig({
+    theme: {
+      "template": theme.value,
+      "config": props.mindMap.getCustomThemeConfig()
+    }
+  });
+}
 </script>
 
 <style lang="less" scoped>

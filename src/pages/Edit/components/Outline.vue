@@ -4,39 +4,39 @@
   </Sidebar>
 </template>
 
-<script>
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 大纲内容
+*/
+import { onMounted, ref, nextTick } from 'vue'
 import Sidebar from "./Sidebar";
 import bus from "@/utils/bus.js"
-/**
- * @Author: 黄原寅
- * @Desc: 大纲内容
- */
+
+const sidebar = ref(null)
+const data = ref([])
+const defaultProps = ref({
+  label(data) {
+    return data.data.text;
+  }
+})
+
+onMounted(() => {
+  bus.on("data_change", (data2) => {
+    data.value = [data2];
+  });
+  bus.on("showOutline", () => {
+    sidebar.value.show = false;
+    nextTick(() => {
+      sidebar.value.show = true;
+    });
+  });
+})
+</script>
+
+<script>
 export default {
   name: "Outline",
-  components: {
-    Sidebar,
-  },
-  data() {
-    return {
-      data: [],
-      defaultProps: {
-        label(data) {
-          return data.data.text;
-        },
-      },
-    };
-  },
-  created() {
-    bus.on("data_change", (data) => {
-      this.data = [data];
-    });
-    bus.on("showOutline", () => {
-      this.$refs.sidebar.show = false;
-      this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-      });
-    });
-  },
 };
 </script>
 
