@@ -8,10 +8,12 @@
       <span class="name">名称</span>
       <el-input v-model="linkTitle" size="small"></el-input>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 

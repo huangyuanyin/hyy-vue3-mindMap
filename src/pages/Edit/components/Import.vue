@@ -5,10 +5,12 @@
 			<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
 			<div slot="tip" class="el-upload__tip">只能上传.smm文件</div>
 		</el-upload>
-		<span slot="footer" class="dialog-footer">
-			<el-button @click="cancel">取 消</el-button>
-			<el-button type="primary" @click="confirm">确 定</el-button>
-		</span>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="cancel">取 消</el-button>
+				<el-button type="primary" @click="confirm">确 定</el-button>
+			</span>
+		</template>
 	</el-dialog>
 </template>
 

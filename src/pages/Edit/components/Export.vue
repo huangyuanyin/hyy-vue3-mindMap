@@ -14,10 +14,12 @@
       </el-radio-group>
       <div class="tip">tips：.smm文件可用于导入</div>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
