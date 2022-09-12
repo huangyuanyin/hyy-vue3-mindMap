@@ -22,79 +22,80 @@
   </el-dialog>
 </template>
 
-<script>
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 节点标签内容设置
+*/
+import { onMounted, ref } from 'vue';
 import { tagColorList } from "simple-mind-map/src/utils/constant";
 import bus from "@/utils/bus.js"
+
+const dialogVisible = ref(false)
+const tagArr = ref([])
+const tag = ref("")
+const activeNodes = ref([])
+const max = ref(5)
+
+onMounted(() => {
+  bus.on("node_active", (args) => {
+    activeNodes.value = args[1];
+    if (activeNodes.value.length > 0) {
+      let firstNode = activeNodes.value[0];
+      tagArr.value = firstNode.getData("tag") || [];
+    } else {
+      tagArr.value = [];
+      tag.value = ""
+    }
+  });
+  bus.on("showNodeTag", () => {
+    bus.emit('startTextEdit');
+    dialogVisible.value = true;
+  });
+})
+
 /**
  * @Author: 黄原寅
- * @Desc: 节点标签内容设置
+ * @Desc: 添加
  */
+const add = () => {
+  tagArr.value.push(tag.value);
+  tag.value = "";
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 删除
+ */
+const del = (index) => {
+  tagArr.value.splice(index, 1);
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 取消
+ */
+const cancel = () => {
+  dialogVisible.value = false;
+  bus.emit('endTextEdit');
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc:  确定
+ */
+const confirm = () => {
+  activeNodes.value.forEach((node) => {
+    node.setTag(tagArr.value);
+  });
+  cancel();
+}
+</script>
+
+<script>
 export default {
   name: "NodeTag",
-  data() {
-    return {
-      dialogVisible: false,
-      tagColorList,
-      tagArr: [],
-      tag: "",
-      activeNodes: [],
-      max: 5,
-    };
-  },
-  created() {
-    bus.on("node_active", (args) => {
-      this.activeNodes = args[1];
-      if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.tagArr = firstNode.getData("tag") || [];
-      } else {
-        this.tagArr = [];
-        this.tag = "";
-      }
-    });
-    bus.on("showNodeTag", () => {
-      bus.emit('startTextEdit');
-      this.dialogVisible = true;
-    });
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 添加
-     */
-    add() {
-      this.tagArr.push(this.tag);
-      this.tag = "";
-    },
 
-    /**
-     * @Author: 黄原寅
-     * @Desc: 删除
-     */
-    del(index) {
-      this.tagArr.splice(index, 1);
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc: 取消
-     */
-    cancel() {
-      this.dialogVisible = false;
-      bus.emit('endTextEdit');
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc:  确定
-     */
-    confirm() {
-      this.activeNodes.forEach((node) => {
-        node.setTag(this.tagArr);
-      });
-      this.cancel();
-    },
-  },
 };
 </script>
 
