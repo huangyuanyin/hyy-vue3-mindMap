@@ -1,6 +1,6 @@
 <template>
   <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图片">
-    <ImgUpload ref="ImgUpload" v-model="img" @changeImg="onchange" :value="img"></ImgUpload>
+    <ImgUpload ref="imgUpload" v-model="img" @changeImg="onchange" :value="img"></ImgUpload>
     <div class="imgTitleBox">
       <span class="title">图片标题</span>
       <el-input v-model="imgTitle" size="small"></el-input>
@@ -14,76 +14,76 @@
   </el-dialog>
 </template>
 
-<script>
-import ImgUpload from "@/components/ImgUpload";
+<script setup>
+/**
+* @Author: 黄原寅
+* @Desc: 节点图片内容设置
+*/
+import { onMounted, ref } from 'vue'
+import ImgUpload from "@/components/ImgUpload"
 import bus from "@/utils/bus.js"
+
+const dialogVisible = ref(false)
+const img = ref('')
+const imgTitle = ref('')
+const activeNodes = ref(null)
+const imgUpload = ref(null)
+
+onMounted(() => {
+  bus.on("node_active", (args) => {
+    activeNodes.value = args[1];
+    if (activeNodes.value.length > 0) {
+      let firstNode = activeNodes.value[0];
+      img.value = firstNode.getData("image");
+      imgTitle.value = firstNode.getData("imageTitle");
+    } else {
+      img.value = "";
+      imgTitle.value = "";
+    }
+  });
+  bus.on("showNodeImage", () => {
+    dialogVisible.value = true;
+  });
+})
+
+const onchange = (src) => {
+  img.value = src;
+}
+
 /**
  * @Author: 黄原寅
- * @Desc: 节点图片内容设置
+ * @Desc: 取消
  */
+const cancel = () => {
+  dialogVisible.value = false;
+  img.value = ""
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc:  确定
+ */
+const confirm = async () => {
+  try {
+    let { width, height } = await imgUpload.value.getSize();
+    activeNodes.value.forEach((node) => {
+      node.setImage({
+        url: img.value || "none",
+        title: imgTitle.value,
+        width,
+        height,
+      });
+    });
+    cancel();
+  } catch (error) {
+    console.log(error);
+  }
+}
+</script>
+
+<script>
 export default {
   name: "NodeImage",
-  components: {
-    ImgUpload,
-  },
-  data() {
-    return {
-      dialogVisible: false,
-      img: "",
-      imgTitle: "",
-      activeNodes: null,
-    };
-  },
-  created() {
-    bus.on("node_active", (args) => {
-      this.activeNodes = args[1];
-      if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.img = firstNode.getData("image");
-        this.imgTitle = firstNode.getData("imageTitle");
-      } else {
-        this.img = "";
-        this.imgTitle = "";
-      }
-    });
-    bus.on("showNodeImage", () => {
-      this.dialogVisible = true;
-    });
-  },
-  methods: {
-    onchange(src) {
-      this.img = src;
-    },
-    /**
-     * @Author: 黄原寅
-     * @Desc: 取消
-     */
-    cancel() {
-      this.dialogVisible = false;
-      this.img = ""
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc:  确定
-     */
-    async confirm() {
-      try {
-        let { width, height } = await this.$refs.ImgUpload.getSize();
-        this.activeNodes.forEach((node) => {
-          node.setImage({
-            url: this.img || "none",
-            title: this.imgTitle,
-            width,
-            height,
-          });
-        });
-        this.cancel();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
 };
 </script>
 
