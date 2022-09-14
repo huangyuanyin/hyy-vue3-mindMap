@@ -174,7 +174,7 @@ export default {
         viewData: view,
         customNoteContentShow: {
           show: (content, left, top) => {
-            bus.emit('showNoteContent', content, left, top);
+            bus.emit('showNoteContent', [content, left, top]);
           },
           hide: () => {
             bus.emit('hideNoteContent');
@@ -231,15 +231,15 @@ export default {
      * @Author: 黄原寅
      * @Desc: 执行命令
      */
-    execCommand(...args) {
-      this.mindMap.execCommand(...args)
+    execCommand(args) {
+      this.mindMap.execCommand(...(Array.isArray(args) ? args : [args]))
     },
 
     /**
      * @Author: 黄原寅
      * @Desc: 导出
      */
-    async export(...args) {
+    async export(args) {
       try {
         this.mindMap.export(...args)
       } catch (error) {

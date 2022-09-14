@@ -205,12 +205,12 @@ export default {
           this.copyData = this.mindMap.renderer.copyNode();
           break;
         case "CUT_NODE":
-          bus.emit("execCommand", key, (copyData) => {
+          bus.emit("execCommand",[ key, (copyData) => {
             this.copyData = copyData;
-          });
+          }]);
           break;
         case "PASTE_NODE":
-          bus.emit("execCommand", key, this.copyData);
+          bus.emit("execCommand", [key, this.copyData]);
           break;
         case "RETURN_CENTER":
           this.mindMap.view.reset();
