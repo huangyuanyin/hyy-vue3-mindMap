@@ -55,7 +55,7 @@ const cancel = () => {
  * @Desc:  确定导出
  */
 const confirm = () => {
-  bus.emit("export", exportType.value, true, fileName.value);
+  bus.emit("export", [exportType.value, true, fileName.value]); // mitt只支持传入一个参数
   cancel();
   ElNotification({
     title: '消息',
