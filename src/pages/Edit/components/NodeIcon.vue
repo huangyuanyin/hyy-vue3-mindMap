@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="nodeDialog" v-model="dialogVisible" title="图标">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图标">
     <div class="item" v-for="item in nodeIconList" :key="item.name">
       <div class="title">{{ item.name }}</div>
       <div class="list">
