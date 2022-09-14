@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图片">
+  <el-dialog class="nodeDialog" v-model="dialogVisible" title="图片">
     <ImgUpload ref="imgUpload" v-model="img" @changeImg="onchange" :value="img"></ImgUpload>
     <div class="imgTitleBox">
       <span class="title">图片标题</span>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="备注">
+  <el-dialog class="nodeDialog" v-model="dialogVisible" title="备注">
     <!-- <el-input
       type="textarea"
       :autosize="{ minRows: 3, maxRows: 5 }"

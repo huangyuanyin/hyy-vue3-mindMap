@@ -1,5 +1,5 @@
 <template>
-	<el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导入">
+	<el-dialog class="nodeDialog" v-model="dialogVisible" title="导入">
 		<el-upload ref="upload" action="x" :file-list="fileList" :auto-upload="false" :multiple="false"
 			:on-change="onChange" :limit="1" :on-exceed="onExceed">
 			<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
