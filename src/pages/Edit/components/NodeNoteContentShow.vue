@@ -22,7 +22,7 @@ export default {
     };
   },
   created() {
-    bus.on("showNoteContent", (content, left, top) => {
+    bus.on("showNoteContent", ([content, left, top]) => { // mitt只支持传入一个参数
       this.editor.setMarkdown(content);
       this.left = left;
       this.top = top;
