@@ -90,7 +90,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">颜色</span>
-            <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('borderColor')">
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')" width='auto'>
               <template #reference>
                 <span class="block" :style="{ width: '80px', backgroundColor: style.borderColor }"
                   :class="{ disabled: checkDisabled('borderColor') }"></span>
@@ -130,7 +130,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">颜色</span>
-            <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('fillColor')">
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')" width="auto">
               <template #reference>
                 <span class="block" :style="{ backgroundColor: style.fillColor }"
                   :class="{ disabled: checkDisabled('fillColor') }"></span>

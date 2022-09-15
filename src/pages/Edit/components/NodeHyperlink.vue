@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="nodeDialog" v-model="dialogVisible" title="超链接">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="超链接">
     <div class="item">
       <span class="name">链接</span>
       <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>
@@ -35,7 +35,6 @@ export default {
   },
   created() {
     bus.on("node_active", (args) => {
-      console.log("node_active", ...args);
       this.activeNodes = args[1];
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0];

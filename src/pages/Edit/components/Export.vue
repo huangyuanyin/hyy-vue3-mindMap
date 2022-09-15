@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="nodeDialog" v-model="dialogVisible" title="导出">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导出">
     <div>
       <div class="nameInputBox">
         <span class="name">导出文件名称</span>
