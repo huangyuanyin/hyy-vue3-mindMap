@@ -1,9 +1,9 @@
 <template>
-	<el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导入">
+	<el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导入" width="600px">
 		<el-upload ref="upload" action="x" :file-list="fileList" :auto-upload="false" :multiple="false"
 			:on-change="onChange" :limit="1" :on-exceed="onExceed">
 			<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-			<div slot="tip" class="el-upload__tip">只能上传.smm文件</div>
+			<div slot="tip" class="el-upload__tip">支持.smm、.json、.xmind文件</div>
 		</el-upload>
 		<template #footer>
 			<span class="dialog-footer">
@@ -22,6 +22,7 @@
 import { onMounted, ref, watch } from 'vue'
 import bus from "@/utils/bus.js"
 import { ElMessage } from "element-plus";
+import MindMap from 'simple-mind-map'
 
 const dialogVisible = ref(false)
 const fileList = ref([])
@@ -43,10 +44,10 @@ onMounted(() => {
  * @Desc: 文件选择
  */
 const onChange = (file) => {
-	let reg = /\.smm$/;
+	let reg = /\.(smm|xmind|json)$/;
 	if (!reg.test(file.name)) {
 		ElMessage({
-			message: "请选择.smm文件",
+			message: "请选择.smm、.json、.xmind文件",
 			type: "error",
 		});
 		fileList.value = [];
@@ -86,6 +87,15 @@ const confirm = () => {
 		});
 	}
 	let file = fileList.value[0];
+	if (/\.(smm|json)$/.test(file.name)) {
+		handleSmm(file)
+	} else if (/\.xmind$/.test(file.name)) {
+		handleXmind(file)
+	}
+	cancel();
+}
+
+const handleSmm = (file) => {
 	let fileReader = new FileReader()
 	fileReader.readAsText(file.raw)
 	fileReader.onload = (evt) => {
@@ -108,6 +118,23 @@ const confirm = () => {
 		}
 	}
 	cancel();
+}
+
+const handleXmind = async (file) => {
+	try {
+		let data = await MindMap.xmind.parseXmindFile(file.raw)
+		bus.emit('setData', data)
+		ElMessage({
+			message: "导入成功",
+			type: "success",
+		});
+	} catch (error) {
+		console.log(error)
+		ElMessage({
+			message: "文件解析失败",
+			type: "error",
+		});
+	}
 }
 </script>
 

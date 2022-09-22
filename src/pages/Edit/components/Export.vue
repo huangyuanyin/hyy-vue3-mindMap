@@ -1,18 +1,21 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导出">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="导出" width="900px">
     <div>
       <div class="nameInputBox">
         <span class="name">导出文件名称</span>
         <el-input style="width: 300px" v-model="fileName" size="small"></el-input>
+        <el-checkbox v-show="['smm', 'json'].includes(exportType)" v-model="widthConfig" style="margin-left: 12px">
+          是否包含主题、结构等配置数据
+        </el-checkbox>
       </div>
-      <el-radio-group v-model="exportType">
-        <el-radio label="smm">专有文件（.smm）</el-radio>
-        <el-radio label="json">json文件（.json）</el-radio>
-        <el-radio label="png">图片文件（.png）</el-radio>
-        <el-radio label="svg">svg文件（.svg）</el-radio>
-        <el-radio label="pdf">pdf文件（.pdf）</el-radio>
+      <el-radio-group v-model="exportType" size="small">
+        <el-radio-button label="smm">专有文件（.smm）</el-radio-button>
+        <el-radio-button label="json">json文件（.json）</el-radio-button>
+        <el-radio-button label="png">图片文件（.png）</el-radio-button>
+        <el-radio-button label="svg">svg文件（.svg）</el-radio-button>
+        <el-radio-button label="pdf">pdf文件（.pdf）</el-radio-button>
       </el-radio-group>
-      <div class="tip">tips：.smm文件可用于导入</div>
+      <div class="tip">tips：.smm和.json文件可用于导入</div>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -35,6 +38,7 @@ import { ElNotification } from 'element-plus'
 const dialogVisible = ref(false)
 const exportType = ref("smm")
 const fileName = ref("思维导图")
+const widthConfig = ref(true)
 
 onMounted(() => {
   bus.on("showExport", () => {
@@ -55,7 +59,7 @@ const cancel = () => {
  * @Desc:  确定导出
  */
 const confirm = () => {
-  bus.emit("export", [exportType.value, true, fileName.value]); // mitt只支持传入一个参数
+  bus.emit("export", [exportType.value, true, fileName.value, widthConfig.value]); // mitt只支持传入一个参数
   cancel();
   ElNotification({
     title: '消息',

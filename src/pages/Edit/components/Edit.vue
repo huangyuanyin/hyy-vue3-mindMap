@@ -215,7 +215,12 @@ export default {
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
-      this.mindMap.setData(data)
+      // this.mindMap.setData(data)
+      if (data.root) {
+        this.mindMap.setFullData(data)
+      } else {
+        this.mindMap.setData(data)
+      }
       this.manualSave()
     },
 
