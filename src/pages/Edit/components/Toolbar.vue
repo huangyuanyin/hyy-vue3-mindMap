@@ -64,7 +64,7 @@
           <span class="text">标签</span>
         </div>
         <div class="toolbarBtn" :class="{
-          disabled: activeNodes.length <= 0 || hasRoot,
+          disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization,
         }" @click="emit('execCommand', 'ADD_GENERALIZATION')">
           <span class="icon iconfont icongaikuozonglan"></span>
           <span class="text">概要</span>
@@ -149,14 +149,14 @@ export default {
   },
   computed: {
     hasRoot() {
-      return this.activeNodes.find((node) => {
+      return this.activeNodes.findIndex((node) => {
         return node.isRoot;
       });
     },
     hasGeneralization() {
-      return this.activeNodes.find((node) => {
+      return this.activeNodes.findIndex((node) => {
         return node.isGeneralization;
-      });
+      }) !== -1;
     }
   },
   created() {
