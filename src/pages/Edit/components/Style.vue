@@ -132,7 +132,7 @@
             <span class="name">颜色</span>
             <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')" width="auto">
               <template #reference>
-                <span class="block" :style="{ backgroundColor: style.fillColor }"
+                <span class="block" :style="{width: '80px', backgroundColor: style.fillColor }"
                   :class="{ disabled: checkDisabled('fillColor') }"></span>
               </template>
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
@@ -147,6 +147,38 @@
             <el-select size="small" style="width: 120px" v-model="style.shape" placeholder=""
               :disabled="checkDisabled('shape')" @change="update('shape')">
               <el-option v-for="item in shapeList" :key="item" :label="item.name" :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <!-- 线条 -->
+        <div class="title">线条</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">颜色</span>
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')" width="auto">
+              <template #reference>
+                <span class="block" :style="{width: '80px', backgroundColor: style.lineColor }"
+                  :class="{ disabled: checkDisabled('lineColor') }"></span>
+              </template>
+              <Color :color="style.lineColor" @change="changeLineColor"></Color>
+            </el-popover>
+          </div>
+          <div class="rowItem">
+            <span class="name">样式</span>
+            <el-select size="small" style="width: 80px" v-model="style.lineDasharray" placeholder="请选择..."
+              :disabled="checkDisabled('lineDasharray')" @change="update('lineDasharray')">
+              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">宽度</span>
+            <el-select size="small" style="width: 80px" v-model="style.lineWidth" placeholder="请选择..."
+              :disabled="checkDisabled('lineWidth')" @change="update('lineWidth')">
+              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
           </div>
@@ -224,6 +256,9 @@ export default {
         fillColor: "",
         borderDasharray: "",
         borderRadius: "",
+        lineColor: "",
+        lineDasharray: "",
+        lineWidth: "",
       },
     };
   },
@@ -280,6 +315,9 @@ export default {
         "fillColor",
         "borderDasharray",
         "borderRadius",
+        "lineColor",
+        "lineDasharray",
+        "lineWidth",
       ].forEach((item) => {
         this.style[item] = this.activeNodes[0].getStyle(
           item,
@@ -341,6 +379,15 @@ export default {
     changeBorderColor(color) {
       this.style.borderColor = color;
       this.update("borderColor");
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 修改线条颜色 
+     */
+    changeLineColor(color) {
+      this.style.lineColor = color;
+      this.update("lineColor");
     },
 
     /**
