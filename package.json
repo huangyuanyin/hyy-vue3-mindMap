@@ -13,7 +13,7 @@
     "core-js": "^3.6.5",
     "element-plus": "^2.2.6",
     "mitt": "^3.0.0",
-    "simple-mind-map": "^0.2.7",
+    "simple-mind-map": "^0.2.9",
     "vue": "^3.2.37",
     "vue-router": "^4.0.16",
     "vuex": "^4.0.2"
