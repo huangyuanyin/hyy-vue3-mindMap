@@ -68,6 +68,9 @@ export default {
      */
     confirm() {
       this.activeNodes.forEach((node) => {
+        if (!this.link.startsWith("http://") && !this.link.startsWith("https://") && !this.link.startsWith("//")) {
+          this.link = `//${this.link}`
+        }
         node.setHyperlink(this.link, this.linkTitle);
         this.cancel();
       });
