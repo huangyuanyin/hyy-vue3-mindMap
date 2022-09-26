@@ -38,7 +38,7 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">颜色</span>
-          <el-popover placement="bottom" trigger="click">
+          <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
               <span class="block" v-popover:popover :style="{ backgroundColor: style.lineColor }"></span>
             </template>
@@ -66,9 +66,9 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">颜色</span>
-          <el-popover placement="bottom" trigger="click">
+          <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
-              <span class="block" v-popover:popover :style="{ backgroundColor: style.generalizationLineColor }"></span>
+              <span class="block" v-popover:popover2 :style="{ backgroundColor: style.generalizationLineColor }"></span>
             </template>
             <Color :color="style.generalizationLineColor" @change="
               (color) => {
