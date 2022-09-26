@@ -91,12 +91,24 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
+        <div class="toolbarBtn" @click="createNewLocalFile">
+          <span class="icon iconfont iconxinjian"></span>
+          <span class="text">新建</span>
+        </div>
+        <div class="toolbarBtn" @click="openLocalFile">
+          <span class="icon iconfont icondakai"></span>
+          <span class="text">打开</span>
+        </div>
+        <div class="toolbarBtn" @click="saveLocalFile">
+          <span class="icon iconfont iconlingcunwei"></span>
+          <span class="text">另存为</span>
+        </div>
         <div class="toolbarBtn" @click="emit('showImport')">
           <span class="icon iconfont icondaoru"></span>
           <span class="text">导入</span>
         </div>
         <div class="toolbarBtn" @click="emit('showExport')">
-          <span class="icon iconfont icondaochu"></span>
+          <span class="icon iconfont iconexport"></span>
           <span class="text">导出</span>
         </div>
         <div class="toolbarBtn" @click="emit('showShortcutKey')">
@@ -123,11 +135,17 @@ import NodeNote from "./NodeNote";
 import NodeTag from "./NodeTag";
 import Export from "./Export";
 import Import from './Import';
+import { mapState } from 'vuex';
+import { ElNotification } from 'element-plus'
+import exampleData from 'simple-mind-map/example/exampleData';
+import { getData } from '../../../api';
 import bus from "@/utils/bus.js"
+
 /**
  * @Author: 黄原寅
  * @Desc: 工具栏
  */
+let fileHandle = null;
 export default {
   name: "Toolbar",
   components: {
@@ -144,10 +162,13 @@ export default {
       activeNodes: [],
       backEnd: false,
       forwardEnd: true,
-      readonly: false
+      readonly: false,
+      isFullDataFile: false,
+      timer: null,
     };
   },
   computed: {
+    ...mapState(['isHandleLocalFile']),
     hasRoot() {
       return this.activeNodes.findIndex((node) => {
         return node.isRoot;
@@ -157,6 +178,13 @@ export default {
       return this.activeNodes.findIndex((node) => {
         return node.isGeneralization;
       }) !== -1;
+    }
+  },
+  watch: {
+    isHandleLocalFile(val) {
+      if (!val) {
+        ElNotification.closeAll();
+      }
     }
   },
   created() {
@@ -170,10 +198,170 @@ export default {
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
     });
+    bus.on("write_local_file", (content) => {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.writeLocalFile(content);
+      }, 1000);
+    });
   },
   methods: {
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 打开本地文件 
+     */
+    async openLocalFile() {
+      try {
+        let [_fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: 'file',
+              accept: {
+                'application/*': ['.json', '.smm']
+              }
+            },
+          ],
+          excludeAcceptAllOption: true,
+          multiple: false
+        });
+        if (!_fileHandle) {
+          return;
+        }
+        fileHandle = _fileHandle;
+        if (fileHandle.kind === 'directory') {
+          this.$message.warning('请选择文件');
+          return;
+        }
+        this.readFile();
+      } catch (error) {
+        console.log("error", error);
+        this.$message({
+          type: 'warning',
+          message: '你的浏览器可能不支持哦',
+          duration: 1000,
+        })
+      }
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 读取本地文件 
+     */
+    async readFile() {
+      let file = await fileHandle.getFile();
+      let fileReader = new FileReader();
+      fileReader.onload = async () => {
+        this.$store.commit('setIsHandleLocalFile', true);
+        this.setData(fileReader.result);
+        ElNotification.closeAll();
+        ElNotification({
+          title: '提示',
+          message: `当前正在编辑你本机的【${file.name}】文件`,
+          duration: 0,
+          showClose: false
+        });
+      }
+      fileReader.readAsText(file);
+    },
+
+    /** 
+     * @Author: 黄原寅 
+     * @Desc: 渲染读取的数据 
+     */
+    setData(str) {
+      try {
+        let data = JSON.parse(str);
+        if (typeof data !== 'object') {
+          throw new Error('文件内容有误');
+        }
+        if (data.root) {
+          this.isFullDataFile = true;
+        } else {
+          this.isFullDataFile = false;
+          data = {
+            ...exampleData,
+            root: data
+          }
+        }
+        bus.emit('setData', data);
+      } catch (error) {
+        console.log(error)
+        this.$message.error("文件打开失败");
+      }
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 写入本地文件 
+     */
+    async writeLocalFile(content) {
+      if (!fileHandle || !this.isHandleLocalFile) {
+        return;
+      }
+      if (!this.isFullDataFile) {
+        content = content.root;
+      }
+      let string = JSON.stringify(content);
+      const writable = await fileHandle.createWritable();
+      await writable.write(string);
+      await writable.close();
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 创建本地文件 
+     */
+    async createNewLocalFile() {
+      await this.createLocalFile(exampleData);
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 另存为 
+     */
+    async saveLocalFile() {
+      let data = getData();
+      await this.createLocalFile(data);
+    },
+
+    /** 
+     * @Author: 黄原寅
+     * @Desc: 创建本地文件 
+     */
+    async createLocalFile(content) {
+      try {
+        let _fileHandle = await window.showSaveFilePicker({
+          types: [{
+            description: 'file',
+            accept: { 'application/*': ['.json', '.smm'] },
+          }],
+        });
+        if (!_fileHandle) {
+          return;
+        }
+        const loading = this.$loading({
+          lock: true,
+          text: '正在创建文件',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        fileHandle = _fileHandle;
+        this.$store.commit('setIsHandleLocalFile', true);
+        this.isFullDataFile = true;
+        await this.writeLocalFile(content);
+        await this.readFile();
+        loading.close();
+      } catch (error) {
+        console.log(error);
+        this.$message({
+          type: 'warning',
+          message: '你的浏览器可能不支持哦',
+          duration: 1000,
+        })
+      }
+    },
     emit: (...agrs) => bus.emit(...agrs)
-  },
+  }
 };
 </script>
 

@@ -23,9 +23,11 @@ import { onMounted, ref, watch } from 'vue'
 import bus from "@/utils/bus.js"
 import { ElMessage } from "element-plus";
 import MindMap from 'simple-mind-map'
+import { useStore } from 'vuex';
 
 const dialogVisible = ref(false)
 const fileList = ref([])
+const store = useStore()
 
 watch(() => dialogVisible.value, (val, oldVal) => {
 	if (!val && oldVal) {
@@ -86,6 +88,7 @@ const confirm = () => {
 			type: "warning",
 		});
 	}
+	store.commit('setIsHandleLocalFile', false);
 	let file = fileList.value[0];
 	if (/\.(smm|json)$/.test(file.name)) {
 		handleSmm(file)

@@ -3,7 +3,8 @@ import exampleData from 'simple-mind-map/example/exampleData';
 
 const store = createStore({
 	state: {
-		mindMapData: null // 思维导图数据
+		mindMapData: null, // 思维导图数据
+		isHandleLocalFile: false// 是否操作的是本地文件
 	},
 	mutations: {
 		/** 
@@ -12,6 +13,13 @@ const store = createStore({
 		 */
 		setMindMapData(state, data) {
 			state.mindMapData = data
+		},
+		/** 
+		* @Author: 黄原寅
+		* @Desc: 设置操作本地文件标志位 
+		*/
+		setIsHandleLocalFile(state, data) {
+			state.isHandleLocalFile = data
 		}
 	},
 	actions: {
