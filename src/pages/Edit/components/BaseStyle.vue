@@ -13,7 +13,7 @@
             "></Color>
           </el-tab-pane>
           <el-tab-pane label="图片" name="image">
-            <ImgUpload class="imgUpload" v-model="style.backgroundImage" @change="
+            <ImgUpload class="imgUpload" :value="style.backgroundImage" @changeImg="
               (img) => {
                 update('backgroundImage', img);
               }
