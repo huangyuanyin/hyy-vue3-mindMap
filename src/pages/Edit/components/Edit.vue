@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { toRaw } from 'vue'
 import MindMap from 'simple-mind-map'
 import Outline from './Outline'
 import Style from './Style'
@@ -125,6 +126,13 @@ export default {
       return data
     },
 
+    // 通过toRaw方法拿到mindMap的原始数据
+    // 解决vue3的mindMap变量被proxy代理了，mindMap变成Proxy里面有些动态的属性就不兼容了
+    // 需要通过toRaw的形式，拿到mindMap的原始引用
+    getMindMap() {
+      return toRaw(this.mindMap)
+    },
+
     /**
      * @Author: 黄原寅
      * @Desc: 存储数据当数据有变时
@@ -200,7 +208,7 @@ export default {
           'mouseup',
           'mode_change'
         ].forEach((event) => {
-          this.mindMap.on(event, (...args) => {
+          this.getMindMap().on(event, (...args) => {
             if (event === 'node_active') {
               bus.emit(event, args)
             } else {
@@ -219,9 +227,9 @@ export default {
     setData(data) {
       // this.mindMap.setData(data)
       if (data.root) {
-        this.mindMap.setFullData(data)
+        this.getMindMap().setFullData(data)
       } else {
-        this.mindMap.setData(data)
+        this.getMindMap().setData(data)
       }
       this.manualSave()
     },
@@ -231,7 +239,7 @@ export default {
      * @Desc: 重新渲染
      */
     reRender() {
-      this.mindMap.reRender()
+      this.getMindMap().reRender()
     },
 
     /**
@@ -239,7 +247,7 @@ export default {
      * @Desc: 执行命令
      */
     execCommand(args) {
-      this.mindMap.execCommand(...(Array.isArray(args) ? args : [args]))
+      this.getMindMap().execCommand(...(Array.isArray(args) ? args : [args]))
     },
 
     /**
