@@ -2,6 +2,7 @@
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count></Count>
+    <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap"></NavigatorToolbar>
     <Outline></Outline>
     <Style></Style>
@@ -27,6 +28,7 @@ import NavigatorToolbar from './NavigatorToolbar'
 import ShortcutKey from './ShortcutKey'
 import Contextmenu from './Contextmenu'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
+import Navigator from './Navigator.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import bus from "@/utils/bus.js"
 /**
@@ -46,7 +48,8 @@ export default {
     NavigatorToolbar,
     ShortcutKey,
     Contextmenu,
-    NodeNoteContentShow
+    NodeNoteContentShow,
+    Navigator
   },
   data() {
     return {

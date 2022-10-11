@@ -1,6 +1,9 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">开启小地图</el-checkbox>
+    </div>
+    <div class="item">
       <el-switch v-model="isReadonly" active-text="只读模式" inactive-text="编辑模式" @change="readonlyChange">
       </el-switch>
     </div>
@@ -21,6 +24,7 @@
 import { ref, defineProps } from "vue"
 import Scale from "./Scale";
 import Fullscreen from "./Fullscreen";
+import bus from "@/utils/bus.js";
 
 const props = defineProps({
   mindMap: {
@@ -29,9 +33,14 @@ const props = defineProps({
 })
 
 const isReadonly = ref(false)
+const openMiniMap = ref(false)
 
 const readonlyChange = (value) => {
   props.mindMap.setMode(value ? 'readonly' : 'edit')
+}
+
+const toggleMiniMap = (show) => {
+  bus.emit('toggle_mini_map', show)
 }
 
 </script>
