@@ -39,8 +39,10 @@ export default {
     bus.on("toggle_mini_map", (show) => {
       this.showMiniMap = show;
       this.$nextTick(() => {
-        this.init();
-        this.drawMiniMap();
+        if (show) {
+          this.init();
+          this.drawMiniMap();
+        }
       });
     });
     bus.on("data_change", () => {
