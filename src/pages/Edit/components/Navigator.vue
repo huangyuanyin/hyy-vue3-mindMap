@@ -64,7 +64,47 @@ export default {
       }, 500);
     });
   },
+  mounted() {
+    bus.on("toggle_mini_map", this.toggle_mini_map);
+    bus.on("data_change", this.data_change);
+    bus.on("view_data_change", this.view_data_change);
+  },
+  beforeUnmount() {
+    console.log('beforeUnmount')
+    bus.off("toggle_mini_map", this.toggle_mini_map);
+    bus.off("data_change", this.data_change);
+    bus.off("view_data_change", this.view_data_change);
+  },
   methods: {
+    toggle_mini_map(show) {
+      this.showMiniMap = show;
+      this.$nextTick(() => {
+        if (this.$refs.navigatorBox) {
+          this.init();
+        }
+        if (this.$refs.svgBox) {
+          this.drawMiniMap();
+        }
+      });
+    },
+    data_change() {
+      if (!this.showMiniMap) {
+        return;
+      }
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.drawMiniMap();
+      }, 500);
+    },
+    view_data_change() {
+      if (!this.showMiniMap) {
+        return;
+      }
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.drawMiniMap();
+      }, 500);
+    },
     init() {
       let { width, height } = this.$refs.navigatorBox.getBoundingClientRect();
       this.boxWidth = width;
