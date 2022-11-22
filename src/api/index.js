@@ -4,6 +4,7 @@ import Vue from 'vue'
 import bus from '@/utils/bus.js'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
+const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
 
 /**
  * @Author: 黄原寅
@@ -71,4 +72,25 @@ export const storeConfig = config => {
   } catch (error) {
     console.log(error)
   }
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 存储语言
+ */
+export const storeLang = lang => {
+  localStorage.setItem(SIMPLE_MIND_MAP_LANG, lang)
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 获取存储的语言
+ */
+export const getLang = () => {
+  let lang = localStorage.getItem(SIMPLE_MIND_MAP_LANG)
+  if (lang) {
+    return lang
+  }
+  storeLang('zh')
+  return 'zh'
 }

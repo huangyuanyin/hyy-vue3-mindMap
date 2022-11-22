@@ -38,13 +38,7 @@
                   }
                 "
               >
-                <el-option
-                  v-for="item in backgroundRepeatList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
-                </el-option>
+                <el-option v-for="item in backgroundRepeatList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
               </el-select>
             </div>
           </el-tab-pane>
@@ -57,11 +51,7 @@
           <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
-              <span
-                class="block"
-                v-popover:popover
-                :style="{ backgroundColor: style.lineColor }"
-              ></span>
+              <span class="block" v-popover:popover :style="{ backgroundColor: style.lineColor }"></span>
             </template>
             <Color
               :color="style.lineColor"
@@ -86,13 +76,7 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
@@ -110,13 +94,7 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineStyleList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
+            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
           </el-select>
         </div>
       </div>
@@ -127,11 +105,7 @@
           <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
-              <span
-                class="block"
-                v-popover:popover2
-                :style="{ backgroundColor: style.generalizationLineColor }"
-              ></span>
+              <span class="block" v-popover:popover2 :style="{ backgroundColor: style.generalizationLineColor }"></span>
             </template>
             <Color
               :color="style.generalizationLineColor"
@@ -156,13 +130,7 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
@@ -251,19 +219,9 @@
       <!-- 二级节点外边距 -->
       <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
       <div class="row column">
-        <el-tabs
-          class="tab"
-          v-model="marginActiveTab"
-          @tab-click="initMarginStyle"
-        >
-          <el-tab-pane
-            :label="$t('baseStyle.level2Node')"
-            name="second"
-          ></el-tab-pane>
-          <el-tab-pane
-            :label="$t('baseStyle.belowLevel2Node')"
-            name="node"
-          ></el-tab-pane>
+        <el-tabs class="tab" v-model="marginActiveTab" @tab-click="initMarginStyle">
+          <el-tab-pane :label="$t('baseStyle.level2Node')" name="second"></el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.belowLevel2Node')" name="node"></el-tab-pane>
         </el-tabs>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
@@ -326,8 +284,6 @@ export default {
   data() {
     return {
       lineWidthList,
-      lineStyleList,
-      backgroundRepeatList,
       activeTab: 'color',
       marginActiveTab: 'second',
       style: {
@@ -347,6 +303,14 @@ export default {
         marginX: 0,
         marginY: 0
       }
+    }
+  },
+  computed: {
+    lineStyleList() {
+      return lineStyleList[this.$i18n.locale] || lineStyleList.zh
+    },
+    backgroundRepeatList() {
+      return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
     }
   },
   created() {
@@ -393,8 +357,7 @@ export default {
      */
     initMarginStyle() {
       ;['marginX', 'marginY'].forEach(key => {
-        this.style[key] =
-          this.mindMap.getThemeConfig()[this.marginActiveTab][key]
+        this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][key]
       })
     },
 

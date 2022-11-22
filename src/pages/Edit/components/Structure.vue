@@ -1,13 +1,7 @@
 <template>
-  <Sidebar ref="sidebar" title="结构">
+  <Sidebar ref="sidebar" :title="$t('strusture.title')">
     <div class="layoutList">
-      <div
-        class="layoutItem"
-        v-for="item in layoutList"
-        :key="item.value"
-        @click="useLayout(item)"
-        :class="{ active: item.value === layout }"
-      >
+      <div class="layoutItem" v-for="item in layoutList" :key="item.value" @click="useLayout(item)" :class="{ active: item.value === layout }">
         <div class="imgBox">
           <img :src="item.img" alt="" />
         </div>
@@ -88,8 +82,7 @@ export default {
     }
 
     &:hover {
-      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
-        0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
     }
 
     &.active {

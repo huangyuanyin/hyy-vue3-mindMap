@@ -31,6 +31,7 @@ import Fullscreen from './Fullscreen'
 import bus from '@/utils/bus.js'
 import { langList } from '@/config'
 import i18n from '@/i18n.js'
+import { storeLang, getLang } from '@/api'
 
 const props = defineProps({
   mindMap: {
@@ -40,7 +41,7 @@ const props = defineProps({
 
 const isReadonly = ref(false)
 const openMiniMap = ref(false)
-const lang = ref('zh')
+const lang = ref(getLang())
 
 const readonlyChange = value => {
   props.mindMap.setMode(value ? 'readonly' : 'edit')
@@ -52,6 +53,8 @@ const toggleMiniMap = show => {
 
 const onLangChange = lang => {
   i18n.locale = lang
+  console.log('i18n', i18n)
+  storeLang(lang)
 }
 
 onMounted(() => {

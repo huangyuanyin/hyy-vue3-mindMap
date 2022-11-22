@@ -1,21 +1,17 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="超链接">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
     <div class="item">
-      <span class="name">链接</span>
-      <el-input
-        v-model="link"
-        size="small"
-        placeholder="http://xxxx.com/"
-      ></el-input>
+      <span class="name">{{ $t('nodeHyperlink.link') }}</span>
+      <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>
     </div>
     <div class="item">
-      <span class="name">名称</span>
+      <span class="name">{{ $t('nodeHyperlink.name') }}</span>
       <el-input v-model="linkTitle" size="small"></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="confirm">确 定</el-button>
+        <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('dialog.confirm') }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -72,11 +68,7 @@ export default {
      */
     confirm() {
       this.activeNodes.forEach(node => {
-        if (
-          !this.link.startsWith('http://') &&
-          !this.link.startsWith('https://') &&
-          !this.link.startsWith('//')
-        ) {
+        if (!this.link.startsWith('http://') && !this.link.startsWith('https://') && !this.link.startsWith('//')) {
           this.link = `//${this.link}`
         }
         node.setHyperlink(this.link, this.linkTitle)

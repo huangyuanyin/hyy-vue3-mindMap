@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="备注">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeNote.title')">
     <!-- <el-input
       type="textarea"
       :autosize="{ minRows: 3, maxRows: 5 }"
@@ -11,8 +11,8 @@
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="confirm">确 定</el-button>
+        <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('dialog.confirm') }}</el-button>
       </span>
     </template>
   </el-dialog>

@@ -1,15 +1,7 @@
 <template>
-  <div
-    class="contextmenuContainer listBox"
-    v-if="isShow"
-    :style="{ left: left + 'px', top: top + 'px' }"
-  >
+  <div class="contextmenuContainer listBox" v-if="isShow" :style="{ left: left + 'px', top: top + 'px' }">
     <template v-if="type === 'node'">
-      <div
-        class="item"
-        @click="exec('INSERT_NODE', insertNodeBtnDisabled)"
-        :class="{ disabled: insertNodeBtnDisabled }"
-      >
+      <div class="item" @click="exec('INSERT_NODE', insertNodeBtnDisabled)" :class="{ disabled: insertNodeBtnDisabled }">
         {{ $t('contextmenu.insertSiblingNode') }}
         <span class="desc">Enter</span>
       </div>
@@ -17,27 +9,15 @@
         {{ $t('contextmenu.insertChildNode') }}
         <span class="desc">Tab</span>
       </div>
-      <div
-        class="item"
-        @click="exec('ADD_GENERALIZATION')"
-        :class="{ disabled: insertNodeBtnDisabled }"
-      >
+      <div class="item" @click="exec('ADD_GENERALIZATION')" :class="{ disabled: insertNodeBtnDisabled }">
         {{ $t('contextmenu.insertSummary') }}
         <span class="desc">Ctrl + S</span>
       </div>
-      <div
-        class="item"
-        @click="exec('UP_NODE')"
-        :class="{ disabled: upNodeBtnDisabled }"
-      >
+      <div class="item" @click="exec('UP_NODE')" :class="{ disabled: upNodeBtnDisabled }">
         {{ $t('contextmenu.moveUpNode') }}
         <span class="desc">Ctrl + ↑</span>
       </div>
-      <div
-        class="item"
-        @click="exec('DOWN_NODE')"
-        :class="{ disabled: downNodeBtnDisabled }"
-      >
+      <div class="item" @click="exec('DOWN_NODE')" :class="{ disabled: downNodeBtnDisabled }">
         {{ $t('contextmenu.moveDownNode') }}
         <span class="desc">Ctrl + ↓</span>
       </div>
@@ -53,11 +33,7 @@
         {{ $t('contextmenu.cutNode') }}
         <span class="desc">Ctrl + X</span>
       </div>
-      <div
-        class="item"
-        :class="{ disabled: copyData === null }"
-        @click="exec('PASTE_NODE')"
-      >
+      <div class="item" :class="{ disabled: copyData === null }" @click="exec('PASTE_NODE')">
         {{ $t('contextmenu.pasteNode') }}
         <span class="desc">Ctrl + V</span>
       </div>
@@ -75,12 +51,7 @@
       <div class="item">
         {{ $t('contextmenu.expandTo') }}
         <div class="subItems listBox">
-          <div
-            class="item"
-            v-for="(item, index) in expandList"
-            :key="item"
-            @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)"
-          >
+          <div class="item" v-for="(item, index) in expandList" :key="item" @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)">
             {{ item }}
           </div>
         </div>
@@ -116,18 +87,13 @@ export default {
       type: '',
       isMousedown: false,
       mosuedownX: 0,
-      mosuedownY: 0,
-      expandList: [
-        this.$t('contextmenu.level1'),
-        this.$t('contextmenu.level2'),
-        this.$t('contextmenu.level3'),
-        this.$t('contextmenu.level4'),
-        this.$t('contextmenu.level5'),
-        this.$t('contextmenu.level6')
-      ]
+      mosuedownY: 0
     }
   },
   computed: {
+    expandList() {
+      return [this.$t('contextmenu.level1'), this.$t('contextmenu.level2'), this.$t('contextmenu.level3'), this.$t('contextmenu.level4'), this.$t('contextmenu.level5'), this.$t('contextmenu.level6')]
+    },
     insertNodeBtnDisabled() {
       return !this.node || this.node.isRoot
     },
@@ -213,10 +179,7 @@ export default {
         return
       }
       this.isMousedown = false
-      if (
-        Math.abs(this.mosuedownX - e.clientX) > 3 ||
-        Math.abs(this.mosuedownY - e.clientY) > 3
-      ) {
+      if (Math.abs(this.mosuedownX - e.clientX) > 3 || Math.abs(this.mosuedownY - e.clientY) > 3) {
         this.hide()
         return
       }
