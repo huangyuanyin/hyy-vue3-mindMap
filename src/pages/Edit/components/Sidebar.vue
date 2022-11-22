@@ -1,5 +1,10 @@
 <template>
-  <div class="sidebarContainer" @click.stop :class="{ show: show }" :style="{ zIndex: zIndex }">
+  <div
+    class="sidebarContainer"
+    @click.stop
+    :class="{ show: show }"
+    :style="{ zIndex: zIndex }"
+  >
     <el-icon class="closeBtn" @click="show = false">
       <Close />
     </el-icon>
@@ -13,45 +18,45 @@
 </template>
 
 <script>
-import { store } from "@/config";
-import { Close } from "@element-plus/icons-vue";
+import { store } from '@/config'
+import { Close } from '@element-plus/icons-vue'
 
 /**
  * @Author: 黄原寅
  * @Desc: 侧边栏容器
  */
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   components: {
-    Close,
+    Close
   },
   props: {
     title: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   data() {
     return {
       show: false,
-      zIndex: 0,
-    };
+      zIndex: 0
+    }
   },
   watch: {
     show(val, oldVal) {
       if (val && !oldVal) {
-        this.zIndex = store.sidebarZIndex++;
+        this.zIndex = store.sidebarZIndex++
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
 .sidebarContainer {
   position: fixed;
   right: -300px;
-  top: 100px;
+  top: 110px;
   bottom: 0;
   width: 300px;
   background-color: #fff;

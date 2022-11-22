@@ -5,7 +5,11 @@
         <div class="title">{{ item.type }}</div>
         <div class="list" v-for="item2 in item.list" :key="item2.value">
           <div class="item">
-            <span v-if="item2.icon" class="icon iconfont" :class="[item2.icon]"></span>
+            <span
+              v-if="item2.icon"
+              class="icon iconfont"
+              :class="[item2.icon]"
+            ></span>
             <span class="name">{{ item2.name }}</span>
             <div class="value">{{ item2.value }}</div>
           </div>
@@ -17,30 +21,30 @@
 
 <script setup>
 /**
-* @Author: 黄原寅
-* @Desc: 快捷键功能
-*/
+ * @Author: 黄原寅
+ * @Desc: 快捷键功能
+ */
 import { ref, onMounted, nextTick } from 'vue'
-import Sidebar from "./Sidebar"
-import { shortcutKeyList } from "@/config"
-import bus from "@/utils/bus.js"
+import Sidebar from './Sidebar'
+import { shortcutKeyList } from '@/config'
+import bus from '@/utils/bus.js'
 
 const sidebar = ref(null) // 声明一个 ref 来存放该元素的引用   必须和模板里的 ref 同名
 
 onMounted(() => {
-  bus.on("showShortcutKey", () => {
-    sidebar.value.show = false;
+  bus.on('showShortcutKey', () => {
+    sidebar.value.show = false
     nextTick(() => {
-      sidebar.value.show = true;
-    });
-  });
+      sidebar.value.show = true
+    })
+  })
 })
 </script>
 
 <script>
 export default {
-  name: "ShortcutKey",
-};
+  name: 'ShortcutKey'
+}
 </script>
 
 <style lang="less" scoped>

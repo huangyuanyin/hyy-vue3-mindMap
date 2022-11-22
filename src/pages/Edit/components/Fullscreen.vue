@@ -8,21 +8,25 @@
 
 <script setup>
 /**
-* @Author: 黄原寅
-* @Desc: 全屏
-*/
-import { defineProps, onMounted, watch } from "vue"
-import { fullscrrenEvent, fullScreen } from "@/utils";
+ * @Author: 黄原寅
+ * @Desc: 全屏
+ */
+import { defineProps, onMounted, watch } from 'vue'
+import { fullscrrenEvent, fullScreen } from '@/utils'
 
 const props = defineProps({
   mindMap: {
-    type: Object,
-  },
+    type: Object
+  }
 })
 
-watch(() => props.mindMap, (val, oldVal) => {
-  if (val && !oldVal) { }
-})
+watch(
+  () => props.mindMap,
+  (val, oldVal) => {
+    if (val && !oldVal) {
+    }
+  }
+)
 
 /**
  * @Author: 黄原寅
@@ -33,18 +37,18 @@ const toFullscreen = () => {
 }
 
 onMounted(() => {
-  document[fullscrrenEvent] = (e) => {
+  document[fullscrrenEvent] = e => {
     setTimeout(() => {
-      props.mindMap.resize();
-    }, 1000);
-  };
+      props.mindMap.resize()
+    }, 1000)
+  }
 })
 </script>
 
 <script>
 export default {
-  name: "Fullscreen",
-};
+  name: 'Fullscreen'
+}
 </script>
 
 <style lang="less" scoped>

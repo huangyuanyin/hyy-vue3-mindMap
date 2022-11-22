@@ -1,8 +1,13 @@
 <template>
   <Sidebar ref="sidebar" title="主题">
     <div class="themeList">
-      <div class="themeItem" v-for="item in themeList" :key="item.value" @click="useTheme(item)"
-        :class="{ active: item.value === theme }">
+      <div
+        class="themeItem"
+        v-for="item in themeList"
+        :key="item.value"
+        @click="useTheme(item)"
+        :class="{ active: item.value === theme }"
+      >
         <div class="imgBox">
           <img :src="item.img" alt="" />
         </div>
@@ -17,44 +22,44 @@
  * @Author: 黄原寅寅
  * @Desc: 主题
  */
-import { ref, defineProps, onMounted, nextTick } from 'vue';
-import Sidebar from "./Sidebar";
-import { themeList } from "simple-mind-map/src/utils/constant";
-import { storeConfig } from "@/api";
-import bus from "@/utils/bus.js"
+import { ref, defineProps, onMounted, nextTick } from 'vue'
+import Sidebar from './Sidebar'
+import { themeList } from 'simple-mind-map/src/utils/constant'
+import { storeConfig } from '@/api'
+import bus from '@/utils/bus.js'
 
 const props = defineProps({
   mindMap: {
-    type: Object,
+    type: Object
   }
 })
 
 const sidebar = ref(null)
-const theme = ref("")
+const theme = ref('')
 
 onMounted(() => {
-  bus.on("showTheme", () => {
-    sidebar.value.show = false;
+  bus.on('showTheme', () => {
+    sidebar.value.show = false
     nextTick(() => {
-      theme.value = props.mindMap.getTheme();
-      sidebar.value.show = true;
-    });
-  });
+      theme.value = props.mindMap.getTheme()
+      sidebar.value.show = true
+    })
+  })
 })
 
 /**
  * @Author: 黄原寅寅
  * @Desc: 使用主题
  */
-const useTheme = (item) => {
-  theme.value = item.value;
-  props.mindMap.setTheme(theme.value);
+const useTheme = item => {
+  theme.value = item.value
+  props.mindMap.setTheme(theme.value)
   storeConfig({
     theme: {
-      "template": theme.value,
-      "config": props.mindMap.getCustomThemeConfig()
+      template: theme.value,
+      config: props.mindMap.getCustomThemeConfig()
     }
-  });
+  })
 }
 </script>
 
