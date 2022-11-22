@@ -1,13 +1,13 @@
-import exampleData from "simple-mind-map/example/exampleData"
+import exampleData from 'simple-mind-map/example/exampleData'
 import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
 import Vue from 'vue'
-import bus from "@/utils/bus.js"
+import bus from '@/utils/bus.js'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 
-/** 
+/**
  * @Author: 黄原寅
- * @Desc: 克隆思维导图数据，去除激活状态 
+ * @Desc: 克隆思维导图数据，去除激活状态
  */
 const copyMindMapTreeData = (tree, root) => {
   tree.data = simpleDeepClone(root.data)
@@ -18,12 +18,12 @@ const copyMindMapTreeData = (tree, root) => {
       tree.children[index] = copyMindMapTreeData({}, item)
     })
   }
-  return tree;
+  return tree
 }
 
-/** 
+/**
  * @Author: 黄原寅
- * @Desc: 获取缓存的思维导图数据 
+ * @Desc: 获取缓存的思维导图数据
  */
 export const getData = () => {
   let store = localStorage.getItem(SIMPLE_MIND_MAP_DATA)
@@ -38,11 +38,11 @@ export const getData = () => {
   }
 }
 
-/** 
- * @Author: 黄原寅 
- * @Desc: 存储思维导图数据 
+/**
+ * @Author: 黄原寅
+ * @Desc: 存储思维导图数据
  */
-export const storeData = (data) => {
+export const storeData = data => {
   try {
     let originData = getData()
     originData.root = copyMindMapTreeData({}, data)
@@ -54,11 +54,11 @@ export const storeData = (data) => {
   }
 }
 
-/** 
- * @Author: 黄原寅 
- * @Desc: 存储思维导图配置数据 
+/**
+ * @Author: 黄原寅
+ * @Desc: 存储思维导图配置数据
  */
-export const storeConfig = (config) => {
+export const storeConfig = config => {
   try {
     let originData = getData()
     originData = {

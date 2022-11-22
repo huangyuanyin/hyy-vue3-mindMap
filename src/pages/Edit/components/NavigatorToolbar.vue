@@ -1,10 +1,17 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">开启小地图</el-checkbox>
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap"
+        >开启小地图</el-checkbox
+      >
     </div>
     <div class="item">
-      <el-switch v-model="isReadonly" active-text="只读模式" inactive-text="编辑模式" @change="readonlyChange">
+      <el-switch
+        v-model="isReadonly"
+        active-text="只读模式"
+        inactive-text="编辑模式"
+        @change="readonlyChange"
+      >
       </el-switch>
     </div>
     <div class="item">
@@ -18,41 +25,40 @@
 
 <script setup>
 /**
-* @Author: 黄原寅
-* @Desc: 导航器工具栏
-*/
-import { ref, onMounted, defineProps } from "vue"
-import Scale from "./Scale";
-import Fullscreen from "./Fullscreen";
-import bus from "@/utils/bus.js";
+ * @Author: 黄原寅
+ * @Desc: 导航器工具栏
+ */
+import { ref, onMounted, defineProps } from 'vue'
+import Scale from './Scale'
+import Fullscreen from './Fullscreen'
+import bus from '@/utils/bus.js'
 
 const props = defineProps({
   mindMap: {
-    type: Object,
-  },
+    type: Object
+  }
 })
 
 const isReadonly = ref(false)
 const openMiniMap = ref(false)
 
-const readonlyChange = (value) => {
+const readonlyChange = value => {
   props.mindMap.setMode(value ? 'readonly' : 'edit')
 }
 
-const toggleMiniMap = (show) => {
+const toggleMiniMap = show => {
   bus.emit('toggle_mini_map', show)
 }
 
 onMounted(() => {
   toggleMiniMap(openMiniMap)
 })
-
 </script>
 
 <script>
 export default {
-  name: "NavigatorToolbar",
-};
+  name: 'NavigatorToolbar'
+}
 </script>
 
 <style lang="less" scoped>

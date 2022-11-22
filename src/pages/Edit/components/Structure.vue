@@ -1,8 +1,13 @@
 <template>
   <Sidebar ref="sidebar" title="结构">
     <div class="layoutList">
-      <div class="layoutItem" v-for="item in layoutList" :key="item.value" @click="useLayout(item)"
-        :class="{ active: item.value === layout }">
+      <div
+        class="layoutItem"
+        v-for="item in layoutList"
+        :key="item.value"
+        @click="useLayout(item)"
+        :class="{ active: item.value === layout }"
+      >
         <div class="imgBox">
           <img :src="item.img" alt="" />
         </div>
@@ -14,38 +19,38 @@
 
 <script>
 import { toRaw } from 'vue'
-import Sidebar from "./Sidebar";
-import { layoutList } from "simple-mind-map/src/utils/constant";
-import { storeConfig } from "@/api";
-import bus from "@/utils/bus.js"
+import Sidebar from './Sidebar'
+import { layoutList } from 'simple-mind-map/src/utils/constant'
+import { storeConfig } from '@/api'
+import bus from '@/utils/bus.js'
 /**
  * @Author: 黄原寅
  * @Desc: 结构
  */
 export default {
-  name: "Structure",
+  name: 'Structure',
   components: {
-    Sidebar,
+    Sidebar
   },
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       layoutList,
-      layout: "",
-    };
+      layout: ''
+    }
   },
   created() {
-    bus.on("showStructure", () => {
-      this.$refs.sidebar.show = false;
+    bus.on('showStructure', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.layout = this.mindMap.getLayout();
-        this.$refs.sidebar.show = true;
-      });
-    });
+        this.layout = this.mindMap.getLayout()
+        this.$refs.sidebar.show = true
+      })
+    })
   },
   methods: {
     /**
@@ -53,16 +58,16 @@ export default {
      * @Desc: 使用主题
      */
     useLayout(layout) {
-      this.layout = layout.value;
+      this.layout = layout.value
       // this.mindMap.setLayout(layout.value);
       // 通过toRaw拿到mindMap的原始数据
-      toRaw(this.mindMap).setLayout(layout.value);
+      toRaw(this.mindMap).setLayout(layout.value)
       storeConfig({
-        layout: layout.value,
-      });
-    },
-  },
-};
+        layout: layout.value
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -32,13 +32,12 @@ import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import { getData, storeData, storeConfig } from '@/api'
-import bus from "@/utils/bus.js"
+import bus from '@/utils/bus.js'
 /**
  * @Author: 黄原寅
  * @Desc: 编辑区域
  */
 export default {
-
   name: 'Edit',
   components: {
     Outline,
@@ -68,11 +67,11 @@ export default {
     bus.on('export', this.export)
     bus.on('setData', this.setData)
     bus.on('startTextEdit', () => {
-      this.mindMap.renderer.startTextEdit();
-    });
+      this.mindMap.renderer.startTextEdit()
+    })
     bus.on('endTextEdit', () => {
-      this.mindMap.renderer.endTextEdit();
-    });
+      this.mindMap.renderer.endTextEdit()
+    })
     if (this.openTest) {
       setTimeout(() => {
         this.test()
@@ -88,7 +87,7 @@ export default {
     test() {
       let nodeData = {
         data: { text: '根节点', expand: true, isActive: false },
-        children: [],
+        children: []
       }
       setTimeout(() => {
         nodeData.data.text = '理想青年实验室'
@@ -97,25 +96,67 @@ export default {
         setTimeout(() => {
           nodeData.children.push({
             data: { text: '网站', expand: true, isActive: false },
-            children: [],
+            children: []
           })
           this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
 
           setTimeout(() => {
             nodeData.children.push({
               data: { text: '博客', expand: true, isActive: false },
-              children: [],
+              children: []
             })
             this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
 
             setTimeout(() => {
-              let viewData = { "transform": { "scaleX": 1, "scaleY": 1, "shear": 0, "rotate": 0, "translateX": 179, "translateY": 0, "originX": 0, "originY": 0, "a": 1, "b": 0, "c": 0, "d": 1, "e": 179, "f": 0 }, "state": { "scale": 1, "x": 179, "y": 0, "sx": 0, "sy": 0 } }
+              let viewData = {
+                transform: {
+                  scaleX: 1,
+                  scaleY: 1,
+                  shear: 0,
+                  rotate: 0,
+                  translateX: 179,
+                  translateY: 0,
+                  originX: 0,
+                  originY: 0,
+                  a: 1,
+                  b: 0,
+                  c: 0,
+                  d: 1,
+                  e: 179,
+                  f: 0
+                },
+                state: { scale: 1, x: 179, y: 0, sx: 0, sy: 0 }
+              }
               this.mindMap.view.setTransformData(viewData)
 
               setTimeout(() => {
-                let viewData = { "transform": { "scaleX": 1.6000000000000005, "scaleY": 1.6000000000000005, "shear": 0, "rotate": 0, "translateX": -373.3000000000004, "translateY": -281.10000000000025, "originX": 0, "originY": 0, "a": 1.6000000000000005, "b": 0, "c": 0, "d": 1.6000000000000005, "e": -373.3000000000004, "f": -281.10000000000025 }, "state": { "scale": 1.6000000000000005, "x": 179, "y": 0, "sx": 0, "sy": 0 } }
+                let viewData = {
+                  transform: {
+                    scaleX: 1.6000000000000005,
+                    scaleY: 1.6000000000000005,
+                    shear: 0,
+                    rotate: 0,
+                    translateX: -373.3000000000004,
+                    translateY: -281.10000000000025,
+                    originX: 0,
+                    originY: 0,
+                    a: 1.6000000000000005,
+                    b: 0,
+                    c: 0,
+                    d: 1.6000000000000005,
+                    e: -373.3000000000004,
+                    f: -281.10000000000025
+                  },
+                  state: {
+                    scale: 1.6000000000000005,
+                    x: 179,
+                    y: 0,
+                    sx: 0,
+                    sy: 0
+                  }
+                }
                 this.mindMap.view.setTransformData(viewData)
-              }, 1000);
+              }, 1000)
             }, 1000)
           }, 1000)
         }, 1000)
@@ -147,12 +188,12 @@ export default {
       if (this.openTest) {
         return
       }
-      bus.on('data_change', (data) => {
+      bus.on('data_change', data => {
         storeData(data)
       })
-      bus.on('view_data_change', (data) => {
+      bus.on('view_data_change', data => {
         storeConfig({
-          view: data,
+          view: data
         })
       })
     },
@@ -190,39 +231,39 @@ export default {
         viewData: view,
         customNoteContentShow: {
           show: (content, left, top) => {
-            bus.emit('showNoteContent', [content, left, top]);
+            bus.emit('showNoteContent', [content, left, top])
           },
           hide: () => {
-            bus.emit('hideNoteContent');
+            bus.emit('hideNoteContent')
           }
         }
       })
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
-        // 转发事件
-        ;[
-          'node_active',
-          'data_change',
-          'view_data_change',
-          'back_forward',
-          'node_contextmenu',
-          'node_click',
-          'draw_click',
-          'expand_btn_click',
-          'svg_mousedown',
-          'mouseup',
-          'mode_change',
-          'node_tree_render_end'
-        ].forEach((event) => {
-          this.getMindMap().on(event, (...args) => {
-            if (event === 'node_active') {
-              bus.emit(event, args)
-            } else {
-              bus.emit(event, ...args)
-            }
-          })
+      // 转发事件
+      ;[
+        'node_active',
+        'data_change',
+        'view_data_change',
+        'back_forward',
+        'node_contextmenu',
+        'node_click',
+        'draw_click',
+        'expand_btn_click',
+        'svg_mousedown',
+        'mouseup',
+        'mode_change',
+        'node_tree_render_end'
+      ].forEach(event => {
+        this.getMindMap().on(event, (...args) => {
+          if (event === 'node_active') {
+            bus.emit(event, args)
+          } else {
+            bus.emit(event, ...args)
+          }
         })
+      })
       this.bindSaveEvent()
       window.mindMap = this.mindMap
     },
@@ -267,8 +308,8 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
