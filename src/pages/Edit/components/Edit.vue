@@ -212,7 +212,8 @@ export default {
           'expand_btn_click',
           'svg_mousedown',
           'mouseup',
-          'mode_change'
+          'mode_change',
+          'node_tree_render_end'
         ].forEach((event) => {
           this.getMindMap().on(event, (...args) => {
             if (event === 'node_active') {
