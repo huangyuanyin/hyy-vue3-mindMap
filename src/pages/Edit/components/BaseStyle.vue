@@ -1,11 +1,11 @@
 <template>
-  <Sidebar ref="sidebar" title="基础样式">
+  <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
     <div class="sidebarContent" v-if="data">
       <!-- 背景 -->
-      <div class="title noTop">背景</div>
+      <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
         <el-tabs class="tab" v-model="activeTab">
-          <el-tab-pane label="颜色" name="color">
+          <el-tab-pane :label="$t('baseStyle.color')" name="color">
             <Color
               :color="style.backgroundColor"
               @change="
@@ -15,7 +15,7 @@
               "
             ></Color>
           </el-tab-pane>
-          <el-tab-pane label="图片" name="image">
+          <el-tab-pane :label="$t('baseStyle.image')" name="image">
             <ImgUpload
               class="imgUpload"
               :value="style.backgroundImage"
@@ -26,7 +26,7 @@
               "
             ></ImgUpload>
             <div class="rowItem">
-              <span class="name">图片重复</span>
+              <span class="name">{{ $t('baseStyle.imageRepeat') }}</span>
               <el-select
                 size="small"
                 style="width: 120px"
@@ -51,10 +51,10 @@
         </el-tabs>
       </div>
       <!-- 连线 -->
-      <div class="title noTop">连线</div>
+      <div class="title noTop">{{ $t('baseStyle.line') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
               <span
@@ -74,7 +74,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -98,7 +98,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">风格</span>
+          <span class="name">{{ $t('baseStyle.style') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -121,10 +121,10 @@
         </div>
       </div>
       <!-- 概要连线 -->
-      <div class="title noTop">概要的连线</div>
+      <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
               <span
@@ -144,7 +144,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -167,10 +167,10 @@
         </div>
       </div>
       <!-- 内边距 -->
-      <div class="title noTop">节点内边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">水平</span>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.paddingX"
@@ -184,7 +184,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">垂直</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.paddingY"
@@ -197,10 +197,10 @@
         </div>
       </div>
       <!-- 图片 -->
-      <div class="title noTop">图片</div>
+      <div class="title noTop">{{ $t('baseStyle.image') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大宽度</span>
+          <span class="name">{{ $t('baseStyle.maximumWidth') }}</span>
           <el-slider
             style="width: 140px"
             v-model="style.imgMaxWidth"
@@ -216,7 +216,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大高度</span>
+          <span class="name">{{ $t('baseStyle.maximumHeight') }}</span>
           <el-slider
             style="width: 140px"
             v-model="style.imgMaxHeight"
@@ -231,10 +231,10 @@
         </div>
       </div>
       <!-- 图标 -->
-      <div class="title noTop">图标</div>
+      <div class="title noTop">{{ $t('baseStyle.icon') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">大小</span>
+          <span class="name">{{ $t('baseStyle.size') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.iconSize"
@@ -249,18 +249,24 @@
         </div>
       </div>
       <!-- 二级节点外边距 -->
-      <div class="title noTop">节点外边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
       <div class="row column">
         <el-tabs
           class="tab"
           v-model="marginActiveTab"
           @tab-click="initMarginStyle"
         >
-          <el-tab-pane label="二级节点" name="second"></el-tab-pane>
-          <el-tab-pane label="三级及以下节点" name="node"></el-tab-pane>
+          <el-tab-pane
+            :label="$t('baseStyle.level2Node')"
+            name="second"
+          ></el-tab-pane>
+          <el-tab-pane
+            :label="$t('baseStyle.belowLevel2Node')"
+            name="node"
+          ></el-tab-pane>
         </el-tabs>
         <div class="rowItem">
-          <span class="name">水平</span>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
             :max="200"
             style="width: 200px"
@@ -273,7 +279,7 @@
           ></el-slider>
         </div>
         <div class="rowItem">
-          <span class="name">垂直</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             :max="200"
             style="width: 200px"
