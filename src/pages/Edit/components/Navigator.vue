@@ -36,16 +36,30 @@ export default {
     };
   },
   mounted() {
-    bus.on("toggle_mini_map", (show) => {
+    bus.on("toggle_mini_map", this.toggle_mini_map);
+    bus.on("data_change", this.data_change);
+    bus.on("view_data_change", this.view_data_change);
+  },
+  destroyed() {
+    bus.off("toggle_mini_map", this.toggle_mini_map);
+    bus.off("data_change", this.data_change);
+    bus.off("view_data_change", this.view_data_change);
+  },
+  methods: {
+    toggle_mini_map(show) {
       this.showMiniMap = show;
       this.$nextTick(() => {
         if (show) {
-          this.init();
-          this.drawMiniMap();
+          if (this.$refs.navigatorBox) {
+            this.init();
+          }
+          if (this.$refs.svgBox) {
+            this.drawMiniMap();
+          }
         }
-      });
-    });
-    bus.on("data_change", () => {
+      })
+    },
+    data_change() {
       if (!this.showMiniMap) {
         return;
       }
@@ -53,8 +67,8 @@ export default {
       this.timer = setTimeout(() => {
         this.drawMiniMap();
       }, 500);
-    });
-    bus.on("view_data_change", () => {
+    },
+    view_data_change() {
       if (!this.showMiniMap) {
         return;
       }
@@ -62,9 +76,7 @@ export default {
       this.timer = setTimeout(() => {
         this.drawMiniMap();
       }, 500);
-    });
-  },
-  methods: {
+    },
     init() {
       let { width, height } = this.$refs.navigatorBox.getBoundingClientRect();
       this.boxWidth = width;
