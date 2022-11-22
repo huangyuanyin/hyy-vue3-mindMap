@@ -16,7 +16,9 @@
       :on-exceed="onExceed"
     >
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-      <div slot="tip" class="el-upload__tip">支持.smm、.json、.xmind文件</div>
+      <div slot="tip" class="el-upload__tip">
+        支持.smm、.json、.xmind、.xlsx文件
+      </div>
     </el-upload>
     <template #footer>
       <span class="dialog-footer">
@@ -37,6 +39,8 @@ import bus from '@/utils/bus.js'
 import { ElMessage } from 'element-plus'
 import MindMap from 'simple-mind-map'
 import { useStore } from 'vuex'
+import { fileToBuffer } from '@/utils'
+import { read, utils } from 'xlsx'
 
 const dialogVisible = ref(false)
 const fileList = ref([])
@@ -62,10 +66,10 @@ onMounted(() => {
  * @Desc: 文件选择
  */
 const onChange = file => {
-  let reg = /\.(smm|xmind|json)$/
+  let reg = /\.(smm|xmind|json|xlsx)$/
   if (!reg.test(file.name)) {
     ElMessage({
-      message: '请选择.smm、.json、.xmind文件',
+      message: '请选择.smm、.json、.xmind、.xlsx文件',
       type: 'error'
     })
     fileList.value = []
@@ -110,10 +114,15 @@ const confirm = () => {
     handleSmm(file)
   } else if (/\.xmind$/.test(file.name)) {
     handleXmind(file)
+  } else if (/\.xlsx$/.test(file.name)) {
+    handleExcel(file)
   }
   cancel()
 }
-
+/**
+ * @Author: 黄原寅
+ * @Desc: 处理.smm文件
+ */
 const handleSmm = file => {
   let fileReader = new FileReader()
   fileReader.readAsText(file.raw)
@@ -138,7 +147,10 @@ const handleSmm = file => {
   }
   cancel()
 }
-
+/**
+ * @Author: 黄原寅
+ * @Desc: 处理.xmind文件
+ */
 const handleXmind = async file => {
   try {
     let data = await MindMap.xmind.parseXmindFile(file.raw)
@@ -153,6 +165,71 @@ const handleXmind = async file => {
       message: '文件解析失败',
       type: 'error'
     })
+  }
+}
+/**
+ * @Author: 黄原寅
+ * @Desc: 处理.xlsx文件
+ */
+const handleExcel = async file => {
+  try {
+    const wb = read(await fileToBuffer(file.raw))
+    const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+      header: 1
+    })
+    if (data.length <= 0) {
+      return
+    }
+    let max = 0
+    data.forEach(arr => {
+      if (arr.length > max) {
+        max = arr.length
+      }
+    })
+    let layers = []
+    let walk = layer => {
+      if (!layers[layer]) {
+        layers[layer] = []
+      }
+      for (let i = 0; i < data.length; i++) {
+        if (data[i][layer]) {
+          let node = {
+            data: {
+              text: data[i][layer]
+            },
+            children: [],
+            _row: i
+          }
+          layers[layer].push(node)
+        }
+      }
+      if (layer < max - 1) {
+        walk(layer + 1)
+      }
+    }
+    walk(0)
+    let getParent = (arr, row) => {
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (row >= arr[i]._row) {
+          return arr[i]
+        }
+      }
+    }
+    for (let i = 1; i < layers.length; i++) {
+      let arr = layers[i]
+      for (let j = 0; j < arr.length; j++) {
+        let item = arr[j]
+        let parent = getParent(layers[i - 1], item._row)
+        if (parent) {
+          parent.children.push(item)
+        }
+      }
+    }
+    bus.emit('setData', layers[0][0])
+    ElMessage.success('导入成功')
+  } catch (error) {
+    console.log(error)
+    ElMessage.error('文件解析失败')
   }
 }
 </script>

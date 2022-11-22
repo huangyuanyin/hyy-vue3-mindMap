@@ -18,7 +18,8 @@
     "v-viewer": "^3.0.11",
     "vue": "^3.2.37",
     "vue-router": "^4.0.16",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",
