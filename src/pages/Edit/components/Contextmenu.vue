@@ -100,7 +100,14 @@ export default {
       isZenMode: state => state.localConfig.isZenMode
     }),
     expandList() {
-      return [this.$t('contextmenu.level1'), this.$t('contextmenu.level2'), this.$t('contextmenu.level3'), this.$t('contextmenu.level4'), this.$t('contextmenu.level5'), this.$t('contextmenu.level6')]
+      return [
+        this.$t('contextmenu.level1'),
+        this.$t('contextmenu.level2'),
+        this.$t('contextmenu.level3'),
+        this.$t('contextmenu.level4'),
+        this.$t('contextmenu.level5'),
+        this.$t('contextmenu.level6')
+      ]
     },
     insertNodeBtnDisabled() {
       return !this.node || this.node.isRoot

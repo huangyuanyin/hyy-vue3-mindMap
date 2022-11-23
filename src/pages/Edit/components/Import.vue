@@ -1,6 +1,15 @@
 <template>
   <el-dialog custom-class="nodeDialog" v-model="dialogVisible" t:title="$t('import.title')" width="600px">
-    <el-upload ref="upload" action="x" :file-list="fileList" :auto-upload="false" :multiple="false" :on-change="onChange" :limit="1" :on-exceed="onExceed">
+    <el-upload
+      ref="upload"
+      action="x"
+      :file-list="fileList"
+      :auto-upload="false"
+      :multiple="false"
+      :on-change="onChange"
+      :limit="1"
+      :on-exceed="onExceed"
+    >
       <el-button slot="trigger" size="small" type="primary">$t('import.selectFile')</el-button>
       <div slot="tip" class="el-upload__tip">支持.smm、.json、.xmind、.xlsx文件</div>
     </el-upload>

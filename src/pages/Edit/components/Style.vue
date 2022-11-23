@@ -11,21 +11,48 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.fontFamily') }}</span>
-            <el-select size="small" v-model="style.fontFamily" placeholder="" :disabled="checkDisabled('fontFamily')" @change="update('fontFamily')">
-              <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.name" :value="item.value" :style="{ fontFamily: item.value }"> </el-option>
+            <el-select
+              size="small"
+              v-model="style.fontFamily"
+              placeholder=""
+              :disabled="checkDisabled('fontFamily')"
+              @change="update('fontFamily')"
+            >
+              <el-option
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+                :style="{ fontFamily: item.value }"
+              >
+              </el-option>
             </el-select>
           </div>
         </div>
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.fontSize') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.fontSize" placeholder="" :disabled="checkDisabled('fontSize')" @change="update('fontSize')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.fontSize"
+              placeholder=""
+              :disabled="checkDisabled('fontSize')"
+              @change="update('fontSize')"
+            >
               <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.lineHeight') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.lineHeight" placeholder="" :disabled="checkDisabled('lineHeight')" @change="update('lineHeight')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.lineHeight"
+              placeholder=""
+              :disabled="checkDisabled('lineHeight')"
+              @change="update('lineHeight')"
+            >
               <el-option v-for="item in lineHeightList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
@@ -100,14 +127,25 @@
             <span class="name">{{ $t('style.color') }}</span>
             <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')" width="auto">
               <template #reference>
-                <span class="block" :style="{ width: '80px', backgroundColor: style.borderColor }" :class="{ disabled: checkDisabled('borderColor') }"></span>
+                <span
+                  class="block"
+                  :style="{ width: '80px', backgroundColor: style.borderColor }"
+                  :class="{ disabled: checkDisabled('borderColor') }"
+                ></span>
               </template>
               <Color :color="style.borderColor" @change="changeBorderColor"></Color>
             </el-popover>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.style') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.borderDasharray" placeholder="" :disabled="checkDisabled('borderDasharray')" @change="update('borderDasharray')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.borderDasharray"
+              placeholder=""
+              :disabled="checkDisabled('borderDasharray')"
+              @change="update('borderDasharray')"
+            >
               <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
@@ -115,13 +153,27 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.width') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.borderWidth" placeholder="" :disabled="checkDisabled('borderWidth')" @change="update('borderWidth')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.borderWidth"
+              placeholder=""
+              :disabled="checkDisabled('borderWidth')"
+              @change="update('borderWidth')"
+            >
               <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.borderRadius') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.borderRadius" placeholder="" :disabled="checkDisabled('borderRadius')" @change="update('borderRadius')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.borderRadius"
+              placeholder=""
+              :disabled="checkDisabled('borderRadius')"
+              @change="update('borderRadius')"
+            >
               <el-option v-for="item in borderRadiusList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
@@ -133,7 +185,11 @@
             <span class="name">{{ $t('style.color') }}</span>
             <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')" width="auto">
               <template #reference>
-                <span class="block" :style="{ width: '80px', backgroundColor: style.fillColor }" :class="{ disabled: checkDisabled('fillColor') }"></span>
+                <span
+                  class="block"
+                  :style="{ width: '80px', backgroundColor: style.fillColor }"
+                  :class="{ disabled: checkDisabled('fillColor') }"
+                ></span>
               </template>
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
@@ -144,7 +200,14 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.shape') }}</span>
-            <el-select size="small" style="width: 120px" v-model="style.shape" placeholder="" :disabled="checkDisabled('shape')" @change="update('shape')">
+            <el-select
+              size="small"
+              style="width: 120px"
+              v-model="style.shape"
+              placeholder=""
+              :disabled="checkDisabled('shape')"
+              @change="update('shape')"
+            >
               <el-option v-for="item in shapeList" :key="item" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
@@ -156,14 +219,25 @@
             <span class="name">{{ $t('style.color') }}</span>
             <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')" width="auto">
               <template #reference>
-                <span class="block" :style="{ width: '80px', backgroundColor: style.lineColor }" :class="{ disabled: checkDisabled('lineColor') }"></span>
+                <span
+                  class="block"
+                  :style="{ width: '80px', backgroundColor: style.lineColor }"
+                  :class="{ disabled: checkDisabled('lineColor') }"
+                ></span>
               </template>
               <Color :color="style.lineColor" @change="changeLineColor"></Color>
             </el-popover>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.style') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.lineDasharray" placeholder="请选择..." :disabled="checkDisabled('lineDasharray')" @change="update('lineDasharray')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.lineDasharray"
+              placeholder="请选择..."
+              :disabled="checkDisabled('lineDasharray')"
+              @change="update('lineDasharray')"
+            >
               <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
@@ -171,7 +245,14 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.width') }}</span>
-            <el-select size="small" style="width: 80px" v-model="style.lineWidth" placeholder="请选择..." :disabled="checkDisabled('lineWidth')" @change="update('lineWidth')">
+            <el-select
+              size="small"
+              style="width: 80px"
+              v-model="style.lineWidth"
+              placeholder="请选择..."
+              :disabled="checkDisabled('lineWidth')"
+              @change="update('lineWidth')"
+            >
               <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
@@ -181,13 +262,23 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.horizontal') }}</span>
-            <el-slider style="width: 200px" v-model="style.paddingX" :disabled="checkDisabled('paddingX')" @change="update('paddingX')"></el-slider>
+            <el-slider
+              style="width: 200px"
+              v-model="style.paddingX"
+              :disabled="checkDisabled('paddingX')"
+              @change="update('paddingX')"
+            ></el-slider>
           </div>
         </div>
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.vertical') }}</span>
-            <el-slider style="width: 200px" v-model="style.paddingY" :disabled="checkDisabled('paddingY')" @change="update('paddingY')"></el-slider>
+            <el-slider
+              style="width: 200px"
+              v-model="style.paddingY"
+              :disabled="checkDisabled('paddingY')"
+              @change="update('paddingY')"
+            ></el-slider>
           </div>
         </div>
       </div>

@@ -5,13 +5,7 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  defineProps,
-  onMounted,
-  onUnmounted,
-  getCurrentInstance
-} from 'vue'
+import { ref, defineProps, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 const props = defineProps({
   mindMap: {
     type: Object,
@@ -20,8 +14,7 @@ const props = defineProps({
     }
   }
 })
-const $viewerApi =
-  getCurrentInstance().appContext.config.globalProperties.$viewerApi
+const $viewerApi = getCurrentInstance().appContext.config.globalProperties.$viewerApi
 const images = ref([])
 onMounted(() => {
   props.mindMap.on('node_img_dblclick', onNodeTmgDblclick)

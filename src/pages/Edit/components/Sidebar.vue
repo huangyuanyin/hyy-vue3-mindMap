@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="sidebarContainer"
-    @click.stop
-    :class="{ show: show }"
-    :style="{ zIndex: zIndex }"
-  >
+  <div class="sidebarContainer" @click.stop :class="{ show: show }" :style="{ zIndex: zIndex }">
     <el-icon class="closeBtn" @click="show = false">
       <Close />
     </el-icon>

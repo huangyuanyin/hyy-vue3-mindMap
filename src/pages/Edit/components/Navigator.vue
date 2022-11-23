@@ -1,12 +1,5 @@
 <template>
-  <div
-    v-if="showMiniMap"
-    class="navigatorBox"
-    ref="navigatorBox"
-    @mousedown="onMousedown"
-    @mousemove="onMousemove"
-    @mouseup="onMouseup"
-  >
+  <div v-if="showMiniMap" class="navigatorBox" ref="navigatorBox" @mousedown="onMousedown" @mousemove="onMousemove" @mouseup="onMouseup">
     <div
       class="svgBox"
       ref="svgBox"
@@ -86,13 +79,10 @@ export default {
       this.boxHeight = height
     },
     drawMiniMap() {
-      let {
-        svgHTML,
-        viewBoxStyle,
-        miniMapBoxScale,
-        miniMapBoxLeft,
-        miniMapBoxTop
-      } = this.mindMap.miniMap.calculationMiniMap(this.boxWidth, this.boxHeight)
+      let { svgHTML, viewBoxStyle, miniMapBoxScale, miniMapBoxLeft, miniMapBoxTop } = this.mindMap.miniMap.calculationMiniMap(
+        this.boxWidth,
+        this.boxHeight
+      )
       // 渲染到小地图
       this.$refs.svgBox.innerHTML = svgHTML
       this.viewBoxStyle = viewBoxStyle

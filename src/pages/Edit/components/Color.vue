@@ -1,21 +1,11 @@
 <template>
   <div>
     <div class="colorList">
-      <span
-        class="colorItem"
-        v-for="item in colorList"
-        :style="{ backgroundColor: item }"
-        :key="item"
-        @click="clickColorItem(item)"
-      ></span>
+      <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item" @click="clickColorItem(item)"></span>
     </div>
     <div class="moreColor">
       <span>{{ $t('color.moreColor') }}</span>
-      <el-color-picker
-        size="small"
-        v-model="selectColor"
-        @change="changeColor"
-      ></el-color-picker>
+      <el-color-picker size="small" v-model="selectColor" @change="changeColor"></el-color-picker>
     </div>
   </div>
 </template>

@@ -30,9 +30,9 @@ export const fullScreen = element => {
   }
 }
 
-/** 
+/**
  * @Author: 黄原寅
- * @Desc: 文件转buffer 
+ * @Desc: 文件转buffer
  */
 export const fileToBuffer = file => {
   return new Promise(r => {

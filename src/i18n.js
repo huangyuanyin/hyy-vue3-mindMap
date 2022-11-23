@@ -3,9 +3,9 @@ import messages from './lang'
 import { getLang } from '@/api'
 
 const i18n = createI18n({
-	legacy: false,
-	locale: getLang(),
-	messages
+  legacy: false,
+  locale: getLang(),
+  messages
 })
 
 export default i18n
