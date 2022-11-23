@@ -7,6 +7,7 @@
       top: this.top + 'px',
       visibility: show ? 'visible' : 'hidden'
     }"
+    @click.stop
   ></div>
 </template>
 
@@ -29,21 +30,39 @@ export default {
     }
   },
   created() {
-    bus.on('showNoteContent', ([content, left, top]) => {
-      // mitt只支持传入一个参数
-      this.editor.setMarkdown(content)
-      this.left = left
-      this.top = top
-      this.show = true
-    })
-    bus.on('hideNoteContent', () => {
-      this.show = false
-    })
+    bus.on('showNoteContent', this.onShowNoteContent)
+    bus.on('hideNoteContent', this.hideNoteContent)
+    document.body.addEventListener('click', this.hideNoteContent)
+    bus.on('node_active', this.hideNoteContent)
+  },
+  beforeDestroy() {
+    bus.off('showNoteContent', this.onShowNoteContent)
+    bus.off('hideNoteContent', this.hideNoteContent)
+    document.body.removeEventListener('click', this.hideNoteContent)
+    bus.off('node_active', this.hideNoteContent)
   },
   mounted() {
     this.initEditor()
   },
   methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 显示备注浮层
+     */
+    onShowNoteContent([content, left, top]) {
+      // mitt只支持传入一个参数
+      this.editor.setMarkdown(content)
+      this.left = left
+      this.top = top
+      this.show = true
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 隐藏备注浮层
+     */
+    hideNoteContent() {
+      this.show = false
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 初始化编辑器
@@ -65,5 +84,21 @@ export default {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: none;
+    background: transparent;
+    display: none;
+  }
 }
 </style>
