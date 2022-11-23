@@ -21,6 +21,7 @@ import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 
 const props = defineProps({
   mindMap: {
@@ -30,16 +31,6 @@ const props = defineProps({
 
 const sidebar = ref(null)
 const theme = ref('')
-
-onMounted(() => {
-  bus.on('showTheme', () => {
-    sidebar.value.show = false
-    nextTick(() => {
-      theme.value = props.mindMap.getTheme()
-      sidebar.value.show = true
-    })
-  })
-})
 
 /**
  * @Author: 黄原寅寅
@@ -54,6 +45,24 @@ const useTheme = item => {
       config: props.mindMap.getCustomThemeConfig()
     }
   })
+}
+</script>
+
+<script>
+export default {
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'theme') {
+        this.theme = this.mindMap.getTheme()
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  }
 }
 </script>
 

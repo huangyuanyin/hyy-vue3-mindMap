@@ -115,7 +115,7 @@
         </div>
       </div>
       <!-- 通用操作 -->
-      <div class="toolbarBlock">
+      <!-- <div class="toolbarBlock">
         <div class="toolbarBtn" @click="emit('showOutline')">
           <span class="icon iconfont iconfuhao-dagangshu"></span>
           <span class="text">{{ $t('toolbar.displayOutline') }}</span>
@@ -132,7 +132,7 @@
           <span class="icon iconfont iconjiegou"></span>
           <span class="text">{{ $t('toolbar.strusture') }}</span>
         </div>
-      </div>
+      </div> -->
       <!-- 导出 -->
       <div class="toolbarBlock">
         <div class="toolbarBtn" @click="createNewLocalFile">
@@ -155,10 +155,10 @@
           <span class="icon iconfont iconexport"></span>
           <span class="text">{{ $t('toolbar.export') }}</span>
         </div>
-        <div class="toolbarBtn" @click="emit('showShortcutKey')">
+        <!-- <div class="toolbarBtn" @click="emit('showShortcutKey')">
           <span class="icon iconfont iconjianpan"></span>
           <span class="text">{{ $t('toolbar.shortcutKey') }}</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <NodeImage></NodeImage>

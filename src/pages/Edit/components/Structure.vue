@@ -23,6 +23,7 @@ import Sidebar from './Sidebar'
 import { layoutList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 结构
@@ -41,6 +42,19 @@ export default {
     return {
       layoutList,
       layout: ''
+    }
+  },
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'structure') {
+        this.layout = this.mindMap.getLayout()
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
     }
   },
   created() {

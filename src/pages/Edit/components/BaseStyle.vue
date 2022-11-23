@@ -261,6 +261,7 @@ import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 基础样式
@@ -306,6 +307,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['activeSidebar']),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
@@ -313,14 +315,15 @@ export default {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
     }
   },
-  created() {
-    bus.on('showBaseStyle', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  watch: {
+    activeSidebar(val) {
+      if (val === 'baseStyle') {
         this.$refs.sidebar.show = true
         this.initStyle()
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**

@@ -9,7 +9,8 @@ const store = createStore({
     localConfig: {
       // 本地配置
       isZenMode: false // 是否是禅模式
-    }
+    },
+    activeSidebar: '' // 当前显示的侧边栏
   },
   mutations: {
     /**
@@ -36,6 +37,13 @@ const store = createStore({
         ...data
       }
       storeLocalConfig(state.localConfig)
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 设置当前显示的侧边栏
+     */
+    setActiveSidebar(state, data) {
+      state.activeSidebar = data
     }
   },
   actions: {

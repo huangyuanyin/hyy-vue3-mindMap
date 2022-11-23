@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
-    <div class="styleBox">
+    <div class="styleBox" v-if="activeNodes.length > 0">
       <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
         <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
@@ -283,6 +283,10 @@
         </div>
       </div>
     </div>
+    <div class="tipBox" v-else>
+      <div class="tipIcon iconfont icontianjiazijiedian"></div>
+      <div class="tipText">请选择一个节点</div>
+    </div>
   </Sidebar>
 </template>
 
@@ -292,6 +296,7 @@ import Color from './Color'
 import { fontFamilyList, fontSizeList, borderWidthList, borderDasharrayList, borderRadiusList, lineHeightList, shapeList } from '@/config'
 import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 节点样式设置
@@ -334,6 +339,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['activeSidebar']),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
     },
@@ -342,6 +348,15 @@ export default {
     },
     shapeList() {
       return shapeList[this.$i18n.locale] || shapeList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'nodeStyle') {
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
     }
   },
   created() {
@@ -356,10 +371,11 @@ export default {
      * @Desc: 监听节点激活事件
      */
     onNodeActive(...args) {
-      if (this.$refs.sidebar) this.$refs.sidebar.show = false
+      // if (this.$refs.sidebar) this.$refs.sidebar.show = false
       this.$nextTick(() => {
         this.activeTab = 'normal'
-        if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0
+        this.activeNodes = args[0][1]
+        // if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0
         this.initNodeStyle()
       })
     },
@@ -498,6 +514,18 @@ export default {
     flex-grow: 0;
     flex-shrink: 0;
     padding: 0 20px;
+  }
+}
+.tipBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  .tipIcon {
+    font-size: 100px;
   }
 }
 

@@ -15,7 +15,7 @@
   </Sidebar>
 </template>
 
-<script setup>
+<!-- <script setup>
 /**
  * @Author: 黄原寅
  * @Desc: 快捷键功能
@@ -24,6 +24,7 @@ import { ref, onMounted, nextTick, computed } from 'vue'
 import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 
 const sidebar = ref(null) // 声明一个 ref 来存放该元素的引用   必须和模板里的 ref 同名
 
@@ -41,11 +42,32 @@ onMounted(() => {
     })
   })
 })
-</script>
+</script> -->
 
 <script>
+import Sidebar from './Sidebar'
+import { shortcutKeyList } from '@/config'
+import { mapState } from 'vuex'
 export default {
-  name: 'ShortcutKey'
+  name: 'ShortcutKey',
+  components: {
+    Sidebar
+  },
+  computed: {
+    ...mapState(['activeSidebar']),
+    shortcutKeyList() {
+      return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'shortcutKey') {
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  }
 }
 </script>
 
