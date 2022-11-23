@@ -1,10 +1,15 @@
 import { createStore } from 'vuex'
 import exampleData from 'simple-mind-map/example/exampleData'
+import { storeLocalConfig } from '@/api'
 
 const store = createStore({
   state: {
     mindMapData: null, // 思维导图数据
-    isHandleLocalFile: false // 是否操作的是本地文件
+    isHandleLocalFile: false, // 是否操作的是本地文件
+    localConfig: {
+      // 本地配置
+      isZenMode: false // 是否是禅模式
+    }
   },
   mutations: {
     /**
@@ -20,6 +25,17 @@ const store = createStore({
      */
     setIsHandleLocalFile(state, data) {
       state.isHandleLocalFile = data
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 设置本地配置
+     */
+    setLocalConfig(state, data) {
+      state.localConfig = {
+        ...state.localConfig,
+        ...data
+      }
+      storeLocalConfig(state.localConfig)
     }
   },
   actions: {

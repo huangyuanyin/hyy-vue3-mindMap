@@ -234,24 +234,50 @@ export default {
     }
   },
   created() {
-    bus.on('mode_change', mode => {
+    bus.on('mode_change', this.onModeChange)
+    bus.on('node_active', this.onNodeActive)
+    bus.on('back_forward', this.onBackForward)
+    bus.on('write_local_file', this.onWriteLocalFile)
+  },
+  beforeDestroy() {
+    bus.off('mode_change', this.onModeChange)
+    bus.off('node_active', this.onNodeActive)
+    bus.off('back_forward', this.onBackForward)
+    bus.off('write_local_file', this.onWriteLocalFile)
+  },
+  methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听模式切换
+     */
+    onModeChange(mode) {
       this.readonly = mode === 'readonly'
-    })
-    bus.on('node_active', args => {
-      this.activeNodes = args[1]
-    })
-    bus.on('back_forward', (index, len) => {
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听节点激活
+     */
+    onNodeActive(...args) {
+      this.activeNodes = args[0][1]
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听前进后退
+     */
+    onBackForward(index, len) {
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
-    })
-    bus.on('write_local_file', content => {
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听本地文件读写
+     */
+    onWriteLocalFile(content) {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
       }, 1000)
-    })
-  },
-  methods: {
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 打开本地文件

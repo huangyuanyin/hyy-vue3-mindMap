@@ -27,13 +27,21 @@ export default {
     }
   },
   created() {
-    bus.on('data_change', data => {
+    bus.on('data_change', this.onDataChange)
+  },
+  beforeDestroy() {
+    bus.off('data_change', this.onDataChange)
+  },
+  methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听数据变化
+     */
+    onDataChange(data) {
       this.words = 0
       this.num = 0
       this.walk(data)
-    })
-  },
-  methods: {
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 遍历

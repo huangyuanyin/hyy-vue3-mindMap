@@ -5,6 +5,7 @@ import bus from '@/utils/bus.js'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
+const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
 
 /**
  * @Author: 黄原寅
@@ -93,4 +94,24 @@ export const getLang = () => {
   }
   storeLang('zh')
   return 'zh'
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 存储本地配置
+ */
+export const storeLocalConfig = config => {
+  localStorage.setItem(SIMPLE_MIND_MAP_LOCAL_CONFIG, JSON.stringify(config))
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 获取本地配置
+ */
+export const getLocalConfig = () => {
+  let config = localStorage.getItem(SIMPLE_MIND_MAP_LOCAL_CONFIG)
+  if (config) {
+    return JSON.parse(config)
+  }
+  return null
 }

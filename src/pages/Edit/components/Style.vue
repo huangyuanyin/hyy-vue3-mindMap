@@ -254,17 +254,24 @@ export default {
     }
   },
   created() {
-    bus.on('node_active', args => {
+    bus.on('node_active', this.onNodeActive)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.onNodeActive)
+  },
+  methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听节点激活事件
+     */
+    onNodeActive(...args) {
       if (this.$refs.sidebar) this.$refs.sidebar.show = false
       this.$nextTick(() => {
         this.activeTab = 'normal'
-        this.activeNodes = args[1]
         if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0
         this.initNodeStyle()
       })
-    })
-  },
-  methods: {
+    },
     /**
      * @Author: 黄原寅
      * @Desc: tab切换

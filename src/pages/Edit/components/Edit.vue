@@ -1,11 +1,11 @@
 <template>
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
-    <Count></Count>
+    <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
-    <NavigatorToolbar :mindMap="mindMap"></NavigatorToolbar>
+    <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <Outline></Outline>
-    <Style></Style>
+    <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
@@ -33,6 +33,7 @@ import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 编辑区域
@@ -60,6 +61,11 @@ export default {
       prevImg: '',
       openTest: false
     }
+  },
+  computed: {
+    ...mapState({
+      isZenMode: state => state.localConfig.isZenMode
+    })
   },
   mounted() {
     this.init()

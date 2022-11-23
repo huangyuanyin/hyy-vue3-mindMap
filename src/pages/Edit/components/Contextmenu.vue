@@ -60,12 +60,17 @@
         {{ $t('contextmenu.arrangeLayout') }}
         <span class="desc">Ctrl + L</span>
       </div>
+      <div class="item" @click="exec('TOGGLE_ZEN_MODE')">
+        {{ $t('contextmenu.zenMode') }}
+        {{ isZenMode ? '🐶' : '' }}
+      </div>
     </template>
   </div>
 </template>
 
 <script>
 import bus from '@/utils/bus.js'
+import { mapState, mapMutations } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 右键菜单
@@ -91,6 +96,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isZenMode: state => state.localConfig.isZenMode
+    }),
     expandList() {
       return [this.$t('contextmenu.level1'), this.$t('contextmenu.level2'), this.$t('contextmenu.level3'), this.$t('contextmenu.level4'), this.$t('contextmenu.level5'), this.$t('contextmenu.level6')]
     },
@@ -145,6 +153,7 @@ export default {
     this.mindMap.keyCommand.removeShortcut('Control+x', this.cut)
   },
   methods: {
+    ...mapMutations(['setLocalConfig']),
     /**
      * @Author: 黄原寅
      * @Desc: 节点右键显示
@@ -233,6 +242,11 @@ export default {
           break
         case 'RETURN_CENTER':
           this.mindMap.view.reset()
+          break
+        case 'TOGGLE_ZEN_MODE':
+          this.setLocalConfig({
+            isZenMode: !this.isZenMode
+          })
           break
         default:
           bus.emit('execCommand', [key, ...args])
