@@ -1,44 +1,43 @@
 <template>
   <div>
     <div class="colorList">
-      <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item"
-        @click="clickColorItem(item)"></span>
+      <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item" @click="clickColorItem(item)"></span>
     </div>
     <div class="moreColor">
-      <span>更多颜色</span>
+      <span>{{ $t('color.moreColor') }}</span>
       <el-color-picker size="small" v-model="selectColor" @change="changeColor"></el-color-picker>
     </div>
   </div>
 </template>
 
 <script>
-import { colorList } from "@/config";
+import { colorList } from '@/config'
 
-/** 
+/**
  * @Author: 黄原寅
- * @Desc: 颜色选择器 
+ * @Desc: 颜色选择器
  */
 export default {
-  name: "Color",
+  name: 'Color',
   props: {
     color: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   data() {
     return {
       colorList,
-      selectColor: "",
-    };
+      selectColor: ''
+    }
   },
   watch: {
     color() {
-      this.selectColor = this.color;
-    },
+      this.selectColor = this.color
+    }
   },
   created() {
-    this.selectColor = this.color;
+    this.selectColor = this.color
   },
   methods: {
     /**
@@ -46,7 +45,7 @@ export default {
      * @Desc: 点击预设颜色
      */
     clickColorItem(color) {
-      this.$emit("change", color);
+      this.$emit('change', color)
     },
 
     /**
@@ -54,10 +53,10 @@ export default {
      * @Desc: 修改颜色
      */
     changeColor() {
-      this.$emit("change", this.selectColor);
-    },
-  },
-};
+      this.$emit('change', this.selectColor)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

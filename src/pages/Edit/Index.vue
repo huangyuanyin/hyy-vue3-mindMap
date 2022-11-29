@@ -1,43 +1,65 @@
 <template>
   <div class="container">
     <template v-if="show">
-      <Toolbar></Toolbar>
+      <Toolbar v-if="!isZenMode"></Toolbar>
       <Edit></Edit>
     </template>
   </div>
 </template>
 
 <script>
-import Toolbar from "./components/Toolbar";
-import Edit from "./components/Edit";
-import { mapState, mapActions } from "vuex";
+import Toolbar from './components/Toolbar'
+import Edit from './components/Edit'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { getLocalConfig } from '@/api'
 
 export default {
-  name: "Index",
+  name: 'Index',
   components: {
     Toolbar,
-    Edit,
+    Edit
   },
   data() {
     return {
-      show: false,
-    };
+      show: false
+    }
+  },
+  computed: {
+    ...mapState({
+      isZenMode: state => state.localConfig.isZenMode
+    })
   },
   async created() {
+    this.initLocalConfig()
     const loading = this.$loading({
       lock: true,
-      text: "正在加载，请稍后...",
-    });
-    await this.getUserMindMapData();
-    this.show = true;
-    loading.close();
+      text: '正在加载，请稍后...'
+    })
+    await this.getUserMindMapData()
+    this.show = true
+    loading.close()
   },
   methods: {
-    ...mapActions(["getUserMindMapData"]),
-  },
-};
+    ...mapActions(['getUserMindMapData']),
+    ...mapMutations(['setLocalConfig']),
+    /**
+     * @Author: 黄原寅
+     * @Desc: 初始化本地配置
+     */
+    initLocalConfig() {
+      let config = getLocalConfig()
+      if (config) {
+        this.setLocalConfig({
+          ...this.$store.state.localConfig,
+          ...config
+        })
+      }
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-.container {}
+.container {
+}
 </style>

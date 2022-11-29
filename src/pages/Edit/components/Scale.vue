@@ -1,12 +1,12 @@
 <template>
   <div class="scaleContainer">
-    <el-tooltip class="item" effect="dark" content="缩小" placement="top">
+    <el-tooltip class="item" effect="dark" :content="$t('scale.zoomOut')" placement="top">
       <el-icon class="btn" @click="narrow">
         <Minus />
       </el-icon>
     </el-tooltip>
     <div class="scaleInfo">{{ scaleNum }}%</div>
-    <el-tooltip class="item" effect="dark" content="放大" placement="top">
+    <el-tooltip class="item" effect="dark" :content="$t('scale.zoomIn')" placement="top">
       <el-icon class="btn" @click="enlarge">
         <Plus />
       </el-icon>
@@ -20,30 +20,33 @@
  * @Desc: 放大缩小
  */
 import { ref, defineProps, watch } from 'vue'
-import { Plus, Minus } from "@element-plus/icons-vue";
+import { Plus, Minus } from '@element-plus/icons-vue'
 
 const props = defineProps({
   mindMap: {
-    type: Object,
-  },
+    type: Object
+  }
 })
 
 const scaleNum = ref(100)
 
-watch(() => props.mindMap, (val, oldVal) => {
-  if (val && !oldVal) {
-    props.mindMap.on("scale", (scale) => {
-      scaleNum.value = toPer(scale);
-    });
-    scaleNum.value = toPer(props.mindMap.view.scale)
+watch(
+  () => props.mindMap,
+  (val, oldVal) => {
+    if (val && !oldVal) {
+      props.mindMap.on('scale', scale => {
+        scaleNum.value = toPer(scale)
+      })
+      scaleNum.value = toPer(props.mindMap.view.scale)
+    }
   }
-})
+)
 
-/** 
-* @Author: 黄原寅 
-* @Desc: 转换成百分数 
-*/
-const toPer = (scale) => {
+/**
+ * @Author: 黄原寅
+ * @Desc: 转换成百分数
+ */
+const toPer = scale => {
   return (scale * 100).toFixed(0)
 }
 
@@ -53,22 +56,22 @@ const toPer = (scale) => {
  */
 
 const narrow = () => {
-  props.mindMap.view.narrow();
+  props.mindMap.view.narrow()
 }
 
 /**
  * @Author: 黄原寅
  * @Desc: 放大
-*/
+ */
 const enlarge = () => {
-  props.mindMap.view.enlarge();
+  props.mindMap.view.enlarge()
 }
 </script>
 
 <script>
 export default {
-  name: "Scale",
-};
+  name: 'Scale'
+}
 </script>
 
 <style lang="less" scoped>

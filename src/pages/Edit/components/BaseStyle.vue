@@ -1,185 +1,253 @@
 <template>
-  <Sidebar ref="sidebar" title="基础样式">
+  <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
     <div class="sidebarContent" v-if="data">
       <!-- 背景 -->
-      <div class="title noTop">背景</div>
+      <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
         <el-tabs class="tab" v-model="activeTab">
-          <el-tab-pane label="颜色" name="color">
-            <Color :color="style.backgroundColor" @change="
-              (color) => {
-                update('backgroundColor', color);
-              }
-            "></Color>
-          </el-tab-pane>
-          <el-tab-pane label="图片" name="image">
-            <ImgUpload class="imgUpload" :value="style.backgroundImage" @changeImg="
-              (img) => {
-                update('backgroundImage', img);
-              }
-            "></ImgUpload>
-            <div class="rowItem">
-              <span class="name">图片重复</span>
-              <el-select size="small" style="width: 120px" v-model="style.backgroundRepeat" placeholder="" @change="
-                (value) => {
-                  update('backgroundRepeat', value);
+          <el-tab-pane :label="$t('baseStyle.color')" name="color">
+            <Color
+              :color="style.backgroundColor"
+              @change="
+                color => {
+                  update('backgroundColor', color)
                 }
-              ">
-                <el-option v-for="item in backgroundRepeatList" :key="item.value" :label="item.name"
-                  :value="item.value">
-                </el-option>
+              "
+            ></Color>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.image')" name="image">
+            <ImgUpload
+              class="imgUpload"
+              :value="style.backgroundImage"
+              @changeImg="
+                img => {
+                  update('backgroundImage', img)
+                }
+              "
+            ></ImgUpload>
+            <div class="rowItem">
+              <span class="name">{{ $t('baseStyle.imageRepeat') }}</span>
+              <el-select
+                size="small"
+                style="width: 120px"
+                v-model="style.backgroundRepeat"
+                placeholder=""
+                @change="
+                  value => {
+                    update('backgroundRepeat', value)
+                  }
+                "
+              >
+                <el-option v-for="item in backgroundRepeatList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
               </el-select>
             </div>
           </el-tab-pane>
         </el-tabs>
       </div>
       <!-- 连线 -->
-      <div class="title noTop">连线</div>
+      <div class="title noTop">{{ $t('baseStyle.line') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
               <span class="block" v-popover:popover :style="{ backgroundColor: style.lineColor }"></span>
             </template>
-            <Color :color="style.lineColor" @change="
-              (color) => {
-                update('lineColor', color);
-              }
-            "></Color>
+            <Color
+              :color="style.lineColor"
+              @change="
+                color => {
+                  update('lineColor', color)
+                }
+              "
+            ></Color>
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
-          <el-select size="small" style="width: 80px" v-model="style.lineWidth" placeholder="" @change="
-            (value) => {
-              update('lineWidth', value);
-            }
-          ">
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
-            </el-option>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.lineWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('lineWidth', value)
+              }
+            "
+          >
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">风格</span>
-          <el-select size="small" style="width: 80px" v-model="style.lineStyle" placeholder="" @change="
-            (value) => {
-              update('lineStyle', value);
-            }
-          ">
-            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value">
-            </el-option>
+          <span class="name">{{ $t('baseStyle.style') }}</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.lineStyle"
+            placeholder=""
+            @change="
+              value => {
+                update('lineStyle', value)
+              }
+            "
+          >
+            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
           </el-select>
         </div>
       </div>
       <!-- 概要连线 -->
-      <div class="title noTop">概要的连线</div>
+      <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
               <span class="block" v-popover:popover2 :style="{ backgroundColor: style.generalizationLineColor }"></span>
             </template>
-            <Color :color="style.generalizationLineColor" @change="
-              (color) => {
-                update('generalizationLineColor', color);
-              }
-            "></Color>
+            <Color
+              :color="style.generalizationLineColor"
+              @change="
+                color => {
+                  update('generalizationLineColor', color)
+                }
+              "
+            ></Color>
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
-          <el-select size="small" style="width: 80px" v-model="style.generalizationLineWidth" placeholder="" @change="
-            (value) => {
-              update('generalizationLineWidth', value);
-            }
-          ">
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
-            </el-option>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.generalizationLineWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('generalizationLineWidth', value)
+              }
+            "
+          >
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
       <!-- 内边距 -->
-      <div class="title noTop">节点内边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">水平</span>
-          <el-slider style="width: 200px" v-model="style.paddingX" @change="
-            (value) => {
-              update('paddingX', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <el-slider
+            style="width: 200px"
+            v-model="style.paddingX"
+            @change="
+              value => {
+                update('paddingX', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">垂直</span>
-          <el-slider style="width: 200px" v-model="style.paddingY" @change="
-            (value) => {
-              update('paddingY', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
+          <el-slider
+            style="width: 200px"
+            v-model="style.paddingY"
+            @change="
+              value => {
+                update('paddingY', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
       <!-- 图片 -->
-      <div class="title noTop">图片</div>
+      <div class="title noTop">{{ $t('baseStyle.image') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大宽度</span>
-          <el-slider style="width: 140px" v-model="style.imgMaxWidth" :min="10" :max="300" @change="
-            (value) => {
-              update('imgMaxWidth', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.maximumWidth') }}</span>
+          <el-slider
+            style="width: 140px"
+            v-model="style.imgMaxWidth"
+            :min="10"
+            :max="300"
+            @change="
+              value => {
+                update('imgMaxWidth', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大高度</span>
-          <el-slider style="width: 140px" v-model="style.imgMaxHeight" :min="10" :max="300" @change="
-            (value) => {
-              update('imgMaxHeight', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.maximumHeight') }}</span>
+          <el-slider
+            style="width: 140px"
+            v-model="style.imgMaxHeight"
+            :min="10"
+            :max="300"
+            @change="
+              value => {
+                update('imgMaxHeight', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
       <!-- 图标 -->
-      <div class="title noTop">图标</div>
+      <div class="title noTop">{{ $t('baseStyle.icon') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">大小</span>
-          <el-slider style="width: 200px" v-model="style.iconSize" :min="12" :max="50" @change="
-            (value) => {
-              update('iconSize', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.size') }}</span>
+          <el-slider
+            style="width: 200px"
+            v-model="style.iconSize"
+            :min="12"
+            :max="50"
+            @change="
+              value => {
+                update('iconSize', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
       <!-- 二级节点外边距 -->
-      <div class="title noTop">节点外边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
       <div class="row column">
         <el-tabs class="tab" v-model="marginActiveTab" @tab-click="initMarginStyle">
-          <el-tab-pane label="二级节点" name="second"></el-tab-pane>
-          <el-tab-pane label="三级及以下节点" name="node"></el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.level2Node')" name="second"></el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.belowLevel2Node')" name="node"></el-tab-pane>
         </el-tabs>
         <div class="rowItem">
-          <span class="name">水平</span>
-          <el-slider :max="200" style="width: 200px" v-model="style.marginX" @change="
-            (value) => {
-              updateMargin('marginX', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <el-slider
+            :max="200"
+            style="width: 200px"
+            v-model="style.marginX"
+            @change="
+              value => {
+                updateMargin('marginX', value)
+              }
+            "
+          ></el-slider>
         </div>
         <div class="rowItem">
-          <span class="name">垂直</span>
-          <el-slider :max="200" style="width: 200px" v-model="style.marginY" @change="
-            (value) => {
-              updateMargin('marginY', value);
-            }
-          "></el-slider>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
+          <el-slider
+            :max="200"
+            style="width: 200px"
+            v-model="style.marginY"
+            @change="
+              value => {
+                updateMargin('marginY', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
     </div>
@@ -187,70 +255,75 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import Color from "./Color";
-import {
-  lineWidthList,
-  lineStyleList,
-  backgroundRepeatList
-} from "@/config";
-import ImgUpload from "@/components/ImgUpload";
-import { storeConfig } from "@/api";
-import bus from "@/utils/bus.js"
+import Sidebar from './Sidebar'
+import Color from './Color'
+import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
+import ImgUpload from '@/components/ImgUpload'
+import { storeConfig } from '@/api'
+import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 基础样式
  */
 export default {
-  name: "BaseStyle",
+  name: 'BaseStyle',
   components: {
     Sidebar,
     Color,
-    ImgUpload,
+    ImgUpload
   },
   props: {
     data: {
       type: [Object, null],
-      default: null,
+      default: null
     },
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       lineWidthList,
-      lineStyleList,
-      backgroundRepeatList,
-      activeTab: "color",
-      marginActiveTab: "second",
+      activeTab: 'color',
+      marginActiveTab: 'second',
       style: {
-        backgroundColor: "",
-        lineColor: "",
-        lineWidth: "",
-        lineStyle: "",
-        generalizationLineWidth: "",
-        generalizationLineColor: "",
+        backgroundColor: '',
+        lineColor: '',
+        lineWidth: '',
+        lineStyle: '',
+        generalizationLineWidth: '',
+        generalizationLineColor: '',
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
         imgMaxHeight: 0,
         iconSize: 0,
-        backgroundImage: "",
-        backgroundRepeat: "no-repeat",
+        backgroundImage: '',
+        backgroundRepeat: 'no-repeat',
         marginX: 0,
-        marginY: 0,
-      },
-    };
+        marginY: 0
+      }
+    }
   },
-  created() {
-    bus.on("showBaseStyle", () => {
-      this.$refs.sidebar.show = false;
-      this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-        this.initStyle();
-      });
-    });
+  computed: {
+    ...mapState(['activeSidebar']),
+    lineStyleList() {
+      return lineStyleList[this.$i18n.locale] || lineStyleList.zh
+    },
+    backgroundRepeatList() {
+      return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'baseStyle') {
+        this.$refs.sidebar.show = true
+        this.initStyle()
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**
@@ -258,27 +331,27 @@ export default {
      * @Desc: 初始样式
      */
     initStyle() {
-      [
-        "backgroundColor",
-        "lineWidth",
-        "lineStyle",
-        "lineColor",
-        "generalizationLineWidth",
-        "generalizationLineColor",
-        "paddingX",
-        "paddingY",
-        "imgMaxWidth",
-        "imgMaxHeight",
-        "iconSize",
-        "backgroundImage",
-        "backgroundRepeat",
-      ].forEach((key) => {
-        this.style[key] = this.mindMap.getThemeConfig(key);
-        if (key === "backgroundImage" && this.style[key] === "none") {
-          this.style[key] = "";
+      ;[
+        'backgroundColor',
+        'lineWidth',
+        'lineStyle',
+        'lineColor',
+        'generalizationLineWidth',
+        'generalizationLineColor',
+        'paddingX',
+        'paddingY',
+        'imgMaxWidth',
+        'imgMaxHeight',
+        'iconSize',
+        'backgroundImage',
+        'backgroundRepeat'
+      ].forEach(key => {
+        this.style[key] = this.mindMap.getThemeConfig(key)
+        if (key === 'backgroundImage' && this.style[key] === 'none') {
+          this.style[key] = ''
         }
-      });
-      this.initMarginStyle();
+      })
+      this.initMarginStyle()
     },
 
     /**
@@ -286,10 +359,9 @@ export default {
      * @Desc: margin初始值
      */
     initMarginStyle() {
-      ["marginX", "marginY"].forEach((key) => {
-        this.style[key] =
-          this.mindMap.getThemeConfig()[this.marginActiveTab][key];
-      });
+      ;['marginX', 'marginY'].forEach(key => {
+        this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][key]
+      })
     },
 
     /**
@@ -297,19 +369,19 @@ export default {
      * @Desc: 更新配置
      */
     update(key, value) {
-      if (key === "backgroundImage" && value === "none") {
-        this.style[key] = "";
+      if (key === 'backgroundImage' && value === 'none') {
+        this.style[key] = ''
       } else {
-        this.style[key] = value;
+        this.style[key] = value
       }
-      this.data.theme.config[key] = value;
-      this.mindMap.setThemeConfig(this.data.theme.config);
+      this.data.theme.config[key] = value
+      this.mindMap.setThemeConfig(this.data.theme.config)
       storeConfig({
         theme: {
-          "template": this.mindMap.getTheme(),
-          "config": this.data.theme.config
+          template: this.mindMap.getTheme(),
+          config: this.data.theme.config
         }
-      });
+      })
     },
 
     /**
@@ -317,15 +389,15 @@ export default {
      * @Desc: 设置margin
      */
     updateMargin(type, value) {
-      this.style[type] = value;
+      this.style[type] = value
       if (!this.data.theme.config[this.marginActiveTab]) {
-        this.data.theme.config[this.marginActiveTab] = {};
+        this.data.theme.config[this.marginActiveTab] = {}
       }
-      this.data.theme.config[this.marginActiveTab][type] = value;
-      this.mindMap.setThemeConfig(this.data.theme.config);
-    },
-  },
-};
+      this.data.theme.config[this.marginActiveTab][type] = value
+      this.mindMap.setThemeConfig(this.data.theme.config)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
