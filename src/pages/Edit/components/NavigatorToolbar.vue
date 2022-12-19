@@ -1,15 +1,18 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap"
-        >开启小地图</el-checkbox
-      >
+      <el-select v-model="lang" size="small" style="width: 100px" @change="onLangChange">
+        <el-option v-for="item in langList" :key="item.value" :label="item.name" :value="item.value" />
+      </el-select>
+    </div>
+    <div class="item">
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{ $t('navigatorToolbar.openMiniMap') }}</el-checkbox>
     </div>
     <div class="item">
       <el-switch
         v-model="isReadonly"
-        active-text="只读模式"
-        inactive-text="编辑模式"
+        :active-text="$t('navigatorToolbar.readonly')"
+        :inactive-text="$t('navigatorToolbar.edit')"
         @change="readonlyChange"
       >
       </el-switch>
@@ -32,6 +35,9 @@ import { ref, onMounted, defineProps } from 'vue'
 import Scale from './Scale'
 import Fullscreen from './Fullscreen'
 import bus from '@/utils/bus.js'
+import { langList } from '@/config'
+import i18n from '@/i18n.js'
+import { storeLang, getLang } from '@/api'
 
 const props = defineProps({
   mindMap: {
@@ -41,6 +47,7 @@ const props = defineProps({
 
 const isReadonly = ref(false)
 const openMiniMap = ref(false)
+const lang = ref(getLang())
 
 const readonlyChange = value => {
   props.mindMap.setMode(value ? 'readonly' : 'edit')
@@ -48,6 +55,12 @@ const readonlyChange = value => {
 
 const toggleMiniMap = show => {
   bus.emit('toggle_mini_map', show)
+}
+
+const onLangChange = lang => {
+  i18n.locale = lang
+  console.log('i18n', i18n)
+  storeLang(lang)
 }
 
 onMounted(() => {

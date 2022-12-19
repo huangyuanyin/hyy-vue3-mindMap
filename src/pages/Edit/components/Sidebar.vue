@@ -1,11 +1,6 @@
 <template>
-  <div
-    class="sidebarContainer"
-    @click.stop
-    :class="{ show: show }"
-    :style="{ zIndex: zIndex }"
-  >
-    <el-icon class="closeBtn" @click="show = false">
+  <div class="sidebarContainer" @click.stop :class="{ show: show }" :style="{ zIndex: zIndex }">
+    <el-icon class="closeBtn" @click="close">
       <Close />
     </el-icon>
     <div class="sidebarHeader" v-if="title">
@@ -20,6 +15,7 @@
 <script>
 import { store } from '@/config'
 import { Close } from '@element-plus/icons-vue'
+import { mapState, mapMutations } from 'vuex'
 
 /**
  * @Author: 黄原寅
@@ -47,6 +43,13 @@ export default {
       if (val && !oldVal) {
         this.zIndex = store.sidebarZIndex++
       }
+    }
+  },
+  methods: {
+    ...mapMutations(['setActiveSidebar']),
+    close() {
+      this.show = false
+      this.setActiveSidebar('')
     }
   }
 }

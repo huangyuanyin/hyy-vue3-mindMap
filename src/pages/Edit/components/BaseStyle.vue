@@ -1,11 +1,11 @@
 <template>
-  <Sidebar ref="sidebar" title="基础样式">
+  <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
     <div class="sidebarContent" v-if="data">
       <!-- 背景 -->
-      <div class="title noTop">背景</div>
+      <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
         <el-tabs class="tab" v-model="activeTab">
-          <el-tab-pane label="颜色" name="color">
+          <el-tab-pane :label="$t('baseStyle.color')" name="color">
             <Color
               :color="style.backgroundColor"
               @change="
@@ -15,7 +15,7 @@
               "
             ></Color>
           </el-tab-pane>
-          <el-tab-pane label="图片" name="image">
+          <el-tab-pane :label="$t('baseStyle.image')" name="image">
             <ImgUpload
               class="imgUpload"
               :value="style.backgroundImage"
@@ -26,7 +26,7 @@
               "
             ></ImgUpload>
             <div class="rowItem">
-              <span class="name">图片重复</span>
+              <span class="name">{{ $t('baseStyle.imageRepeat') }}</span>
               <el-select
                 size="small"
                 style="width: 120px"
@@ -38,30 +38,20 @@
                   }
                 "
               >
-                <el-option
-                  v-for="item in backgroundRepeatList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
-                </el-option>
+                <el-option v-for="item in backgroundRepeatList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
               </el-select>
             </div>
           </el-tab-pane>
         </el-tabs>
       </div>
       <!-- 连线 -->
-      <div class="title noTop">连线</div>
+      <div class="title noTop">{{ $t('baseStyle.line') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
-              <span
-                class="block"
-                v-popover:popover
-                :style="{ backgroundColor: style.lineColor }"
-              ></span>
+              <span class="block" v-popover:popover :style="{ backgroundColor: style.lineColor }"></span>
             </template>
             <Color
               :color="style.lineColor"
@@ -74,7 +64,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -86,19 +76,13 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">风格</span>
+          <span class="name">{{ $t('baseStyle.style') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -110,28 +94,18 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineStyleList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
+            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
           </el-select>
         </div>
       </div>
       <!-- 概要连线 -->
-      <div class="title noTop">概要的连线</div>
+      <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover placement="bottom" trigger="hover" width="auto">
             <template #reference>
-              <span
-                class="block"
-                v-popover:popover2
-                :style="{ backgroundColor: style.generalizationLineColor }"
-              ></span>
+              <span class="block" v-popover:popover2 :style="{ backgroundColor: style.generalizationLineColor }"></span>
             </template>
             <Color
               :color="style.generalizationLineColor"
@@ -144,7 +118,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">粗细</span>
+          <span class="name">{{ $t('baseStyle.width') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -156,21 +130,15 @@
               }
             "
           >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
           </el-select>
         </div>
       </div>
       <!-- 内边距 -->
-      <div class="title noTop">节点内边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">水平</span>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.paddingX"
@@ -184,7 +152,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">垂直</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.paddingY"
@@ -197,10 +165,10 @@
         </div>
       </div>
       <!-- 图片 -->
-      <div class="title noTop">图片</div>
+      <div class="title noTop">{{ $t('baseStyle.image') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大宽度</span>
+          <span class="name">{{ $t('baseStyle.maximumWidth') }}</span>
           <el-slider
             style="width: 140px"
             v-model="style.imgMaxWidth"
@@ -216,7 +184,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">显示的最大高度</span>
+          <span class="name">{{ $t('baseStyle.maximumHeight') }}</span>
           <el-slider
             style="width: 140px"
             v-model="style.imgMaxHeight"
@@ -231,10 +199,10 @@
         </div>
       </div>
       <!-- 图标 -->
-      <div class="title noTop">图标</div>
+      <div class="title noTop">{{ $t('baseStyle.icon') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">大小</span>
+          <span class="name">{{ $t('baseStyle.size') }}</span>
           <el-slider
             style="width: 200px"
             v-model="style.iconSize"
@@ -249,18 +217,14 @@
         </div>
       </div>
       <!-- 二级节点外边距 -->
-      <div class="title noTop">节点外边距</div>
+      <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
       <div class="row column">
-        <el-tabs
-          class="tab"
-          v-model="marginActiveTab"
-          @tab-click="initMarginStyle"
-        >
-          <el-tab-pane label="二级节点" name="second"></el-tab-pane>
-          <el-tab-pane label="三级及以下节点" name="node"></el-tab-pane>
+        <el-tabs class="tab" v-model="marginActiveTab" @tab-click="initMarginStyle">
+          <el-tab-pane :label="$t('baseStyle.level2Node')" name="second"></el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.belowLevel2Node')" name="node"></el-tab-pane>
         </el-tabs>
         <div class="rowItem">
-          <span class="name">水平</span>
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
             :max="200"
             style="width: 200px"
@@ -273,7 +237,7 @@
           ></el-slider>
         </div>
         <div class="rowItem">
-          <span class="name">垂直</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             :max="200"
             style="width: 200px"
@@ -297,6 +261,7 @@ import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 基础样式
@@ -320,8 +285,6 @@ export default {
   data() {
     return {
       lineWidthList,
-      lineStyleList,
-      backgroundRepeatList,
       activeTab: 'color',
       marginActiveTab: 'second',
       style: {
@@ -343,14 +306,24 @@ export default {
       }
     }
   },
-  created() {
-    bus.on('showBaseStyle', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  computed: {
+    ...mapState(['activeSidebar']),
+    lineStyleList() {
+      return lineStyleList[this.$i18n.locale] || lineStyleList.zh
+    },
+    backgroundRepeatList() {
+      return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'baseStyle') {
         this.$refs.sidebar.show = true
         this.initStyle()
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**
@@ -387,8 +360,7 @@ export default {
      */
     initMarginStyle() {
       ;['marginX', 'marginY'].forEach(key => {
-        this.style[key] =
-          this.mindMap.getThemeConfig()[this.marginActiveTab][key]
+        this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][key]
       })
     },
 

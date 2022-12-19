@@ -1,13 +1,7 @@
 <template>
-  <Sidebar ref="sidebar" title="主题">
+  <Sidebar ref="sidebar" :title="$t('style.title')">
     <div class="themeList">
-      <div
-        class="themeItem"
-        v-for="item in themeList"
-        :key="item.value"
-        @click="useTheme(item)"
-        :class="{ active: item.value === theme }"
-      >
+      <div class="themeItem" v-for="item in themeList" :key="item.value" @click="useTheme(item)" :class="{ active: item.value === theme }">
         <div class="imgBox">
           <img :src="item.img" alt="" />
         </div>
@@ -27,6 +21,7 @@ import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 
 const props = defineProps({
   mindMap: {
@@ -36,16 +31,6 @@ const props = defineProps({
 
 const sidebar = ref(null)
 const theme = ref('')
-
-onMounted(() => {
-  bus.on('showTheme', () => {
-    sidebar.value.show = false
-    nextTick(() => {
-      theme.value = props.mindMap.getTheme()
-      sidebar.value.show = true
-    })
-  })
-})
 
 /**
  * @Author: 黄原寅寅
@@ -60,6 +45,24 @@ const useTheme = item => {
       config: props.mindMap.getCustomThemeConfig()
     }
   })
+}
+</script>
+
+<script>
+export default {
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'theme') {
+        this.theme = this.mindMap.getTheme()
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  }
 }
 </script>
 
@@ -81,8 +84,7 @@ const useTheme = item => {
     }
 
     &:hover {
-      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
-        0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
     }
 
     &.active {

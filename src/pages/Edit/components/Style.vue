@@ -1,16 +1,16 @@
 <template>
-  <Sidebar ref="sidebar" title="节点样式">
-    <div class="styleBox">
+  <Sidebar ref="sidebar" :title="$t('style.title')">
+    <div class="styleBox" v-if="activeNodes.length > 0">
       <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
-        <el-tab-pane label="常态" name="normal"></el-tab-pane>
-        <el-tab-pane label="选中状态" name="active"></el-tab-pane>
+        <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
+        <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
       </el-tabs>
       <div class="sidebarContent" v-if="activeNodes.length > 0">
         <!-- 文字 -->
-        <div class="title noTop">文字</div>
+        <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">字体</span>
+            <span class="name">{{ $t('style.fontFamily') }}</span>
             <el-select
               size="small"
               v-model="style.fontFamily"
@@ -31,7 +31,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">字号</span>
+            <span class="name">{{ $t('style.fontSize') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -40,17 +40,11 @@
               :disabled="checkDisabled('fontSize')"
               @change="update('fontSize')"
             >
-              <el-option
-                v-for="item in fontSizeList"
-                :key="item"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
+              <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">行高</span>
+            <span class="name">{{ $t('style.lineHeight') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -59,42 +53,26 @@
               :disabled="checkDisabled('lineHeight')"
               @change="update('lineHeight')"
             >
-              <el-option
-                v-for="item in lineHeightList"
-                :key="item"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
+              <el-option v-for="item in lineHeightList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
         </div>
         <div class="row">
           <div class="btnGroup">
-            <el-tooltip content="颜色" placement="bottom">
+            <el-tooltip :content="$t('style.color')" placement="bottom">
               <div>
-                <el-popover
-                  placement="bottom"
-                  trigger="click"
-                  :disabled="checkDisabled('color')"
-                >
+                <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('color')">
                   <template #reference>
-                    <div
-                      class="styleBtn"
-                      :class="{ disabled: checkDisabled('color') }"
-                    >
+                    <div class="styleBtn" :class="{ disabled: checkDisabled('color') }">
                       A
-                      <span
-                        class="colorShow"
-                        :style="{ backgroundColor: style.color || '#eee' }"
-                      ></span>
+                      <span class="colorShow" :style="{ backgroundColor: style.color || '#eee' }"></span>
                     </div>
                   </template>
                   <Color :color="style.color" @change="changeFontColor"></Color>
                 </el-popover>
               </div>
             </el-tooltip>
-            <el-tooltip content="加粗" placement="bottom">
+            <el-tooltip :content="$t('style.addFontWeight')" placement="bottom">
               <div
                 class="styleBtn"
                 :class="{
@@ -106,7 +84,7 @@
                 B
               </div>
             </el-tooltip>
-            <el-tooltip content="斜体" placement="bottom">
+            <el-tooltip :content="$t('style.italic')" placement="bottom">
               <div
                 class="styleBtn i"
                 :class="{
@@ -118,13 +96,9 @@
                 I
               </div>
             </el-tooltip>
-            <el-tooltip content="划线" placement="bottom">
+            <el-tooltip :content="$t('style.textDecoration')" placement="bottom">
               <div>
-                <el-popover
-                  placement="bottom"
-                  trigger="click"
-                  :disabled="checkDisabled('color')"
-                >
+                <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('color')">
                   <template #reference>
                     <div
                       class="styleBtn u"
@@ -136,16 +110,10 @@
                       U
                     </div>
                   </template>
-                  <el-radio-group
-                    size="small"
-                    v-model="style.textDecoration"
-                    @change="update('textDecoration')"
-                  >
-                    <el-radio-button label="underline">下划线</el-radio-button>
-                    <el-radio-button label="line-through"
-                      >中划线</el-radio-button
-                    >
-                    <el-radio-button label="overline">上划线</el-radio-button>
+                  <el-radio-group size="small" v-model="style.textDecoration" @change="update('textDecoration')">
+                    <el-radio-button label="underline">{{ $t('style.underline') }}</el-radio-button>
+                    <el-radio-button label="line-through"> {{ $t('style.lineThrough') }} </el-radio-button>
+                    <el-radio-button label="overline">{{ $t('style.overline') }}</el-radio-button>
                   </el-radio-group>
                 </el-popover>
               </div>
@@ -153,16 +121,11 @@
           </div>
         </div>
         <!-- 边框 -->
-        <div class="title">边框</div>
+        <div class="title">{{ $t('style.border') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
-            <el-popover
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('borderColor')"
-              width="auto"
-            >
+            <span class="name">{{ $t('style.color') }}</span>
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')" width="auto">
               <template #reference>
                 <span
                   class="block"
@@ -170,14 +133,11 @@
                   :class="{ disabled: checkDisabled('borderColor') }"
                 ></span>
               </template>
-              <Color
-                :color="style.borderColor"
-                @change="changeBorderColor"
-              ></Color>
+              <Color :color="style.borderColor" @change="changeBorderColor"></Color>
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">样式</span>
+            <span class="name">{{ $t('style.style') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -186,19 +146,13 @@
               :disabled="checkDisabled('borderDasharray')"
               @change="update('borderDasharray')"
             >
-              <el-option
-                v-for="item in borderDasharrayList"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-              >
-              </el-option>
+              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">宽度</span>
+            <span class="name">{{ $t('style.width') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -207,17 +161,11 @@
               :disabled="checkDisabled('borderWidth')"
               @change="update('borderWidth')"
             >
-              <el-option
-                v-for="item in borderWidthList"
-                :key="item"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
+              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">圆角</span>
+            <span class="name">{{ $t('style.borderRadius') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -226,27 +174,16 @@
               :disabled="checkDisabled('borderRadius')"
               @change="update('borderRadius')"
             >
-              <el-option
-                v-for="item in borderRadiusList"
-                :key="item"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
+              <el-option v-for="item in borderRadiusList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
         </div>
         <!-- 背景 -->
-        <div class="title">背景</div>
+        <div class="title">{{ $t('style.background') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
-            <el-popover
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('fillColor')"
-              width="auto"
-            >
+            <span class="name">{{ $t('style.color') }}</span>
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')" width="auto">
               <template #reference>
                 <span
                   class="block"
@@ -259,10 +196,10 @@
           </div>
         </div>
         <!-- 形状 -->
-        <div class="title">形状</div>
+        <div class="title">{{ $t('style.shape') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">形状</span>
+            <span class="name">{{ $t('style.shape') }}</span>
             <el-select
               size="small"
               style="width: 120px"
@@ -271,27 +208,16 @@
               :disabled="checkDisabled('shape')"
               @change="update('shape')"
             >
-              <el-option
-                v-for="item in shapeList"
-                :key="item"
-                :label="item.name"
-                :value="item.value"
-              >
-              </el-option>
+              <el-option v-for="item in shapeList" :key="item" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
         </div>
         <!-- 线条 -->
-        <div class="title">线条</div>
+        <div class="title">{{ $t('style.line') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
-            <el-popover
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('lineColor')"
-              width="auto"
-            >
+            <span class="name">{{ $t('style.color') }}</span>
+            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')" width="auto">
               <template #reference>
                 <span
                   class="block"
@@ -303,7 +229,7 @@
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">样式</span>
+            <span class="name">{{ $t('style.style') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -312,19 +238,13 @@
               :disabled="checkDisabled('lineDasharray')"
               @change="update('lineDasharray')"
             >
-              <el-option
-                v-for="item in borderDasharrayList"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-              >
-              </el-option>
+              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
             </el-select>
           </div>
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">宽度</span>
+            <span class="name">{{ $t('style.width') }}</span>
             <el-select
               size="small"
               style="width: 80px"
@@ -333,21 +253,15 @@
               :disabled="checkDisabled('lineWidth')"
               @change="update('lineWidth')"
             >
-              <el-option
-                v-for="item in borderWidthList"
-                :key="item"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
+              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
             </el-select>
           </div>
         </div>
         <!-- 节点内边距 -->
-        <div class="title noTop">节点内边距</div>
+        <div class="title noTop">{{ $t('style.nodePadding') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">水平</span>
+            <span class="name">{{ $t('style.horizontal') }}</span>
             <el-slider
               style="width: 200px"
               v-model="style.paddingX"
@@ -358,7 +272,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">垂直</span>
+            <span class="name">{{ $t('style.vertical') }}</span>
             <el-slider
               style="width: 200px"
               v-model="style.paddingY"
@@ -369,23 +283,20 @@
         </div>
       </div>
     </div>
+    <div class="tipBox" v-else>
+      <div class="tipIcon iconfont icontianjiazijiedian"></div>
+      <div class="tipText">请选择一个节点</div>
+    </div>
   </Sidebar>
 </template>
 
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import {
-  fontFamilyList,
-  fontSizeList,
-  borderWidthList,
-  borderDasharrayList,
-  borderRadiusList,
-  lineHeightList,
-  shapeList
-} from '@/config'
+import { fontFamilyList, fontSizeList, borderWidthList, borderDasharrayList, borderRadiusList, lineHeightList, shapeList } from '@/config'
 import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 节点样式设置
@@ -399,11 +310,8 @@ export default {
   data() {
     return {
       supportActiveStyle,
-      shapeList,
-      fontFamilyList,
       fontSizeList,
       borderWidthList,
-      borderDasharrayList,
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
@@ -430,19 +338,47 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['activeSidebar']),
+    fontFamilyList() {
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+    borderDasharrayList() {
+      return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
+    },
+    shapeList() {
+      return shapeList[this.$i18n.locale] || shapeList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'nodeStyle') {
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  },
   created() {
-    bus.on('node_active', args => {
-      if (this.$refs.sidebar) this.$refs.sidebar.show = false
-      this.$nextTick(() => {
-        this.activeTab = 'normal'
-        this.activeNodes = args[1]
-        if (this.$refs.sidebar)
-          this.$refs.sidebar.show = this.activeNodes.length > 0
-        this.initNodeStyle()
-      })
-    })
+    bus.on('node_active', this.onNodeActive)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.onNodeActive)
   },
   methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听节点激活事件
+     */
+    onNodeActive(...args) {
+      // if (this.$refs.sidebar) this.$refs.sidebar.show = false
+      this.$nextTick(() => {
+        this.activeTab = 'normal'
+        this.activeNodes = args[0][1]
+        // if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0
+        this.initNodeStyle()
+      })
+    },
     /**
      * @Author: 黄原寅
      * @Desc: tab切换
@@ -456,9 +392,7 @@ export default {
      * @Desc: 检查是否禁用
      */
     checkDisabled(prop) {
-      return (
-        this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
-      )
+      return this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
     },
 
     /**
@@ -490,11 +424,7 @@ export default {
         'lineDasharray',
         'lineWidth'
       ].forEach(item => {
-        this.style[item] = this.activeNodes[0].getStyle(
-          item,
-          false,
-          this.activeTab === 'active'
-        )
+        this.style[item] = this.activeNodes[0].getStyle(item, false, this.activeTab === 'active')
       })
     },
 
@@ -584,6 +514,18 @@ export default {
     flex-grow: 0;
     flex-shrink: 0;
     padding: 0 20px;
+  }
+}
+.tipBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  .tipIcon {
+    font-size: 100px;
   }
 }
 

@@ -1,14 +1,14 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" title="图片">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeImage.title')">
     <ImgUpload ref="imgUpload" @changeImg="onchange" :value="img"></ImgUpload>
     <div class="imgTitleBox">
-      <span class="title">图片标题</span>
+      <span class="title">{{ $t('nodeImage.imgTitle') }}</span>
       <el-input v-model="imgTitle" size="small"></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="confirm">确 定</el-button>
+        <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+        <el-button type="primary" @click="confirm">{{ $t('dialog.confirm') }}</el-button>
       </span>
     </template>
   </el-dialog>

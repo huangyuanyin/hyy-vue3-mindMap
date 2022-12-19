@@ -11,7 +11,7 @@
           @click="emit('execCommand', 'BACK')"
         >
           <span class="icon iconfont iconhoutui-shi"></span>
-          <span class="text">回退</span>
+          <span class="text">{{ $t('toolbar.undo') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -21,7 +21,7 @@
           @click="emit('execCommand', 'FORWARD')"
         >
           <span class="icon iconfont iconqianjin1"></span>
-          <span class="text">前进</span>
+          <span class="text">{{ $t('toolbar.redo') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -31,7 +31,7 @@
           @click="emit('execCommand', 'INSERT_NODE')"
         >
           <span class="icon iconfont iconjiedian"></span>
-          <span class="text">插入同级节点</span>
+          <span class="text">{{ $t('toolbar.insertSiblingNode') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -41,7 +41,7 @@
           @click="emit('execCommand', 'INSERT_CHILD_NODE')"
         >
           <span class="icon iconfont icontianjiazijiedian"></span>
-          <span class="text">插入子节点</span>
+          <span class="text">{{ $t('toolbar.insertChildNode') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -51,7 +51,7 @@
           @click="emit('execCommand', 'REMOVE_NODE')"
         >
           <span class="icon iconfont iconshanchu"></span>
-          <span class="text">删除节点</span>
+          <span class="text">{{ $t('toolbar.deleteNode') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -61,7 +61,7 @@
           @click="emit('showNodeImage')"
         >
           <span class="icon iconfont iconimage"></span>
-          <span class="text">图片</span>
+          <span class="text">{{ $t('toolbar.image') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -71,7 +71,7 @@
           @click="emit('showNodeIcon')"
         >
           <span class="icon iconfont iconxiaolian"></span>
-          <span class="text">图标</span>
+          <span class="text">{{ $t('toolbar.icon') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -81,7 +81,7 @@
           @click="emit('showNodeLink')"
         >
           <span class="icon iconfont iconchaolianjie"></span>
-          <span class="text">超链接</span>
+          <span class="text">{{ $t('toolbar.link') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -91,7 +91,7 @@
           @click="emit('showNodeNote')"
         >
           <span class="icon iconfont iconflow-Mark"></span>
-          <span class="text">备注</span>
+          <span class="text">{{ $t('toolbar.note') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -101,7 +101,7 @@
           @click="emit('showNodeTag')"
         >
           <span class="icon iconfont iconbiaoqian"></span>
-          <span class="text">标签</span>
+          <span class="text">{{ $t('toolbar.tag') }}</span>
         </div>
         <div
           class="toolbarBtn"
@@ -111,54 +111,54 @@
           @click="emit('execCommand', 'ADD_GENERALIZATION')"
         >
           <span class="icon iconfont icongaikuozonglan"></span>
-          <span class="text">概要</span>
+          <span class="text">{{ $t('toolbar.summary') }}</span>
         </div>
       </div>
       <!-- 通用操作 -->
-      <div class="toolbarBlock">
+      <!-- <div class="toolbarBlock">
         <div class="toolbarBtn" @click="emit('showOutline')">
           <span class="icon iconfont iconfuhao-dagangshu"></span>
-          <span class="text">显示大纲</span>
+          <span class="text">{{ $t('toolbar.displayOutline') }}</span>
         </div>
         <div class="toolbarBtn" @click="emit('showBaseStyle')">
           <span class="icon iconfont iconyangshi"></span>
-          <span class="text">基础样式</span>
+          <span class="text">{{ $t('toolbar.baseStyle') }}</span>
         </div>
         <div class="toolbarBtn" @click="emit('showTheme')">
           <span class="icon iconfont iconjingzi"></span>
-          <span class="text">主题</span>
+          <span class="text">{{ $t('toolbar.theme') }}</span>
         </div>
         <div class="toolbarBtn" @click="emit('showStructure')">
           <span class="icon iconfont iconjiegou"></span>
-          <span class="text">结构</span>
+          <span class="text">{{ $t('toolbar.strusture') }}</span>
         </div>
-      </div>
+      </div> -->
       <!-- 导出 -->
       <div class="toolbarBlock">
         <div class="toolbarBtn" @click="createNewLocalFile">
           <span class="icon iconfont iconxinjian"></span>
-          <span class="text">新建</span>
+          <span class="text">{{ $t('toolbar.newFile') }}</span>
         </div>
         <div class="toolbarBtn" @click="openLocalFile">
           <span class="icon iconfont icondakai"></span>
-          <span class="text">打开</span>
+          <span class="text">{{ $t('toolbar.openFile') }}</span>
         </div>
         <div class="toolbarBtn" @click="saveLocalFile">
           <span class="icon iconfont iconlingcunwei"></span>
-          <span class="text">另存为</span>
+          <span class="text">{{ $t('toolbar.saveAs') }}</span>
         </div>
         <div class="toolbarBtn" @click="emit('showImport')">
           <span class="icon iconfont icondaoru"></span>
-          <span class="text">导入</span>
+          <span class="text">{{ $t('toolbar.import') }}</span>
         </div>
         <div class="toolbarBtn" @click="emit('showExport')">
           <span class="icon iconfont iconexport"></span>
-          <span class="text">导出</span>
+          <span class="text">{{ $t('toolbar.export') }}</span>
         </div>
-        <div class="toolbarBtn" @click="emit('showShortcutKey')">
+        <!-- <div class="toolbarBtn" @click="emit('showShortcutKey')">
           <span class="icon iconfont iconjianpan"></span>
-          <span class="text">快捷键</span>
-        </div>
+          <span class="text">{{ $t('toolbar.shortcutKey') }}</span>
+        </div> -->
       </div>
     </div>
     <NodeImage></NodeImage>
@@ -234,24 +234,50 @@ export default {
     }
   },
   created() {
-    bus.on('mode_change', mode => {
+    bus.on('mode_change', this.onModeChange)
+    bus.on('node_active', this.onNodeActive)
+    bus.on('back_forward', this.onBackForward)
+    bus.on('write_local_file', this.onWriteLocalFile)
+  },
+  beforeDestroy() {
+    bus.off('mode_change', this.onModeChange)
+    bus.off('node_active', this.onNodeActive)
+    bus.off('back_forward', this.onBackForward)
+    bus.off('write_local_file', this.onWriteLocalFile)
+  },
+  methods: {
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听模式切换
+     */
+    onModeChange(mode) {
       this.readonly = mode === 'readonly'
-    })
-    bus.on('node_active', args => {
-      this.activeNodes = args[1]
-    })
-    bus.on('back_forward', (index, len) => {
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听节点激活
+     */
+    onNodeActive(...args) {
+      this.activeNodes = args[0][1]
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听前进后退
+     */
+    onBackForward(index, len) {
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
-    })
-    bus.on('write_local_file', content => {
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 监听本地文件读写
+     */
+    onWriteLocalFile(content) {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
       }, 1000)
-    })
-  },
-  methods: {
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 打开本地文件
@@ -407,9 +433,7 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning(
-          '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
-        )
+        this.$message.warning('你的浏览器可能不支持，建议使用最新版本的Chrome浏览器')
       }
     },
     emit: (...agrs) => bus.emit(...agrs)

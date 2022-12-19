@@ -1,18 +1,19 @@
 <template>
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
-    <Count></Count>
+    <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
-    <NavigatorToolbar :mindMap="mindMap"></NavigatorToolbar>
+    <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <Outline></Outline>
-    <Style></Style>
+    <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
-    <NodeNoteContentShow></NodeNoteContentShow>
+    <NodeNoteContentShow v-if="mindMap" :mindMap="mindMap"></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
+    <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
   </div>
 </template>
 
@@ -31,8 +32,10 @@ import Contextmenu from './Contextmenu'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
+import SidebarTrigger from './SidebarTrigger.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 编辑区域
@@ -51,7 +54,8 @@ export default {
     Contextmenu,
     NodeNoteContentShow,
     Navigator,
-    NodeImgPreview
+    NodeImgPreview,
+    SidebarTrigger
   },
   data() {
     return {
@@ -60,6 +64,11 @@ export default {
       prevImg: '',
       openTest: false
     }
+  },
+  computed: {
+    ...mapState({
+      isZenMode: state => state.localConfig.isZenMode
+    })
   },
   mounted() {
     this.init()
@@ -234,7 +243,7 @@ export default {
             bus.emit('showNoteContent', [content, left, top])
           },
           hide: () => {
-            bus.emit('hideNoteContent')
+            // bus.emit('hideNoteContent')
           }
         }
       })

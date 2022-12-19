@@ -1,15 +1,11 @@
 <template>
-  <Sidebar ref="sidebar" title="快捷键">
+  <Sidebar ref="sidebar" :title="$t('shortcutKey.title')">
     <div class="box">
       <div v-for="item in shortcutKeyList" :key="item.type">
         <div class="title">{{ item.type }}</div>
         <div class="list" v-for="item2 in item.list" :key="item2.value">
           <div class="item">
-            <span
-              v-if="item2.icon"
-              class="icon iconfont"
-              :class="[item2.icon]"
-            ></span>
+            <span v-if="item2.icon" class="icon iconfont" :class="[item2.icon]"></span>
             <span class="name">{{ item2.name }}</span>
             <div class="value">{{ item2.value }}</div>
           </div>
@@ -19,17 +15,24 @@
   </Sidebar>
 </template>
 
-<script setup>
+<!-- <script setup>
 /**
  * @Author: 黄原寅
  * @Desc: 快捷键功能
  */
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 
 const sidebar = ref(null) // 声明一个 ref 来存放该元素的引用   必须和模板里的 ref 同名
+
+computed(() => {
+  shortcutKeyList: {
+    return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
+  }
+})
 
 onMounted(() => {
   bus.on('showShortcutKey', () => {
@@ -39,11 +42,32 @@ onMounted(() => {
     })
   })
 })
-</script>
+</script> -->
 
 <script>
+import Sidebar from './Sidebar'
+import { shortcutKeyList } from '@/config'
+import { mapState } from 'vuex'
 export default {
-  name: 'ShortcutKey'
+  name: 'ShortcutKey',
+  components: {
+    Sidebar
+  },
+  computed: {
+    ...mapState(['activeSidebar']),
+    shortcutKeyList() {
+      return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
+    }
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'shortcutKey') {
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  }
 }
 </script>
 
