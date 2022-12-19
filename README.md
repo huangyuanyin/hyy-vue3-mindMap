@@ -1,4 +1,4 @@
-# 一个简单&强大的Web思维导图
+# 一个Vue3 + ElementPlus的Web思维导图
 
 ## 项目预览
 ![image](https://user-images.githubusercontent.com/42410679/208390574-d34f6b64-6570-4d33-87e8-9441da1126a5.png)
