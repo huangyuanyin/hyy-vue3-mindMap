@@ -1,6 +1,7 @@
 # 一个基于Vue3.2 + ElementPlus的Web思维导图
 
 ## 项目预览
+### 项目地址：[思维导图](http://101.42.8.58/mindMap/#/)
 ![image](https://user-images.githubusercontent.com/42410679/208390574-d34f6b64-6570-4d33-87e8-9441da1126a5.png)
 ![image](https://user-images.githubusercontent.com/42410679/208390826-60ded4ce-ad48-46da-ab84-c66c3ef29885.png)
 ![image](https://user-images.githubusercontent.com/42410679/208390888-401d8c91-f76b-4c3b-a095-24daccae8404.png)
