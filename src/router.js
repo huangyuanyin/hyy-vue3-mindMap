@@ -1,10 +1,11 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import EditPage from '@/pages/Edit/Index'
 
 const routes = [{ path: '/', name: 'Edit', component: EditPage }]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: process.env.NODE_ENV === 'development' ? createWebHistory() : createWebHashHistory(),
+  base: '/mindMap/',
   routes
 })
 
