@@ -134,6 +134,22 @@
           </el-select>
         </div>
       </div>
+      <!-- 节点边框风格 -->
+      <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="style.nodeUseLineStyle"
+            @change="
+              value => {
+                update('nodeUseLineStyle', value)
+              }
+            "
+          >
+            {{ $t('baseStyle.nodeUseLineStyle') }}
+          </el-checkbox>
+        </div>
+      </div>
       <!-- 内边距 -->
       <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
@@ -302,7 +318,8 @@ export default {
         backgroundImage: '',
         backgroundRepeat: 'no-repeat',
         marginX: 0,
-        marginY: 0
+        marginY: 0,
+        nodeUseLineStyle: false
       }
     }
   },
@@ -344,7 +361,8 @@ export default {
         'imgMaxHeight',
         'iconSize',
         'backgroundImage',
-        'backgroundRepeat'
+        'backgroundRepeat',
+        'nodeUseLineStyle'
       ].forEach(key => {
         this.style[key] = this.mindMap.getThemeConfig(key)
         if (key === 'backgroundImage' && this.style[key] === 'none') {
