@@ -1,6 +1,13 @@
 <template>
   <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeTag.title')">
-    <el-input v-model="tag" @keyup.native.enter="add" :disabled="tagArr.length >= max" :placeholder="$t('nodeTag.addTip')"> </el-input>
+    <el-input
+      v-model="tag"
+      @keyup.native.enter="add"
+      @keyup.native.stop
+      :disabled="tagArr.length >= max"
+      :placeholder="$t('nodeTag.addTip')"
+    >
+    </el-input>
     <div class="tagList">
       <div
         class="tagItem"

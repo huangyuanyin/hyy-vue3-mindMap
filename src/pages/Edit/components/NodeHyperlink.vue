@@ -6,7 +6,7 @@
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
-      <el-input v-model="linkTitle" size="small"></el-input>
+      <el-input v-model="linkTitle" size="small" @keyup.native.stop></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -17,65 +17,65 @@
   </el-dialog>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import bus from '@/utils/bus.js'
 /**
  * @Author: 黄原寅
  * @Desc: 节点超链接内容设置
  */
-export default {
-  name: 'NodeHyperlink',
-  data() {
-    return {
-      dialogVisible: false,
-      link: '',
-      linkTitle: '',
-      activeNodes: []
-    }
-  },
-  created() {
-    bus.on('node_active', args => {
-      this.activeNodes = args[1]
-      if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0]
-        this.link = firstNode.getData('hyperlink')
-        this.linkTitle = firstNode.getData('hyperlinkTitle')
-      } else {
-        this.link = ''
-        this.linkTitle = ''
-      }
-    })
-    bus.on('showNodeLink', () => {
-      this.activeNodes[0].mindMap.keyCommand.pause()
-      bus.emit('startTextEdit')
-      this.dialogVisible = true
-    })
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 取消
-     */
-    cancel() {
-      this.dialogVisible = false
-      this.activeNodes[0].mindMap.keyCommand.recovery()
-      bus.emit('endTextEdit')
-    },
+const dialogVisible = ref(false)
+const link = ref('')
+const linkTitle = ref('')
+const activeNodes = ref([])
 
-    /**
-     * @Author: 黄原寅
-     * @Desc:  确定
-     */
-    confirm() {
-      this.activeNodes.forEach(node => {
-        if (!this.link.startsWith('http://') && !this.link.startsWith('https://') && !this.link.startsWith('//')) {
-          this.link = `//${this.link}`
-        }
-        node.setHyperlink(this.link, this.linkTitle)
-        this.cancel()
-      })
+onMounted(() => {
+  bus.on('node_active', args => {
+    activeNodes.value = args[1]
+    if (activeNodes.value.length > 0) {
+      let firstNode = activeNodes.value[0]
+      link.value = firstNode.getData('hyperlink')
+      linkTitle.value = firstNode.getData('hyperlinkTitle')
+    } else {
+      link.value = ''
+      linkTitle.value = ''
     }
-  }
+  })
+  bus.on('showNodeLink', () => {
+    activeNodes.value[0].mindMap.keyCommand.pause()
+    bus.emit('startTextEdit')
+    dialogVisible.value = true
+  })
+})
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 取消
+ */
+const cancel = () => {
+  dialogVisible.value = false
+  activeNodes.value[0].mindMap.keyCommand.recovery()
+  bus.emit('endTextEdit')
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc:  确定
+ */
+const confirm = () => {
+  activeNodes.value.forEach(node => {
+    if (!link.value.startsWith('http://') && !link.value.startsWith('https://') && !link.value.startsWith('//')) {
+      link.value = `//${link.value}`
+    }
+    node.setHyperlink(link.value, linkTitle.value)
+    cancel()
+  })
+}
+</script>
+
+<script>
+export default {
+  name: 'NodeHyperlink'
 }
 </script>
 
@@ -85,7 +85,6 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-
     .name {
       display: block;
       width: 50px;

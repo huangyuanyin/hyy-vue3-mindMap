@@ -7,7 +7,7 @@
       v-model="note"
     >
     </el-input> -->
-    <div class="noteEditor" ref="noteEditor"></div>
+    <div class="noteEditor" ref="noteEditor" @keyup.stop></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <template #footer>
       <span class="dialog-footer">
@@ -18,7 +18,8 @@
   </el-dialog>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, nextTick } from 'vue'
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import bus from '@/utils/bus.js'
@@ -26,72 +27,72 @@ import bus from '@/utils/bus.js'
  * @Author: 黄原寅
  * @Desc: 节点备注内容设置
  */
-export default {
-  name: 'NodeNote',
-  data() {
-    return {
-      dialogVisible: false,
-      note: '',
-      activeNodes: [],
-      editor: null
-    }
-  },
-  created() {
-    bus.on('node_active', args => {
-      this.activeNodes = args[1]
-      if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0]
-        this.note = firstNode.getData('note')
-      } else {
-        this.note = ''
-      }
-    })
-    bus.on('showNodeNote', () => {
-      bus.emit('startTextEdit')
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        this.initEditor()
-      })
-    })
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 初始化编辑器
-     */
-    initEditor() {
-      if (!this.editor) {
-        this.editor = new Editor({
-          el: this.$refs.noteEditor,
-          height: '500px',
-          initialEditType: 'markdown',
-          previewStyle: 'vertical'
-        })
-      }
-      this.editor.setMarkdown(this.note)
-    },
+const dialogVisible = ref(false)
+const note = ref('')
+const activeNodes = ref([])
+const editor = ref(null)
+const noteEditor = ref(null)
 
-    /**
-     * @Author: 黄原寅
-     * @Desc: 取消
-     */
-    cancel() {
-      this.dialogVisible = false
-      bus.emit('endTextEdit')
-    },
-
-    /**
-     * @Author: 黄原寅
-     * @Desc:  确定
-     */
-    confirm() {
-      this.note = this.editor.getMarkdown()
-      this.activeNodes.forEach(node => {
-        node.setNote(this.note)
-      })
-      this.cancel()
+onMounted(() => {
+  bus.on('node_active', args => {
+    activeNodes.value = args[1]
+    if (activeNodes.value.length > 0) {
+      let firstNode = activeNodes.value[0]
+      note.value = firstNode.getData('note')
+    } else {
+      note.value = ''
     }
+  })
+  bus.on('showNodeNote', () => {
+    bus.emit('startTextEdit')
+    dialogVisible.value = true
+    nextTick(() => {
+      initEditor()
+    })
+  })
+})
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 初始化编辑器
+ */
+const initEditor = () => {
+  if (!editor.value) {
+    editor.value = new Editor({
+      el: noteEditor.value,
+      height: '500px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical'
+    })
   }
+  editor.value.setMarkdown(note.value)
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc: 取消
+ */
+const cancel = () => {
+  dialogVisible.value = false
+  bus.emit('endTextEdit')
+}
+
+/**
+ * @Author: 黄原寅
+ * @Desc:  确定
+ */
+const confirm = () => {
+  note.value = editor.value.getMarkdown()
+  activeNodes.value.forEach(node => {
+    node.setNote(note.value)
+  })
+  cancel()
+}
+</script>
+
+<script>
+export default {
+  name: 'NodeNote'
 }
 </script>
 
