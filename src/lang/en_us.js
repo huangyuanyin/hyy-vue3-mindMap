@@ -68,7 +68,9 @@ export default {
     tips: 'tips：.smm and .json file can be import'
   },
   fullscreen: {
-    fullscreen: 'Fullscreen'
+    fullscreen: 'Fullscreen',
+    fullscreenShow: 'Full screen show',
+    fullscreenEdit: 'Full screen edit'
   },
   import: {
     title: 'Import',

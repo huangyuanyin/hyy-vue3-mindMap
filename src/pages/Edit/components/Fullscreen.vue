@@ -1,7 +1,10 @@
 <template>
   <div class="fullscreenContainer">
-    <el-tooltip class="item" effect="dark" :content="$t('fullscreen.fullscreen')" placement="top">
-      <div class="btn iconfont iconquanping" @click="toFullscreen"></div>
+    <el-tooltip class="item" effect="dark" :content="$t('fullscreen.fullscreenShow')" placement="top">
+      <div class="btn iconfont iconquanping" @click="toFullscreenShow"></div>
+    </el-tooltip>
+    <el-tooltip class="item" effect="dark" :content="$t('fullscreen.fullscreenEdit')" placement="top">
+      <div class="btn iconfont iconquanping1" @click="toFullscreenEdit"></div>
     </el-tooltip>
   </div>
 </template>
@@ -28,12 +31,14 @@ watch(
   }
 )
 
-/**
- * @Author: 黄原寅
- * @Desc: 准备全屏
- */
-const toFullscreen = () => {
+// 全屏查看
+const toFullscreenShow = () => {
   fullScreen(props.mindMap.el)
+}
+
+// 全屏编辑
+const toFullscreenEdit = () => {
+  fullScreen(document.body)
 }
 
 onMounted(() => {
@@ -55,7 +60,9 @@ export default {
 .fullscreenContainer {
   display: flex;
   align-items: center;
-
+  div:first-child {
+    margin-right: 12px;
+  }
   .btn {
     cursor: pointer;
   }
