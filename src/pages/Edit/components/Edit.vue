@@ -36,6 +36,13 @@ import SidebarTrigger from './SidebarTrigger.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { mapState } from 'vuex'
+import customThemeList from '@/customThemes'
+
+// 注册自定义主题
+customThemeList.forEach(item => {
+  MindMap.defineTheme(item.value, item.theme)
+})
+
 /**
  * @Author: 黄原寅
  * @Desc: 编辑区域

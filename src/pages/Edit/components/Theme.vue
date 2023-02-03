@@ -1,7 +1,13 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
     <div class="themeList">
-      <div class="themeItem" v-for="item in themeList" :key="item.value" @click="useTheme(item)" :class="{ active: item.value === theme }">
+      <div
+        class="themeItem"
+        v-for="item in themeAllList"
+        :key="item.value"
+        @click="useTheme(item)"
+        :class="{ active: item.value === theme }"
+      >
         <div class="imgBox">
           <img :src="themeMap[item.value]" alt="" />
         </div>
@@ -23,6 +29,7 @@ import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { useStore } from 'vuex'
 import { themeMap } from '@/config/constant.js'
+import customThemeList from '@/customThemes'
 
 const props = defineProps({
   mindMap: {
@@ -34,6 +41,7 @@ const store = useStore()
 const activeSidebar = computed(() => store.state.activeSidebar)
 const sidebar = ref(null)
 const theme = ref('')
+const themeAllList = ref([...themeList, ...customThemeList])
 
 watch(
   () => activeSidebar.value,
@@ -85,7 +93,6 @@ const useTheme = item => {
     }
     .imgBox {
       width: 100%;
-
       img {
         width: 100%;
       }

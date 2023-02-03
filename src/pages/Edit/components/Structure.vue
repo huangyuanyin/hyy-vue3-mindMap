@@ -54,7 +54,7 @@ watch(
 
 onMounted(() => {
   bus.on('showStructure', () => {
-    this.$refs.sidebar.show = false
+    sidebar.value.show = false
     nextTick(() => {
       layout.value = props.mindMap.getLayout()
       sidebar.value.show = true
