@@ -266,6 +266,21 @@
           ></el-slider>
         </div>
       </div>
+      <!-- 其他配置 -->
+      <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.enableFreeDrag"
+            @change="
+              value => {
+                updateOtherConfig('enableFreeDrag', value)
+              }
+            "
+            >{{ $t('baseStyle.enableFreeDrag') }}</el-checkbox
+          >
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -320,6 +335,9 @@ export default {
         marginX: 0,
         marginY: 0,
         nodeUseLineStyle: false
+      },
+      config: {
+        enableFreeDrag: false
       }
     }
   },
@@ -337,6 +355,7 @@ export default {
       if (val === 'baseStyle') {
         this.$refs.sidebar.show = true
         this.initStyle()
+        this.initConfig()
       } else {
         this.$refs.sidebar.show = false
       }
@@ -372,6 +391,13 @@ export default {
       this.initMarginStyle()
     },
 
+    // 初始化其他配置
+    initConfig() {
+      ;['enableFreeDrag'].forEach(key => {
+        this.config[key] = this.mindMap.getConfig(key)
+      })
+    },
+
     /**
      * @Author: 黄原寅
      * @Desc: margin初始值
@@ -399,6 +425,18 @@ export default {
           template: this.mindMap.getTheme(),
           config: this.data.theme.config
         }
+      })
+    },
+
+    // 更新其他配置
+    updateOtherConfig(key, value) {
+      this.mindMap.updateConfig({
+        [key]: value
+      })
+      this.data.config = this.data.config || {}
+      this.data.config[key] = value
+      storeConfig({
+        config: this.data.config
       })
     },
 
