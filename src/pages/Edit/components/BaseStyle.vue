@@ -266,6 +266,107 @@
           ></el-slider>
         </div>
       </div>
+      <!-- 水印 -->
+      <div class="title noTop">{{ $t('baseStyle.watermark') }}</div>
+      <div class="row">
+        <!-- 是否显示水印 -->
+        <div class="rowItem">
+          <el-checkbox v-model="watermarkConfig.show" @change="watermarkShowChange">{{ $t('baseStyle.showWatermark') }}</el-checkbox>
+        </div>
+      </div>
+      <template v-if="watermarkConfig.show">
+        <!-- 水印文字 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkText') }}</span>
+            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig"></el-input>
+          </div>
+        </div>
+        <!-- 水印文字颜色 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkTextColor') }}</span>
+            <span class="block" v-popover:popover3 :style="{ backgroundColor: watermarkConfig.textStyle.color }"></span>
+            <el-popover ref="popover3" placement="bottom" trigger="click">
+              <Color
+                :color="watermarkConfig.textStyle.color"
+                @change="
+                  value => {
+                    watermarkConfig.textStyle.color = value
+                    updateWatermarkConfig()
+                  }
+                "
+              ></Color>
+            </el-popover>
+          </div>
+        </div>
+        <!-- 水印文字透明度 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkTextOpacity') }}</span>
+            <el-slider
+              v-model="watermarkConfig.textStyle.opacity"
+              style="width: 170px"
+              :min="0"
+              :max="1"
+              :step="0.1"
+              @change="updateWatermarkConfig"
+            ></el-slider>
+          </div>
+        </div>
+        <!-- 水印文字字号 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkTextFontSize') }}</span>
+            <el-input-number
+              v-model="watermarkConfig.textStyle.fontSize"
+              size="small"
+              :min="0"
+              :max="50"
+              :step="1"
+              @change="updateWatermarkConfig"
+            ></el-input-number>
+          </div>
+        </div>
+        <!-- 旋转角度 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkAngle') }}</span>
+            <el-input-number
+              v-model="watermarkConfig.angle"
+              size="small"
+              :min="0"
+              :max="90"
+              :step="10"
+              @change="updateWatermarkConfig"
+            ></el-input-number>
+          </div>
+        </div>
+        <!-- 水印行间距 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkLineSpacing') }}</span>
+            <el-input-number
+              v-model="watermarkConfig.lineSpacing"
+              size="small"
+              :step="10"
+              @change="updateWatermarkConfig"
+            ></el-input-number>
+          </div>
+        </div>
+        <!-- 水印文字间距 -->
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('baseStyle.watermarkTextSpacing') }}</span>
+            <el-input-number
+              v-model="watermarkConfig.textSpacing"
+              size="small"
+              :step="10"
+              @change="updateWatermarkConfig"
+            ></el-input-number>
+          </div>
+        </div>
+      </template>
       <!-- 其他配置 -->
       <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
       <div class="row">
@@ -338,7 +439,20 @@ export default {
       },
       config: {
         enableFreeDrag: false
-      }
+      },
+      watermarkConfig: {
+        show: false,
+        text: '',
+        lineSpacing: 100,
+        textSpacing: 100,
+        angle: 30,
+        textStyle: {
+          color: '',
+          opacity: 0,
+          fontSize: 1
+        }
+      },
+      updateWatermarkTimer: null
     }
   },
   computed: {
@@ -356,6 +470,7 @@ export default {
         this.$refs.sidebar.show = true
         this.initStyle()
         this.initConfig()
+        this.initWatermark()
       } else {
         this.$refs.sidebar.show = false
       }
@@ -396,6 +511,16 @@ export default {
       ;['enableFreeDrag'].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
+    },
+
+    // 初始化水印配置
+    initWatermark() {
+      let config = this.mindMap.getConfig('watermarkConfig')
+      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach(key => {
+        this.watermarkConfig[key] = config[key]
+      })
+      this.watermarkConfig.show = !!config.text
+      this.watermarkConfig.textStyle = { ...config.textStyle }
     },
 
     /**
@@ -440,6 +565,21 @@ export default {
       })
     },
 
+    // 更新水印配置
+    updateWatermarkConfig() {
+      clearTimeout(this.updateWatermarkTimer)
+      this.updateWatermarkTimer = setTimeout(() => {
+        let { show, ...config } = this.watermarkConfig
+        this.mindMap.watermark.updateWatermark({
+          ...config
+        })
+        this.data.config.watermarkConfig = this.mindMap.getConfig('watermarkConfig')
+        storeConfig({
+          config: this.data.config
+        })
+      }, 300)
+    },
+
     /**
      * @Author: 黄原寅
      * @Desc: 设置margin
@@ -451,6 +591,17 @@ export default {
       }
       this.data.theme.config[this.marginActiveTab][type] = value
       this.mindMap.setThemeConfig(this.data.theme.config)
+    },
+
+    // 切换显示水印与否
+    watermarkShowChange(value) {
+      if (value) {
+        let text = this.watermarkConfig.text || this.$t('baseStyle.watermarkDefaultText')
+        this.watermarkConfig.text = text
+      } else {
+        this.watermarkConfig.text = ''
+      }
+      this.updateWatermarkConfig()
     }
   }
 }
@@ -505,6 +656,7 @@ export default {
       .name {
         font-size: 12px;
         margin-right: 10px;
+        white-space: nowrap;
       }
 
       .block {
