@@ -9,7 +9,7 @@
         :class="{ active: item.value === layout }"
       >
         <div class="imgBox">
-          <img :src="item.img" alt="" />
+          <img :src="layoutImgMap[item.value]" alt="" />
         </div>
         <div class="name">{{ item.name }}</div>
       </div>
@@ -17,70 +17,68 @@
   </Sidebar>
 </template>
 
-<script>
-import { toRaw } from 'vue'
+<script setup>
+import { toRaw, ref, onMounted, nextTick, watch, computed } from 'vue'
 import Sidebar from './Sidebar'
 import { layoutList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
+import { layoutImgMap } from '@/config/constant.js'
 /**
  * @Author: 黄原寅
  * @Desc: 结构
  */
-export default {
-  name: 'Structure',
-  components: {
-    Sidebar
-  },
-  props: {
-    mindMap: {
-      type: Object
-    }
-  },
-  data() {
-    return {
-      layoutList,
-      layout: ''
-    }
-  },
-  computed: {
-    ...mapState(['activeSidebar'])
-  },
-  watch: {
-    activeSidebar(val) {
-      if (val === 'structure') {
-        this.layout = this.mindMap.getLayout()
-        this.$refs.sidebar.show = true
-      } else {
-        this.$refs.sidebar.show = false
-      }
-    }
-  },
-  created() {
-    bus.on('showStructure', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
-        this.layout = this.mindMap.getLayout()
-        this.$refs.sidebar.show = true
-      })
-    })
-  },
-  methods: {
-    /**
-     * @Author: 黄原寅
-     * @Desc: 使用主题
-     */
-    useLayout(layout) {
-      this.layout = layout.value
-      // this.mindMap.setLayout(layout.value);
-      // 通过toRaw拿到mindMap的原始数据
-      toRaw(this.mindMap).setLayout(layout.value)
-      storeConfig({
-        layout: layout.value
-      })
+const props = defineProps({
+  mindMap: {
+    type: Object
+  }
+})
+
+const store = useStore()
+const activeSidebar = computed(() => store.state.activeSidebar)
+const layout = ref('')
+const sidebar = ref(null)
+
+watch(
+  () => activeSidebar.value,
+  val => {
+    if (val === 'structure') {
+      layout.value = props.mindMap.getLayout()
+      sidebar.value.show = true
+    } else {
+      sidebar.value.show = false
     }
   }
+)
+
+onMounted(() => {
+  bus.on('showStructure', () => {
+    this.$refs.sidebar.show = false
+    nextTick(() => {
+      layout.value = props.mindMap.getLayout()
+      sidebar.value.show = true
+    })
+  })
+})
+/**
+ * @Author: 黄原寅
+ * @Desc: 使用主题
+ */
+const useLayout = layout => {
+  layout.value = layout.value
+  // this.mindMap.setLayout(layout.value);
+  // 通过toRaw拿到mindMap的原始数据
+  toRaw(props.mindMap).setLayout(layout.value)
+  storeConfig({
+    layout: layout.value
+  })
+}
+</script>
+
+<script>
+export default {
+  name: 'Structure'
 }
 </script>
 
