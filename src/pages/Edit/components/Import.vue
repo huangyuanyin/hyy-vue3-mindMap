@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" t:title="$t('import.title')" width="600px">
+  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('import.title')" width="600px">
     <el-upload
       ref="upload"
       action="x"
@@ -10,8 +10,8 @@
       :limit="1"
       :on-exceed="onExceed"
     >
-      <el-button slot="trigger" size="small" type="primary">$t('import.selectFile')</el-button>
-      <div slot="tip" class="el-upload__tip">支持.smm、.json、.xmind、.xlsx文件</div>
+      <el-button slot="trigger" size="default" type="primary">{{ $t('import.selectFile') }}</el-button>
+      <div slot="tip" class="el-upload__tip">{{ $t('import.supportFile') }}</div>
     </el-upload>
     <template #footer>
       <span class="dialog-footer">
@@ -30,7 +30,8 @@
 import { onMounted, ref, watch } from 'vue'
 import bus from '@/utils/bus.js'
 import { ElMessage } from 'element-plus'
-import MindMap from 'simple-mind-map'
+// import MindMap from 'simple-mind-map'
+import xmind from 'simple-mind-map/src/parse/xmind.js'
 import { useStore } from 'vuex'
 import { fileToBuffer } from '@/utils'
 import { read, utils } from 'xlsx'
@@ -146,7 +147,8 @@ const handleSmm = file => {
  */
 const handleXmind = async file => {
   try {
-    let data = await MindMap.xmind.parseXmindFile(file.raw)
+    // let data = await MindMap.xmind.parseXmindFile(file.raw)
+    let data = await xmind.parseXmindFile(file.raw) // 将xmind解析方法从MindMap类上移除，改为按需引入方式使用
     bus.emit('setData', data)
     ElMessage({
       message: '导入成功',
@@ -233,4 +235,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.el-upload__tip {
+  margin: 0 0 0 5px;
+}
+</style>
