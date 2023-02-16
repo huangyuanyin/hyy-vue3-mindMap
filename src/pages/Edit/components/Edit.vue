@@ -20,6 +20,12 @@
 <script>
 import { toRaw } from 'vue'
 import MindMap from 'simple-mind-map'
+import MiniMap from 'simple-mind-map/src/MiniMap.js'
+import Watermark from 'simple-mind-map/src/Watermark.js'
+import Drag from 'simple-mind-map/src/Drag.js'
+import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
+import Export from 'simple-mind-map/src/Export.js'
+import Select from 'simple-mind-map/src/Select.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -37,6 +43,9 @@ import { getData, storeData, storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
+
+// 注册插件
+MindMap.usePlugin(MiniMap).usePlugin(Watermark).usePlugin(Drag).usePlugin(KeyboardNavigation).usePlugin(Export).usePlugin(Select)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
