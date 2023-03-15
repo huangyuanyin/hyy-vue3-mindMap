@@ -1,7 +1,7 @@
 # 一个基于Vue3.2 + ElementPlus的Web思维导图
 
 ## 项目预览
-### 项目地址：[思维导图](http://101.42.8.58/mindMap/#/)
+### 项目地址：[思维导图](https://huangyuanyin.gitee.io/hyy-vue3-mindmap/#/)
 ![image](https://user-images.githubusercontent.com/42410679/219315595-5b948055-ebe9-45c0-a2ab-e640d4a09feb.png)
 ![image](https://user-images.githubusercontent.com/42410679/208390826-60ded4ce-ad48-46da-ab84-c66c3ef29885.png)
 ![image](https://user-images.githubusercontent.com/42410679/208390888-401d8c91-f76b-4c3b-a095-24daccae8404.png)
