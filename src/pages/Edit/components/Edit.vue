@@ -283,7 +283,7 @@ export default {
         'node_tree_render_end'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
-          if (event === 'node_active') {
+          if (['node_contextmenu', 'node_active'].includes(event)) {
             bus.emit(event, args)
           } else {
             bus.emit(event, ...args)

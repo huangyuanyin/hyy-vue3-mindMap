@@ -165,7 +165,8 @@ export default {
      * @Author: 黄原寅
      * @Desc: 节点右键显示
      */
-    show(e, node) {
+    // mitt只能传一个参数
+    show([e, node]) {
       this.type = 'node'
       this.left = e.clientX + 10
       this.top = e.clientY + 10

@@ -26,7 +26,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
+            disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
           }"
           @click="emit('execCommand', 'INSERT_NODE')"
         >
@@ -106,7 +106,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
+            disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
           }"
           @click="emit('execCommand', 'ADD_GENERALIZATION')"
         >
