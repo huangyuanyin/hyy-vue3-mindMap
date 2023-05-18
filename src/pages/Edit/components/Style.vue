@@ -40,7 +40,8 @@
               :disabled="checkDisabled('fontSize')"
               @change="update('fontSize')"
             >
-              <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item"> </el-option>
+              <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item" :style="{ fontSize: item + 'px' }">
+              </el-option>
             </el-select>
           </div>
           <div class="rowItem">
@@ -61,7 +62,7 @@
           <div class="btnGroup">
             <el-tooltip :content="$t('style.color')" placement="bottom">
               <div>
-                <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('color')">
+                <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
                   <template #reference>
                     <div class="styleBtn" :class="{ disabled: checkDisabled('color') }">
                       A
@@ -98,7 +99,7 @@
             </el-tooltip>
             <el-tooltip :content="$t('style.textDecoration')" placement="bottom">
               <div>
-                <el-popover placement="bottom" trigger="click" :disabled="checkDisabled('color')">
+                <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
                   <template #reference>
                     <div
                       class="styleBtn u"
