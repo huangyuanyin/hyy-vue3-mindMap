@@ -41,7 +41,8 @@ const store = useStore()
 const activeSidebar = computed(() => store.state.activeSidebar)
 const sidebar = ref(null)
 const theme = ref('')
-const themeAllList = ref([...themeList, ...customThemeList])
+const themeAllList = ref([...themeList])
+// const themeAllList = ref([...themeList, ...customThemeList])
 
 watch(
   () => activeSidebar.value,
