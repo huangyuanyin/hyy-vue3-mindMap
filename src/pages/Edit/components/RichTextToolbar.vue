@@ -44,7 +44,7 @@
     <el-tooltip content="字号" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
-          <div class="btn" :style="{ color: formatInfo.color }">
+          <div class="btn">
             <span class="icon iconfont iconcase fontColor"></span>
           </div>
         </template>
@@ -65,7 +65,7 @@
     <el-tooltip content="字体颜色" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
-          <div class="btn">
+          <div class="btn" :style="{ color: formatInfo.color }">
             <span class="icon iconfont iconzitiyanse"></span>
           </div>
         </template>
