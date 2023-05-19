@@ -26,6 +26,7 @@
         <el-radio-button label="png">{{ $t('export.imageFile') }}（.png）</el-radio-button>
         <el-radio-button label="svg">{{ $t('export.svgFile') }}（.svg）</el-radio-button>
         <el-radio-button label="pdf">{{ $t('export.pdfFile') }}（.pdf）</el-radio-button>
+        <el-radio-button label="md">Markdown文件（.md）</el-radio-button>
       </el-radio-group>
       <div class="tip">{{ $t('export.tips') }}</div>
       <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
