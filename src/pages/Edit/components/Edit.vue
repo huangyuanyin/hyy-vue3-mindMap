@@ -337,7 +337,7 @@ export default {
         this.getMindMap().setData(data)
       }
       this.mindMap.view.reset()
-      // this.manualSave()
+      this.manualSave()
     },
 
     /**
