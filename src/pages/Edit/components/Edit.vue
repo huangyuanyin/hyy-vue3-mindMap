@@ -28,6 +28,7 @@ import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
 import Export from 'simple-mind-map/src/Export.js'
 import Select from 'simple-mind-map/src/Select.js'
 import RichText from 'simple-mind-map/src/RichText.js'
+import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -48,7 +49,13 @@ import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
 
 // 注册插件
-MindMap.usePlugin(MiniMap).usePlugin(Watermark).usePlugin(Drag).usePlugin(KeyboardNavigation).usePlugin(Export).usePlugin(Select)
+MindMap.usePlugin(MiniMap)
+  .usePlugin(Watermark)
+  .usePlugin(Drag)
+  .usePlugin(KeyboardNavigation)
+  .usePlugin(Export)
+  .usePlugin(Select)
+  .usePlugin(AssociativeLine)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -111,6 +118,9 @@ export default {
     })
     bus.on('endTextEdit', () => {
       this.mindMap.renderer.endTextEdit()
+    })
+    bus.on('createAssociativeLine', () => {
+      this.mindMap.associativeLine.createLineFromActiveNode()
     })
     if (this.openTest) {
       setTimeout(() => {
