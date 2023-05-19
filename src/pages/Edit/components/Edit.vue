@@ -122,6 +122,9 @@ export default {
     bus.on('createAssociativeLine', () => {
       this.mindMap.associativeLine.createLineFromActiveNode()
     })
+    window.addEventListener('resize', () => {
+      this.mindMap.resize()
+    })
     if (this.openTest) {
       setTimeout(() => {
         this.test()
