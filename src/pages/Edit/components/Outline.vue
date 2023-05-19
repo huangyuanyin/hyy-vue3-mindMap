@@ -1,13 +1,13 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('outline.title')">
     <el-tree class="outlineTree" :data="data" :props="defaultProps" :expand-on-click-node="false" default-expand-all>
-      <template #default="{ node, data }">
-        <span class="customNode">
+      <template #default="{ node }">
+        <span class="customNode" @click="onClick($event, node)">
           <span
             class="nodeEdit"
             :key="getKey()"
             contenteditable="true"
-            @keydown.stop
+            @keydown.stop="onKeydown($event, node)"
             @keyup.stop
             @blur="onBlur($event, node)"
             v-html="node.label"
@@ -23,7 +23,7 @@
  * @Author: 黄原寅
  * @Desc: 大纲内容
  */
-import { onMounted, ref, defineProps, nextTick } from 'vue'
+import { onMounted, ref } from 'vue'
 import Sidebar from './Sidebar'
 import { mapState } from 'vuex'
 import bus from '@/utils/bus.js'
@@ -40,10 +40,15 @@ const defaultProps = ref({
     return data.data.text.replaceAll(/\n/g, '</br>')
   }
 })
+const notHandleDataChange = ref(false)
 
 onMounted(() => {
-  console.log('props.mindMap', props.mindMap)
   bus.on('data_change', data2 => {
+    // 激活节点会让当前大纲失去焦点
+    if (notHandleDataChange.value) {
+      notHandleDataChange.value = false
+      return
+    }
     data.value = [props.mindMap.renderer.renderTree]
   })
 })
@@ -54,6 +59,38 @@ const onBlur = (e, node) => {
 
 const getKey = () => {
   return Math.random()
+}
+
+const onKeydown = (e, node) => {
+  if (e.keyCode === 13 && !e.shiftKey) {
+    e.preventDefault()
+    insertNode()
+  }
+  if (e.keyCode === 9) {
+    e.preventDefault()
+    insertChildNode()
+  }
+}
+
+// 插入兄弟节点
+const insertNode = () => {
+  notHandleDataChange.value = false
+  props.mindMap.execCommand('INSERT_NODE', false)
+}
+
+// 插入下级节点
+const insertChildNode = () => {
+  notHandleDataChange.value = false
+  props.mindMap.execCommand('INSERT_CHILD_NODE', false)
+}
+
+// 激活当前节点且移动当前节点到画布中间
+const onClick = (e, data) => {
+  notHandleDataChange.value = true
+  let node = data.data._node
+  if (node.nodeData.data.isActive) return
+  node.mindMap.renderer.moveNodeToCenter(node)
+  node.active()
 }
 </script>
 
