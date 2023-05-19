@@ -111,6 +111,7 @@ export default {
     this.showNewFeatureInfo()
     this.init()
     bus.on('execCommand', this.execCommand)
+    bus.on('paddingChange', this.onPaddingChange)
     bus.on('export', this.export)
     bus.on('setData', this.setData)
     bus.on('startTextEdit', () => {
@@ -366,6 +367,14 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    /**
+     * @Author: 黄原寅
+     * @Desc: 修改导出内边距
+     */
+    onPaddingChange(data) {
+      this.mindMap.updateConfig(data)
     },
 
     /**

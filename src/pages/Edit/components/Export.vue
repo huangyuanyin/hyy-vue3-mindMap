@@ -20,6 +20,12 @@
           {{ $t('export.domToImage') }}
         </el-checkbox>
       </div>
+      <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
+        <span class="name">{{ $t('export.paddingX') }}</span>
+        <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange"></el-input>
+        <span class="name" style="margin-left: 10px">{{ $t('export.paddingY') }}</span>
+        <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange"></el-input>
+      </div>
       <div class="downloadTypeList">
         <div
           class="downloadTypeItem"
@@ -69,6 +75,8 @@ const widthConfig = ref(true)
 const domToImage = ref(false)
 const loading = ref(false)
 const loadingText = ref('')
+const paddingX = ref(10)
+const paddingY = ref(10)
 
 const openNodeRichText = computed(() => store.state.localConfig.openNodeRichText)
 const downTypeList2 = computed(() => downTypeList[t.locale] || downTypeList.zh)
@@ -85,6 +93,13 @@ onMounted(() => {
     }
   })
 })
+
+const onPaddingChange = () => {
+  bus.emit('paddingChange', {
+    exportPaddingX: Number(paddingX.value),
+    exportPaddingY: Number(paddingY.value)
+  })
+}
 
 /**
  * @Author: 黄原寅
@@ -140,7 +155,12 @@ export default {
       margin-right: 10px;
     }
   }
-
+  .paddingInputBox {
+    margin-bottom: 10px;
+    .name {
+      margin-right: 10px;
+    }
+  }
   .tip {
     margin-top: 10px;
     &.warning {
