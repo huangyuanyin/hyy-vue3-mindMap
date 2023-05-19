@@ -314,7 +314,8 @@ export default {
         'mode_change',
         'node_tree_render_end',
         'rich_text_selection_change',
-        'transforming-dom-to-images'
+        'transforming-dom-to-images',
+        'generalization_node_contextmenu'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
           if (['node_contextmenu', 'node_active', 'rich_text_selection_change'].includes(event)) {
