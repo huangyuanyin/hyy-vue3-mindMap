@@ -424,6 +424,25 @@
           }}</el-checkbox>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.mousewheelAction') }}</span>
+          <el-select
+            size="small"
+            style="width: 120px"
+            v-model="config.mousewheelAction"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('mousewheelAction', value)
+              }
+            "
+          >
+            <el-option :label="$t('baseStyle.zoomView')" value="zoom"></el-option>
+            <el-option :label="$t('baseStyle.moveViewUpDown')" value="move"></el-option>
+          </el-select>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -482,7 +501,8 @@ export default {
         nodeUseLineStyle: false
       },
       config: {
-        enableFreeDrag: false
+        enableFreeDrag: false,
+        mousewheelAction: 'zoom'
       },
       watermarkConfig: {
         show: false,
@@ -529,6 +549,7 @@ export default {
   },
   created() {
     this.enableNodeRichText = this.localConfig.openNodeRichText
+    this.mousewheelAction = this.localConfig.mousewheelAction
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -565,7 +586,7 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ;['enableFreeDrag'].forEach(key => {
+      ;['enableFreeDrag', 'mousewheelAction'].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },
@@ -667,6 +688,14 @@ export default {
       this.setLocalConfig({
         openNodeRichText: e
       })
+    },
+
+    // 切换鼠标滚轮的行为
+    mousewheelActionChange(e) {
+      this.setLocalConfig({
+        mousewheelAction: e
+      })
+      this.mindMap.updateConfig
     }
   }
 }
