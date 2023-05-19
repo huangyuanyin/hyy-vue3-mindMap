@@ -23,9 +23,9 @@
  * @Author: 黄原寅
  * @Desc: 大纲内容
  */
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import Sidebar from './Sidebar'
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
 import bus from '@/utils/bus.js'
 
 const props = defineProps({
@@ -33,6 +33,8 @@ const props = defineProps({
     type: Object
   }
 })
+
+const store = useStore()
 const sidebar = ref(null)
 const data = ref([])
 const defaultProps = ref({
@@ -41,6 +43,20 @@ const defaultProps = ref({
   }
 })
 const notHandleDataChange = ref(false)
+const isCreateNode = ref(false)
+
+const activeSidebar = computed(() => store.state.activeSidebar)
+
+watch(
+  () => activeSidebar.value,
+  val => {
+    if (val === 'outline') {
+      sidebar.value.show = true
+    } else {
+      sidebar.value.show = false
+    }
+  }
+)
 
 onMounted(() => {
   bus.on('data_change', data2 => {
@@ -54,6 +70,10 @@ onMounted(() => {
 })
 
 const onBlur = (e, node) => {
+  if (isCreateNode.value) {
+    isCreateNode.value = false
+    return
+  }
   node.data._node.setText(e.target.innerText)
 }
 
@@ -75,12 +95,14 @@ const onKeydown = (e, node) => {
 // 插入兄弟节点
 const insertNode = () => {
   notHandleDataChange.value = false
+  isCreateNode.value = true
   props.mindMap.execCommand('INSERT_NODE', false)
 }
 
 // 插入下级节点
 const insertChildNode = () => {
   notHandleDataChange.value = false
+  isCreateNode.value = true
   props.mindMap.execCommand('INSERT_CHILD_NODE', false)
 }
 
@@ -91,25 +113,6 @@ const onClick = (e, data) => {
   if (node.nodeData.data.isActive) return
   node.mindMap.renderer.moveNodeToCenter(node)
   node.active()
-}
-</script>
-
-<script>
-export default {
-  name: 'Outline',
-  computed: {
-    ...mapState(['activeSidebar'])
-  },
-
-  watch: {
-    activeSidebar(val) {
-      if (val === 'outline') {
-        this.$refs.sidebar.show = true
-      } else {
-        this.$refs.sidebar.show = false
-      }
-    }
-  }
 }
 </script>
 
