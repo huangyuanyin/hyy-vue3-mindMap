@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('import.title')" width="600px">
+  <el-dialog custom-class="importNodeDialog" v-model="dialogVisible" :title="$t('import.title')" width="600px">
     <el-upload
       ref="upload"
       action="x"
@@ -32,6 +32,7 @@ import bus from '@/utils/bus.js'
 import { ElMessage } from 'element-plus'
 // import MindMap from 'simple-mind-map'
 import xmind from 'simple-mind-map/src/parse/xmind.js'
+import markdown from 'simple-mind-map/src/parse/markdown.js'
 import { useStore } from 'vuex'
 import { fileToBuffer } from '@/utils'
 import { read, utils } from 'xlsx'
@@ -60,10 +61,10 @@ onMounted(() => {
  * @Desc: 文件选择
  */
 const onChange = file => {
-  let reg = /\.(smm|xmind|json|xlsx)$/
+  let reg = /\.(smm|xmind|json|xlsx|md)$/
   if (!reg.test(file.name)) {
     ElMessage({
-      message: '请选择.smm、.json、.xmind、.xlsx文件',
+      message: '请选择.smm、.json、.xmind、.xlsx、.md文件',
       type: 'error'
     })
     fileList.value = []
@@ -110,6 +111,8 @@ const confirm = () => {
     handleXmind(file)
   } else if (/\.xlsx$/.test(file.name)) {
     handleExcel(file)
+  } else if (/\.md$/.test(file.name)) {
+    handleMd(file)
   }
   cancel()
 }
@@ -225,6 +228,30 @@ const handleExcel = async file => {
   } catch (error) {
     console.log(error)
     ElMessage.error('文件解析失败')
+  }
+}
+/**
+ * @Author: 黄原寅
+ * @Desc: 处理markdown文件
+ */
+const handleMd = async file => {
+  let fileReader = new FileReader()
+  fileReader.readAsText(file.raw)
+  fileReader.onload = async evt => {
+    try {
+      let data = await markdown.transformMarkdownTo(evt.target.result)
+      bus.emit('setData', data)
+      ElMessage({
+        message: '导入成功',
+        type: 'success'
+      })
+    } catch (error) {
+      console.log(error)
+      ElMessage({
+        message: '文件解析失败',
+        type: 'error'
+      })
+    }
   }
 }
 </script>
