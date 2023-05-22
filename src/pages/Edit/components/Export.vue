@@ -16,15 +16,15 @@
         <el-checkbox v-show="['smm', 'json'].includes(exportType)" v-model="widthConfig" style="margin-left: 12px">
           {{ $t('export.include') }}
         </el-checkbox>
-        <el-checkbox v-show="['svg'].includes(exportType)" v-model="domToImage" style="margin-left: 12px">
-          {{ $t('export.domToImage') }}
-        </el-checkbox>
       </div>
       <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
         <span class="name">{{ $t('export.paddingX') }}</span>
         <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange"></el-input>
         <span class="name" style="margin-left: 10px">{{ $t('export.paddingY') }}</span>
         <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange"></el-input>
+        <el-checkbox v-show="['png'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
+          $t('export.isTransparent')
+        }}</el-checkbox>
       </div>
       <div class="downloadTypeList">
         <div
@@ -42,7 +42,6 @@
         </div>
       </div>
       <div class="tip">{{ $t('export.tips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
       <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
     </div>
     <template #footer>
@@ -72,7 +71,7 @@ const dialogVisible = ref(false)
 const exportType = ref('smm')
 const fileName = ref('思维导图')
 const widthConfig = ref(true)
-const domToImage = ref(false)
+const isTransparent = ref(false)
 const loading = ref(false)
 const loadingText = ref('')
 const paddingX = ref(10)
@@ -84,13 +83,6 @@ const downTypeList2 = computed(() => downTypeList[t.locale] || downTypeList.zh)
 onMounted(() => {
   bus.on('showExport', () => {
     dialogVisible.value = true
-  })
-  bus.on('transforming-dom-to-images', (index, len) => {
-    loading.value = true
-    loadingText.value = `${t('export.transformingDomToImages')}${index + 1}/${len}`
-    if (index >= len - 1) {
-      loading.value = false
-    }
   })
 })
 
@@ -121,15 +113,18 @@ const confirm = () => {
       exportType.value,
       true,
       fileName.value,
-      domToImage.value,
       `* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
           }`
     )
-  } else {
+  } else if (['smm', 'json'].includes(exportType.value)) {
     bus.emit('export', exportType.value, true, fileName.value, widthConfig.value)
+  } else if (exportType.value === 'png') {
+    bus.emit('export', exportType.value, true, fileName.value, isTransparent.value)
+  } else {
+    bus.emit('export', exportType.value, true, fileName.value)
   }
   cancel()
   ElNotification({
