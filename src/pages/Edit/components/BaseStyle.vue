@@ -239,6 +239,58 @@
           </el-select>
         </div>
       </div>
+      <!-- 关联线文字 -->
+      <div class="title noTop">关联线文字</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">字体</span>
+          <el-select
+            size="small"
+            v-model="style.associativeLineTextFontFamily"
+            placeholder=""
+            @change="update('associativeLineTextFontFamily', $event)"
+          >
+            <el-option
+              v-for="item in fontFamilyList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+              :style="{ fontFamily: item.value }"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">颜色</span>
+          <el-popover ref="popover6" placement="bottom" trigger="hover">
+            <template #reference>
+              <span class="block" v-popover:popover6 :style="{ backgroundColor: style.associativeLineTextColor }"></span>
+            </template>
+            <Color
+              :color="style.associativeLineTextColor"
+              @change="
+                color => {
+                  update('associativeLineTextColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">字号</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.associativeLineTextFontSize"
+            placeholder=""
+            @change="update('associativeLineTextFontSize', $event)"
+          >
+            <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item" :style="{ fontSize: item + 'px' }"> </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 节点边框风格 -->
       <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
       <div class="row">
@@ -520,7 +572,15 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList } from '@/config'
+import {
+  lineWidthList,
+  lineStyleList,
+  backgroundRepeatList,
+  backgroundPositionList,
+  backgroundSizeList,
+  fontFamilyList,
+  fontSizeList
+} from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
@@ -548,6 +608,7 @@ export default {
   data() {
     return {
       lineWidthList,
+      fontSizeList,
       activeTab: 'color',
       marginActiveTab: 'second',
       style: {
@@ -561,6 +622,9 @@ export default {
         associativeLineWidth: 0,
         associativeLineActiveWidth: 0,
         associativeLineActiveColor: '',
+        associativeLineTextFontSize: 0,
+        associativeLineTextColor: '',
+        associativeLineTextFontFamily: '',
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
@@ -607,6 +671,9 @@ export default {
     },
     backgroundSizeList() {
       return backgroundSizeList[this.$i18n.locale] || backgroundSizeList.zh
+    },
+    fontFamilyList() {
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
     }
   },
   watch: {
@@ -643,6 +710,9 @@ export default {
         'associativeLineWidth',
         'associativeLineActiveWidth',
         'associativeLineActiveColor',
+        'associativeLineTextFontSize',
+        'associativeLineTextColor',
+        'associativeLineTextFontFamily',
         'paddingX',
         'paddingY',
         'imgMaxWidth',
