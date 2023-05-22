@@ -39,5 +39,8 @@ export const themeMap = {
   redSpirit: require('../assets/img/redSpirit.jpg'),
   blackHumour: require('../assets/img/blackHumour.jpg'),
   lateNightOffice: require('../assets/img/lateNightOffice.jpg'),
-  blackGold: require('../assets/img/blackGold.jpg')
+  blackGold: require('../assets/img/blackGold.jpg'),
+  autumn: require('../assets/img/autumn.jpg'),
+  avocado: require('../assets/img/avocado.jpg'),
+  orangeJuice: require('../assets/img/orangeJuice.jpg')
 }

@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="tip">{{ $t('export.tips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
+      <!-- <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div> -->
     </div>
     <template #footer>
       <span class="dialog-footer">
