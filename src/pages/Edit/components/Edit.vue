@@ -47,6 +47,7 @@ import { getData, storeData, storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
+import icon from '@/config/icon'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -293,7 +294,8 @@ export default {
             // bus.emit('hideNoteContent')
           }
         },
-        ...(config || {})
+        ...(config || {}),
+        iconList: icon
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
