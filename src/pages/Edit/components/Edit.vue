@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted() {
-    this.showNewFeatureInfo()
+    // this.showNewFeatureInfo()
     this.init()
     bus.on('execCommand', this.execCommand)
     bus.on('paddingChange', this.onPaddingChange)
