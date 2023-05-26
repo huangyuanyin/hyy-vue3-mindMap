@@ -5,7 +5,7 @@ const routes = [{ path: '/', name: 'Edit', component: EditPage }]
 
 const router = createRouter({
   history: process.env.NODE_ENV === 'development' ? createWebHistory() : createWebHashHistory(),
-  base: '/mindMap/',
+  base: '/hyy-vue3-mindmap/',
   routes
 })
 
