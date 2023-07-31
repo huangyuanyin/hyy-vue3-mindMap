@@ -9,6 +9,8 @@ import '@/assets/icon-font/iconfont.css'
 import 'viewerjs/dist/viewer.css'
 import VueViewer from 'v-viewer'
 import i18n from './i18n.js'
+// import VConsole from 'vconsole'
+// const vConsole = new VConsole()
 
 const app = createApp(App)
 
