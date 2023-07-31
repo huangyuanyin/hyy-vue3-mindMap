@@ -39,7 +39,7 @@
  * @Desc: 节点标签内容设置
  */
 import { onMounted, ref } from 'vue'
-import { tagColorList } from 'simple-mind-map/src/utils/constant'
+import { tagColorList } from 'simple-mind-map/src/constants/constant'
 import bus from '@/utils/bus.js'
 
 const dialogVisible = ref(false)

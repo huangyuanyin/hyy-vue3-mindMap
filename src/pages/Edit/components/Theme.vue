@@ -24,7 +24,7 @@
  */
 import { ref, defineProps, onMounted, computed, watch } from 'vue'
 import Sidebar from './Sidebar'
-import { themeList } from 'simple-mind-map/src/utils/constant'
+import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { useStore } from 'vuex'

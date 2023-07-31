@@ -20,7 +20,7 @@
 <script setup>
 import { toRaw, ref, onMounted, nextTick, watch, computed } from 'vue'
 import Sidebar from './Sidebar'
-import { layoutList } from 'simple-mind-map/src/utils/constant'
+import { layoutList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { mapState, useStore } from 'vuex'
