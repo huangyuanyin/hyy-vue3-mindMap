@@ -11,7 +11,7 @@
       </div>
       <div class="item" @click="exec('ADD_GENERALIZATION')" :class="{ disabled: insertNodeBtnDisabled }">
         {{ $t('contextmenu.insertSummary') }}
-        <span class="desc">Ctrl + S</span>
+        <span class="desc">Ctrl + G</span>
       </div>
       <div class="item" @click="exec('UP_NODE')" :class="{ disabled: upNodeBtnDisabled }">
         {{ $t('contextmenu.moveUpNode') }}
