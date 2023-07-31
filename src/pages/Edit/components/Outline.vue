@@ -43,7 +43,6 @@ const defaultProps = ref({
   }
 })
 const notHandleDataChange = ref(false)
-const isCreateNode = ref(false)
 
 const activeSidebar = computed(() => store.state.activeSidebar)
 
@@ -70,10 +69,6 @@ onMounted(() => {
 })
 
 const onBlur = (e, node) => {
-  // if (isCreateNode.value) {
-  //   isCreateNode.value = false
-  //   return
-  // }
   const richText = node.data.data.richText
   if (richText) {
     node.data._node.setText(e.target.innerHTML, true)
@@ -100,14 +95,12 @@ const onKeydown = (e, node) => {
 // 插入兄弟节点
 const insertNode = () => {
   notHandleDataChange.value = false
-  isCreateNode.value = true
   props.mindMap.execCommand('INSERT_NODE', false)
 }
 
 // 插入下级节点
 const insertChildNode = () => {
   notHandleDataChange.value = false
-  isCreateNode.value = true
   props.mindMap.execCommand('INSERT_CHILD_NODE', false)
 }
 
