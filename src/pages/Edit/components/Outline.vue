@@ -39,7 +39,7 @@ const sidebar = ref(null)
 const data = ref([])
 const defaultProps = ref({
   label(data) {
-    return data.data.text.replaceAll(/\n/g, '</br>')
+    return data.data.richText ? data.data.text : data.data.text.replaceAll(/\n/g, '</br>')
   }
 })
 const notHandleDataChange = ref(false)
@@ -70,11 +70,16 @@ onMounted(() => {
 })
 
 const onBlur = (e, node) => {
-  if (isCreateNode.value) {
-    isCreateNode.value = false
-    return
+  // if (isCreateNode.value) {
+  //   isCreateNode.value = false
+  //   return
+  // }
+  const richText = node.data.data.richText
+  if (richText) {
+    node.data._node.setText(e.target.innerHTML, true)
+  } else {
+    node.data._node.setText(e.target.innerText)
   }
-  node.data._node.setText(e.target.innerText)
 }
 
 const getKey = () => {
