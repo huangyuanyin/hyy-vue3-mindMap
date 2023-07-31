@@ -6,7 +6,8 @@ export const layoutImgMap = {
   catalogOrganization: require('../assets/img/catalogOrganization.jpg'),
   timeline: require('../assets/img/timeline.jpg'),
   timeline2: require('../assets/img/timeline2.jpg'),
-  fishbone: require('../assets/img/fishbone.jpg')
+  fishbone: require('../assets/img/fishbone.jpg'),
+  verticalTimeline: require('../assets/img/verticalTimeline.jpg')
 }
 
 //  主题图片映射
