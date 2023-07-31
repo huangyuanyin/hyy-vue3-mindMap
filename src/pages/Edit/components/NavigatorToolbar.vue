@@ -9,22 +9,31 @@
       <MouseAction :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{ $t('navigatorToolbar.openMiniMap') }}</el-checkbox>
+      <el-tooltip
+        effect="dark"
+        :content="openMiniMap ? $t('navigatorToolbar.closeMiniMap') : $t('navigatorToolbar.openMiniMap')"
+        placement="top"
+      >
+        <div class="btn iconfont icondaohang1" @click="toggleMiniMap"></div>
+      </el-tooltip>
     </div>
     <div class="item">
-      <el-switch
+      <!-- <el-switch
         v-model="isReadonly"
         :active-text="$t('navigatorToolbar.readonly')"
         :inactive-text="$t('navigatorToolbar.edit')"
         @change="readonlyChange"
       >
-      </el-switch>
-    </div>
-    <div class="item">
-      <Scale :mindMap="mindMap"></Scale>
+      </el-switch> -->
+      <el-tooltip effect="dark" :content="isReadonly ? $t('navigatorToolbar.edit') : $t('navigatorToolbar.readonly')" placement="top">
+        <div class="btn iconfont" :class="[isReadonly ? 'iconyanjing' : 'iconbianji1']" @click="readonlyChange"></div>
+      </el-tooltip>
     </div>
     <div class="item">
       <Fullscreen :mindMap="mindMap"></Fullscreen>
+    </div>
+    <div class="item">
+      <Scale :mindMap="mindMap"></Scale>
     </div>
   </div>
 </template>
@@ -53,12 +62,14 @@ const isReadonly = ref(false)
 const openMiniMap = ref(false)
 const lang = ref(getLang())
 
-const readonlyChange = value => {
-  props.mindMap.setMode(value ? 'readonly' : 'edit')
+const readonlyChange = () => {
+  isReadonly.value = !isReadonly.value
+  props.mindMap.setMode(isReadonly.value ? 'readonly' : 'edit')
 }
 
-const toggleMiniMap = show => {
-  bus.emit('toggle_mini_map', show)
+const toggleMiniMap = () => {
+  openMiniMap.value = !openMiniMap.value
+  bus.emit('toggle_mini_map', openMiniMap.value)
 }
 
 const onLangChange = lang => {
@@ -66,10 +77,6 @@ const onLangChange = lang => {
   console.log('i18n', i18n)
   storeLang(lang)
 }
-
-onMounted(() => {
-  toggleMiniMap(openMiniMap)
-})
 </script>
 
 <script>
@@ -98,6 +105,16 @@ export default {
     &:last-of-type {
       margin-right: 0;
     }
+    .btn {
+      cursor: pointer;
+      font-size: 18px;
+    }
+  }
+}
+@media screen and (max-width: 502px) {
+  .navigatorContainer {
+    left: 20px;
+    overflow-x: auto;
   }
 }
 </style>
