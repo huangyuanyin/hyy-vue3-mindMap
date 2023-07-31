@@ -526,6 +526,7 @@
       </template>
       <!-- 其他配置 -->
       <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
+      <!-- 配置开启自由拖拽 -->
       <div class="row">
         <div class="rowItem">
           <el-checkbox
@@ -539,6 +540,7 @@
           >
         </div>
       </div>
+      <!-- 配置是否启用富文本编辑 -->
       <div class="row">
         <div class="rowItem">
           <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{
@@ -546,6 +548,7 @@
           }}</el-checkbox>
         </div>
       </div>
+      <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.mousewheelAction') }}</span>
@@ -562,6 +565,26 @@
           >
             <el-option :label="$t('baseStyle.zoomView')" value="zoom"></el-option>
             <el-option :label="$t('baseStyle.moveViewUpDown')" value="move"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <!-- 配置鼠标缩放行为 -->
+      <div class="row" v-if="config.mousewheelAction === 'zoom'">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.mousewheelZoomActionReverse') }}</span>
+          <el-select
+            size="small"
+            style="width: 120px"
+            v-model="config.mousewheelZoomActionReverse"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('mousewheelZoomActionReverse', value)
+              }
+            "
+          >
+            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse1')" :value="false"></el-option>
+            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse2')" :value="true"></el-option>
           </el-select>
         </div>
       </div>
