@@ -30,6 +30,7 @@ import Drag from 'simple-mind-map/src/plugins/Drag.js'
 import Select from 'simple-mind-map/src/plugins/Select.js'
 import RichText from 'simple-mind-map/src/plugins/RichText.js'
 import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
+import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -65,6 +66,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Export)
   .usePlugin(Select)
   .usePlugin(AssociativeLine)
+// .usePlugin(TouchEvent)
 
 // 注册自定义主题
 // customThemeList.forEach(item => {
