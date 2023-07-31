@@ -6,6 +6,9 @@
       </el-select>
     </div>
     <div class="item">
+      <MouseAction :mindMap="mindMap"></MouseAction>
+    </div>
+    <div class="item">
       <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{ $t('navigatorToolbar.openMiniMap') }}</el-checkbox>
     </div>
     <div class="item">
@@ -34,6 +37,7 @@
 import { ref, onMounted, defineProps } from 'vue'
 import Scale from './Scale'
 import Fullscreen from './Fullscreen'
+import MouseAction from './MouseAction.vue'
 import bus from '@/utils/bus.js'
 import { langList } from '@/config'
 import i18n from '@/i18n.js'

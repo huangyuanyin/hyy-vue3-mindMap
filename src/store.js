@@ -9,7 +9,8 @@ const store = createStore({
     localConfig: {
       // 本地配置
       isZenMode: false, // 是否是禅模式
-      openNodeRichText: true // 是否开启节点富文本
+      openNodeRichText: true, // 是否开启节点富文本
+      useLeftKeySelectionRightKeyDrag: false // 鼠标行为
     },
     activeSidebar: '' // 当前显示的侧边栏
   },

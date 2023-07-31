@@ -96,7 +96,8 @@ export default {
   computed: {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
-      openNodeRichText: state => state.localConfig.openNodeRichText
+      openNodeRichText: state => state.localConfig.openNodeRichText,
+      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag
     })
   },
   watch: {
@@ -295,7 +296,8 @@ export default {
           }
         },
         ...(config || {}),
-        iconList: icon
+        iconList: icon,
+        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
