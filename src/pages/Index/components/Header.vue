@@ -25,6 +25,7 @@
         >
           客户端
         </div>
+        <div class="navItem" @click="jumpHelp">使用文档</div>
         <div class="navItem" @click="jumpDoc">开发文档</div>
         <div class="navItem">
           <a href="https://github.com/wanglin2/mind-map" target="_blank">Github</a>
@@ -64,6 +65,10 @@ const onScroll = () => {
 
 const useOnline = () => {
   router.push('/')
+}
+
+const jumpHelp = () => {
+  router.push('/help/zh/')
 }
 
 const jumpDoc = () => {
