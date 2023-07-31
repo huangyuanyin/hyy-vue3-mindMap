@@ -105,12 +105,11 @@ const insertChildNode = () => {
 }
 
 // 激活当前节点且移动当前节点到画布中间
-const onClick = (e, data) => {
+const onClick = (e, node) => {
   notHandleDataChange.value = true
-  let node = data.data._node
-  if (node.nodeData.data.isActive) return
-  node.mindMap.renderer.moveNodeToCenter(node)
-  node.active()
+  let targetNode = node.data._node
+  if (targetNode && targetNode.nodeData.data.isActive) return
+  props.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid)
 }
 </script>
 
