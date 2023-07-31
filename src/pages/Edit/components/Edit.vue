@@ -25,6 +25,7 @@ import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
 import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
 import KeyboardNavigation from 'simple-mind-map/src/plugins/KeyboardNavigation.js'
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import Drag from 'simple-mind-map/src/plugins/Drag.js'
 import Select from 'simple-mind-map/src/plugins/Select.js'
@@ -64,6 +65,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
   .usePlugin(ExportPDF)
+  .usePlugin(ExportXMind)
   .usePlugin(Export)
   .usePlugin(Select)
   .usePlugin(AssociativeLine)
