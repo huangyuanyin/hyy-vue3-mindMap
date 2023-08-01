@@ -30,6 +30,7 @@ import bus from '@/utils/bus.js'
 import { useStore } from 'vuex'
 import { themeMap } from '@/config/constant.js'
 import customThemeList from '@/customThemes'
+import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
   mindMap: {
@@ -70,11 +71,32 @@ onMounted(() => {
 const useTheme = item => {
   theme.value = item.value
   handleDark()
+  const customThemeConfig = props.mindMap.getCustomThemeConfig()
+  const hasCustomThemeConfig = Object.keys(customThemeConfig).length > 0
+  if (hasCustomThemeConfig) {
+    ElMessageBox.confirm('你当前自定义过基础样式，是否覆盖？', '提示', {
+      confirmButtonText: '覆盖',
+      cancelButtonText: '保留',
+      type: 'warning'
+    })
+      .then(() => {
+        props.mindMap.setThemeConfig({})
+        changeTheme(theme, {})
+      })
+      .catch(() => {
+        changeTheme(theme, customThemeConfig)
+      })
+  } else {
+    changeTheme(theme, customThemeConfig)
+  }
+}
+
+const changeTheme = (theme, config) => {
   props.mindMap.setTheme(theme.value)
   storeConfig({
     theme: {
       template: theme.value,
-      config: props.mindMap.getCustomThemeConfig()
+      config
     }
   })
 }
