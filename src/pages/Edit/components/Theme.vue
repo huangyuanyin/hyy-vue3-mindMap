@@ -1,9 +1,12 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
     <div class="themeList" :class="{ isDark: isDark }">
+      <el-tabs v-model="activeName">
+        <el-tab-pane v-for="group in groupList" :key="group.name" :label="group.name" :name="group.name"></el-tab-pane>
+      </el-tabs>
       <div
         class="themeItem"
-        v-for="item in themeAllList"
+        v-for="item in currentList"
         :key="item.value"
         @click="useTheme(item)"
         :class="{ active: item.value === theme }"
@@ -43,8 +46,10 @@ const activeSidebar = computed(() => store.state.activeSidebar)
 const isDark = computed(() => store.state.isDark)
 const sidebar = ref(null)
 const theme = ref('')
-const themeAllList = ref([...themeList].reverse())
+const themeAllList = ref([...themeList, ...customThemeList].reverse())
 // const themeAllList = ref([...themeList, ...customThemeList])
+const activeName = ref('')
+const groupList = ref([])
 
 watch(
   () => activeSidebar.value,
@@ -59,10 +64,62 @@ watch(
   }
 )
 
-onMounted(() => {
+const currentList = computed(() => {
+  if (groupList.value.length > 0) {
+    return groupList.value.find(item => item.name === activeName.value).list
+  }
+})
+
+onMounted(async () => {
+  await initGroup()
   theme.value = props.mindMap.getTheme()
   handleDark()
 })
+
+const initGroup = () => {
+  let baiduThemes = [
+    'default',
+    'skyGreen',
+    'classic2',
+    'classic3',
+    'classicGreen',
+    'classicBlue',
+    'blueSky',
+    'brainImpairedPink',
+    'earthYellow',
+    'freshGreen',
+    'freshRed',
+    'romanticPurple',
+    'pinkGrape',
+    'mint'
+  ]
+  let baiduList = []
+  let classicsList = []
+  themeAllList.value.forEach(item => {
+    if (baiduThemes.includes(item.value)) {
+      baiduList.push(item)
+    } else if (!item.dark) {
+      classicsList.push(item)
+    }
+  })
+  groupList.value = [
+    {
+      name: '经典',
+      list: classicsList
+    },
+    {
+      name: '深色',
+      list: themeAllList.value.filter(item => {
+        return item.dark
+      })
+    },
+    {
+      name: '朴素',
+      list: baiduList
+    }
+  ]
+  activeName.value = groupList.value[0].name
+}
 
 /**
  * @Author: 黄原寅寅
@@ -102,7 +159,7 @@ const changeTheme = (theme, config) => {
 }
 
 const handleDark = () => {
-  let target = themeList.find(item => {
+  let target = themeAllList.value.find(item => {
     return item.value === theme.value
   })
   store.commit('setIsDark', target.dark)
@@ -112,6 +169,7 @@ const handleDark = () => {
 <style lang="less" scoped>
 .themeList {
   padding: 20px;
+  padding-top: 0;
   &.isDark {
     .name {
       color: #fff;

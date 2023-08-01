@@ -43,5 +43,13 @@ export const themeMap = {
   blackGold: require('../assets/img/blackGold.jpg'),
   autumn: require('../assets/img/autumn.jpg'),
   avocado: require('../assets/img/avocado.jpg'),
-  orangeJuice: require('../assets/img/orangeJuice.jpg')
+  orangeJuice: require('../assets/img/orangeJuice.jpg'),
+  oreo: require('../assets/img/oreo.jpg'),
+  shallowSea: require('../assets/img/shallowSea.jpg'),
+  lemonBubbles: require('../assets/img/lemonBubbles.jpg'),
+  rose: require('../assets/img/rose.jpg'),
+  seaBlueLine: require('../assets/img/seaBlueLine.jpg'),
+  neonLamp: require('../assets/img/neonLamp.jpg'),
+  darkNightLceBlade: require('../assets/img/darkNightLceBlade.jpg'),
+  morandi: require('../assets/img/morandi.jpg')
 }
