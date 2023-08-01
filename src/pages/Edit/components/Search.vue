@@ -10,7 +10,7 @@
         <template #prefix>
           <i class="el-input__icon el-icon-search"></i>
         </template>
-        <template #append v-if="!!searchText.trim()">
+        <template #append v-if="!isUndef(searchText)">
           <el-button @click="showReplaceInput = true">
             {{ $t('search.replace') }}
           </el-button>
@@ -37,6 +37,7 @@
 import { mapState } from 'vuex'
 import bus from '@/utils/bus.js'
 import { Close } from '@element-plus/icons-vue'
+import { isUndef } from 'simple-mind-map/src/utils/index'
 // 搜索替换
 export default {
   name: 'Search',
@@ -64,7 +65,7 @@ export default {
   },
   watch: {
     searchText() {
-      if (!this.searchText.trim()) {
+      if (isUndef(this.searchText)) {
         this.currentIndex = 0
         this.total = 0
         this.showSearchInfo = false
@@ -84,6 +85,7 @@ export default {
     })
   },
   methods: {
+    isUndef,
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
