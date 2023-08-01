@@ -1,12 +1,12 @@
 <template>
-  <div class="searchContainer" :class="{ isDark: isDark, show: show }">
+  <div class="searchContainer" :class="{ isDark: isDark, show: show }" @mouseleave="onMouseleave">
     <div class="closeBtnBox">
       <el-icon class="closeBtn" @click="close">
         <Close />
       </el-icon>
     </div>
     <div class="searchInputBox">
-      <el-input ref="input" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
+      <el-input ref="searchInputRef" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
         <template #prefix>
           <el-icon><Search /></el-icon>
         </template>
@@ -18,7 +18,13 @@
       </el-input>
       <div class="searchInfo" v-if="showSearchInfo">{{ currentIndex }} / {{ total }}</div>
     </div>
-    <el-input v-if="showReplaceInput" :placeholder="$t('search.replacePlaceholder')" v-model="replaceText" style="margin: 12px 0">
+    <el-input
+      v-if="showReplaceInput"
+      ref="replaceInputRef"
+      :placeholder="$t('search.replacePlaceholder')"
+      v-model="replaceText"
+      style="margin: 12px 0"
+    >
       <template #prefix>
         <el-icon><EditPen /></el-icon>
       </template>
@@ -88,11 +94,19 @@ export default {
     showSearch() {
       bus.emit('closeSideBar')
       this.show = true
-      this.$refs.input.focus()
+      // this.$refs.input.focus()
     },
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
+    },
+    onMouseleave() {
+      if (this.$refs.searchInputRef) {
+        this.$refs.searchInputRef.blur()
+      }
+      if (this.$refs.replaceInputRef) {
+        this.$refs.replaceInputRef.blur()
+      }
     },
     onSearchNext() {
       this.mindMap.search.search(this.searchText, () => {
