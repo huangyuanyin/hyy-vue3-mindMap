@@ -68,7 +68,7 @@
           :class="{
             disabled: activeNodes.length <= 0
           }"
-          @click="emit('showNodeIcon')"
+          @click="showNodeIcon"
         >
           <span class="icon iconfont iconxiaolian"></span>
           <span class="text">{{ $t('toolbar.icon') }}</span>
@@ -189,7 +189,7 @@ import NodeNote from './NodeNote'
 import NodeTag from './NodeTag'
 import Export from './Export'
 import Import from './Import'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { ElNotification } from 'element-plus'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
@@ -256,6 +256,11 @@ export default {
     bus.off('write_local_file', this.onWriteLocalFile)
   },
   methods: {
+    ...mapMutations(['setActiveSidebar']),
+    showNodeIcon() {
+      // this.$bus.$emit('showNodeIcon')
+      this.setActiveSidebar('nodeIconSidebar')
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 监听模式切换
