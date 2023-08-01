@@ -16,6 +16,7 @@
 import { store } from '@/config'
 import { Close } from '@element-plus/icons-vue'
 import { mapState, mapMutations } from 'vuex'
+import bus from '@/utils/bus.js'
 
 /**
  * @Author: 黄原寅
@@ -47,6 +48,11 @@ export default {
         this.zIndex = store.sidebarZIndex++
       }
     }
+  },
+  created() {
+    bus.on('closeSideBar', () => {
+      this.close()
+    })
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),

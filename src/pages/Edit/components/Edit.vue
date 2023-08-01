@@ -15,6 +15,7 @@
     <NodeNoteContentShow v-if="mindMap" :mindMap="mindMap"></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
+    <Search v-if="mindMap" :mindMap="mindMap"></Search>
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import RichText from 'simple-mind-map/src/plugins/RichText.js'
 import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
+import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -58,6 +60,7 @@ import Vue from 'vue'
 import router from '../../../router'
 import store from '../../../store'
 import i18n from '../../../i18n'
+import Search from './Search.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -71,6 +74,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(AssociativeLine)
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
+  .usePlugin(SearchPlugin)
 
 // 注册自定义主题
 // customThemeList.forEach(item => {
@@ -97,7 +101,8 @@ export default {
     NodeNoteContentShow,
     Navigator,
     NodeImgPreview,
-    SidebarTrigger
+    SidebarTrigger,
+    Search
   },
   data() {
     return {
