@@ -1,36 +1,34 @@
 <template>
   <div class="searchContainer" :class="{ isDark: isDark, show: show }">
     <div class="closeBtnBox">
-      <span class="closeBtn el-icon-close" @click="close"></span>
+      <el-icon class="closeBtn" @click="close">
+        <Close />
+      </el-icon>
     </div>
     <div class="searchInputBox">
-      <el-input
-        ref="input"
-        :placeholder="$t('search.searchPlaceholder')"
-        size="small"
-        v-model="searchText"
-        @keyup.native.enter.stop="onSearchNext"
-      >
-        <i slot="prefix" class="el-input__icon el-icon-search"></i>
-        <el-button size="small" slot="append" v-if="!!searchText.trim()" @click="showReplaceInput = true">
-          {{ $t('search.replace') }}
-        </el-button>
+      <el-input ref="input" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
+        <template #prefix>
+          <i class="el-input__icon el-icon-search"></i>
+        </template>
+        <template #append v-if="!!searchText.trim()">
+          <el-button @click="showReplaceInput = true">
+            {{ $t('search.replace') }}
+          </el-button>
+        </template>
       </el-input>
       <div class="searchInfo" v-if="showSearchInfo">{{ currentIndex }} / {{ total }}</div>
     </div>
-    <el-input
-      v-if="showReplaceInput"
-      :placeholder="$t('search.replacePlaceholder')"
-      size="small"
-      v-model="replaceText"
-      style="margin: 12px 0"
-    >
-      <i slot="prefix" class="el-input__icon el-icon-edit"></i>
-      <el-button size="small" slot="append" @click="hideReplaceInput">{{ $t('search.cancel') }}</el-button>
+    <el-input v-if="showReplaceInput" :placeholder="$t('search.replacePlaceholder')" v-model="replaceText" style="margin: 12px 0">
+      <template #prefix>
+        <i class="el-input__icon el-icon-edit"></i>
+      </template>
+      <template #append v-if="!!searchText.trim()">
+        <el-button @click="hideReplaceInput">{{ $t('search.cancel') }}</el-button>
+      </template>
     </el-input>
     <div class="btnList" v-if="showReplaceInput">
-      <el-button size="small" @click="replace">{{ $t('search.replace') }}</el-button>
-      <el-button size="small" @click="replaceAll">{{ $t('search.replaceAll') }}</el-button>
+      <el-button @click="replace">{{ $t('search.replace') }}</el-button>
+      <el-button @click="replaceAll">{{ $t('search.replaceAll') }}</el-button>
     </div>
   </div>
 </template>
@@ -38,10 +36,13 @@
 <script>
 import { mapState } from 'vuex'
 import bus from '@/utils/bus.js'
-
+import { Close } from '@element-plus/icons-vue'
 // 搜索替换
 export default {
   name: 'Search',
+  components: {
+    Close
+  },
   props: {
     mindMap: {
       type: Object
