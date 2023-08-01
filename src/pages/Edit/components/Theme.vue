@@ -50,6 +50,7 @@ watch(
   val => {
     if (val === 'theme') {
       theme.value = props.mindMap.getTheme()
+      handleDark()
       sidebar.value.show = true
     } else {
       sidebar.value.show = false
@@ -57,12 +58,18 @@ watch(
   }
 )
 
+onMounted(() => {
+  theme.value = props.mindMap.getTheme()
+  handleDark()
+})
+
 /**
  * @Author: 黄原寅寅
  * @Desc: 使用主题
  */
 const useTheme = item => {
   theme.value = item.value
+  handleDark()
   props.mindMap.setTheme(theme.value)
   storeConfig({
     theme: {
@@ -70,6 +77,13 @@ const useTheme = item => {
       config: props.mindMap.getCustomThemeConfig()
     }
   })
+}
+
+const handleDark = () => {
+  let target = themeList.find(item => {
+    return item.value === theme.value
+  })
+  store.commit('setIsDark', target.dark)
 }
 </script>
 
