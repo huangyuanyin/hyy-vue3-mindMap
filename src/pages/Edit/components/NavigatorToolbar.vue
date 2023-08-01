@@ -6,6 +6,9 @@
       </el-select>
     </div>
     <div class="item">
+      <div class="btn iconfont iconsousuo" @click="showSearch"></div>
+    </div>
+    <div class="item">
       <MouseAction :isDark="isDark" :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
@@ -34,6 +37,9 @@
     </div>
     <div class="item">
       <Scale :isDark="isDark" :mindMap="mindMap"></Scale>
+    </div>
+    <div class="item">
+      <div class="btn iconfont" :class="[isDark ? 'iconmoon_line' : 'iconlieri']" @click="toggleDark"></div>
     </div>
   </div>
 </template>
@@ -79,6 +85,14 @@ const onLangChange = lang => {
   i18n.locale = lang
   console.log('i18n', i18n)
   storeLang(lang)
+}
+
+const showSearch = () => {
+  bus.emit('show_search')
+}
+
+const toggleDark = () => {
+  store.commit('setIsDark', !isDark.value)
 }
 </script>
 

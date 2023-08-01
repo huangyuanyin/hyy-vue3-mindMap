@@ -8,7 +8,7 @@
     <div class="searchInputBox">
       <el-input ref="input" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
         <template #prefix>
-          <i class="el-input__icon el-icon-search"></i>
+          <el-icon><Search /></el-icon>
         </template>
         <template #append v-if="!isUndef(searchText)">
           <el-button @click="showReplaceInput = true">
@@ -20,7 +20,7 @@
     </div>
     <el-input v-if="showReplaceInput" :placeholder="$t('search.replacePlaceholder')" v-model="replaceText" style="margin: 12px 0">
       <template #prefix>
-        <i class="el-input__icon el-icon-edit"></i>
+        <el-icon><EditPen /></el-icon>
       </template>
       <template #append v-if="!!searchText.trim()">
         <el-button @click="hideReplaceInput">{{ $t('search.cancel') }}</el-button>
@@ -36,13 +36,15 @@
 <script>
 import { mapState } from 'vuex'
 import bus from '@/utils/bus.js'
-import { Close } from '@element-plus/icons-vue'
+import { Close, Search, EditPen } from '@element-plus/icons-vue'
 import { isUndef } from 'simple-mind-map/src/utils/index'
 // 搜索替换
 export default {
-  name: 'Search',
+  name: 'Search2',
   components: {
-    Close
+    Close,
+    Search,
+    EditPen
   },
   props: {
     mindMap: {
@@ -73,19 +75,21 @@ export default {
     }
   },
   created() {
+    bus.on('show_search', this.showSearch)
     this.mindMap.on('search_info_change', data => {
       this.currentIndex = data.currentIndex + 1
       this.total = data.total
       this.showSearchInfo = true
     })
-    this.mindMap.keyCommand.addShortcut('Control+f', () => {
-      bus.emit('closeSideBar')
-      this.show = true
-      this.$refs.input.focus()
-    })
+    this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
   },
   methods: {
     isUndef,
+    showSearch() {
+      bus.emit('closeSideBar')
+      this.show = true
+      this.$refs.input.focus()
+    },
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
