@@ -16,7 +16,8 @@
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
-    <NodeIconSidebar></NodeIconSidebar>
+    <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
+    <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
   </div>
 </template>
 
@@ -63,6 +64,7 @@ import store from '../../../store'
 import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
+import NodeIconToolbar from './NodeIconToolbar.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -105,7 +107,8 @@ export default {
     NodeImgPreview,
     SidebarTrigger,
     Search,
-    NodeIconSidebar
+    NodeIconSidebar,
+    NodeIconToolbar
   },
   data() {
     return {

@@ -259,6 +259,7 @@ export default {
     ...mapMutations(['setActiveSidebar']),
     showNodeIcon() {
       // this.$bus.$emit('showNodeIcon')
+      bus.emit('close_node_icon_toolbar')
       this.setActiveSidebar('nodeIconSidebar')
     },
     /**

@@ -58,7 +58,7 @@ import image from '@/config/image'
 import bus from '@/utils/bus.js'
 
 export default {
-  name: 'ShortcutKey',
+  name: 'NodeIconSidebar',
   components: {
     Sidebar
   },
