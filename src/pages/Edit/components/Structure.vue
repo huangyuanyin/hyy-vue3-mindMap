@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('strusture.title')">
-    <div class="layoutList">
+    <div class="layoutList" :class="{ isDark: isDark }">
       <div
         class="layoutItem"
         v-for="item in layoutList"
@@ -37,6 +37,7 @@ const props = defineProps({
 
 const store = useStore()
 const activeSidebar = computed(() => store.state.activeSidebar)
+const isDark = computed(() => store.state.isDark)
 const layout = ref('')
 const sidebar = ref(null)
 
@@ -85,7 +86,11 @@ export default {
 <style lang="less" scoped>
 .layoutList {
   padding: 20px;
-
+  &.isDark {
+    .name {
+      color: #fff;
+    }
+  }
   .layoutItem {
     width: 100%;
     cursor: pointer;

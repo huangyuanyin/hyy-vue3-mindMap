@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebarContainer" @click.stop :class="{ show: show }" :style="{ zIndex: zIndex }">
+  <div class="sidebarContainer" @click.stop :class="{ show: show, isDark: isDark }" :style="{ zIndex: zIndex }">
     <el-icon class="closeBtn" @click="close">
       <Close />
     </el-icon>
@@ -38,6 +38,9 @@ export default {
       zIndex: 0
     }
   },
+  computed: {
+    ...mapState(['isDark'])
+  },
   watch: {
     show(val, oldVal) {
       if (val && !oldVal) {
@@ -67,6 +70,17 @@ export default {
   display: flex;
   flex-direction: column;
   transition: all 0.3s;
+  &.isDark {
+    background-color: #262a2e;
+    border-left-color: hsla(0, 0%, 100%, 0.1);
+    .sidebarHeader {
+      border-bottom-color: hsla(0, 0%, 100%, 0.1);
+      color: #fff;
+    }
+    .closeBtn {
+      color: #fff;
+    }
+  }
 
   &.show {
     right: 0;

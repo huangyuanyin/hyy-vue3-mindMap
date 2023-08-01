@@ -1,5 +1,5 @@
 <template>
-  <div class="mouseActionContainer">
+  <div class="mouseActionContainer" :class="{ isDark: isDark }">
     <el-tooltip
       class="item"
       effect="dark"
@@ -22,6 +22,9 @@ export default {
   props: {
     mindMap: {
       type: Object
+    },
+    isDark: {
+      type: Boolean
     }
   },
   data() {
@@ -51,6 +54,12 @@ export default {
 .mouseActionContainer {
   display: flex;
   align-items: center;
+  &.isDark {
+    .btn {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+  }
+
   .item {
     margin-right: 12px;
     &:last-of-type {

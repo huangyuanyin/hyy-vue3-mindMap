@@ -12,7 +12,8 @@ const store = createStore({
       openNodeRichText: true, // 是否开启节点富文本
       useLeftKeySelectionRightKeyDrag: false // 鼠标行为
     },
-    activeSidebar: '' // 当前显示的侧边栏
+    activeSidebar: '', // 当前显示的侧边栏
+    isDark: false // 是否是暗黑模式
   },
   mutations: {
     /**
@@ -46,6 +47,13 @@ const store = createStore({
      */
     setActiveSidebar(state, data) {
       state.activeSidebar = data
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 设置暗黑模式
+     */
+    setIsDark(state, data) {
+      state.isDark = data
     }
   },
   actions: {

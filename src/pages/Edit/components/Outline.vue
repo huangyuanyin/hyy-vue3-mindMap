@@ -1,6 +1,13 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('outline.title')">
-    <el-tree class="outlineTree" :data="data" :props="defaultProps" :expand-on-click-node="false" default-expand-all>
+    <el-tree
+      class="outlineTree"
+      :class="{ isDark: isDark }"
+      :data="data"
+      :props="defaultProps"
+      :expand-on-click-node="false"
+      default-expand-all
+    >
       <template #default="{ node }">
         <span class="customNode" @click="onClick($event, node)">
           <span
@@ -45,6 +52,7 @@ const defaultProps = ref({
 const notHandleDataChange = ref(false)
 
 const activeSidebar = computed(() => store.state.activeSidebar)
+const isDark = computed(() => store.state.isDark)
 
 watch(
   () => activeSidebar.value,
@@ -136,6 +144,9 @@ const onClick = (e, node) => {
   }
 }
 .outlineTree {
+  &.isDark {
+    background-color: #262a2e;
+  }
   /deep/ .el-tree-node__content {
     height: auto;
     margin: 5px 0;

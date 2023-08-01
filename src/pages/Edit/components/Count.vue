@@ -1,5 +1,5 @@
 <template>
-  <div class="countContainer">
+  <div class="countContainer" :class="{ isDark: isDark }">
     <div class="item">
       <span class="name">{{ $t('count.words') }}</span>
       <span class="value">{{ words }}</span>
@@ -13,6 +13,7 @@
 
 <script>
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 /**
  * @Author: 黄原寅
  * @Desc: 字数及节点数量统计
@@ -27,6 +28,9 @@ export default {
       words: 0,
       num: 0
     }
+  },
+  computed: {
+    ...mapState(['isDark'])
   },
   created() {
     bus.on('data_change', this.onDataChange)
@@ -77,6 +81,12 @@ export default {
   line-height: 22px;
   font-size: 12px;
   display: flex;
+  &.isDark {
+    background: #262a2e;
+    .item {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+  }
 
   .item {
     color: #555;

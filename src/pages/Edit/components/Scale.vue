@@ -1,5 +1,5 @@
 <template>
-  <div class="scaleContainer">
+  <div class="scaleContainer" :class="{ isDark: isDark }">
     <el-tooltip class="item" effect="dark" :content="$t('scale.zoomOut')" placement="top">
       <el-icon class="btn" @click="narrow">
         <Minus />
@@ -25,6 +25,9 @@ import { Plus, Minus } from '@element-plus/icons-vue'
 const props = defineProps({
   mindMap: {
     type: Object
+  },
+  isDark: {
+    type: Boolean
   }
 })
 
@@ -78,7 +81,14 @@ export default {
 .scaleContainer {
   display: flex;
   align-items: center;
-
+  &.isDark {
+    .btn {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+    .scaleInfo {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+  }
   .btn {
     cursor: pointer;
   }

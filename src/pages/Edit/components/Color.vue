@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="colorContainer" :class="{ isDark: isDark }">
     <div class="colorList">
       <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item" @click="clickColorItem(item)"></span>
     </div>
@@ -12,6 +12,7 @@
 
 <script>
 import { colorList } from '@/config'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 黄原寅
@@ -30,6 +31,9 @@ export default {
       colorList,
       selectColor: ''
     }
+  },
+  computed: {
+    ...mapState(['isDark'])
   },
   watch: {
     color() {
@@ -60,6 +64,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.colorContainer {
+  &.isDark {
+    .moreColor {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+  }
+}
 .colorList {
   width: 240px;
 

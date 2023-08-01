@@ -1,12 +1,12 @@
 <template>
-  <div class="navigatorContainer">
+  <div class="navigatorContainer" :class="{ isDark: isDark }">
     <div class="item">
       <el-select v-model="lang" size="small" style="width: 100px" @change="onLangChange">
         <el-option v-for="item in langList" :key="item.value" :label="item.name" :value="item.value" />
       </el-select>
     </div>
     <div class="item">
-      <MouseAction :mindMap="mindMap"></MouseAction>
+      <MouseAction :isDark="isDark" :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
       <el-tooltip
@@ -30,10 +30,10 @@
       </el-tooltip>
     </div>
     <div class="item">
-      <Fullscreen :mindMap="mindMap"></Fullscreen>
+      <Fullscreen :isDark="isDark" :mindMap="mindMap"></Fullscreen>
     </div>
     <div class="item">
-      <Scale :mindMap="mindMap"></Scale>
+      <Scale :isDark="isDark" :mindMap="mindMap"></Scale>
     </div>
   </div>
 </template>
@@ -43,7 +43,8 @@
  * @Author: 黄原寅
  * @Desc: 导航器工具栏
  */
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed } from 'vue'
+import { useStore } from 'vuex'
 import Scale from './Scale'
 import Fullscreen from './Fullscreen'
 import MouseAction from './MouseAction.vue'
@@ -58,9 +59,11 @@ const props = defineProps({
   }
 })
 
+const store = useStore()
 const isReadonly = ref(false)
 const openMiniMap = ref(false)
 const lang = ref(getLang())
+const isDark = computed(() => store.state.isDark)
 
 const readonlyChange = () => {
   isReadonly.value = !isReadonly.value
@@ -98,7 +101,17 @@ export default {
   font-size: 12px;
   display: flex;
   align-items: center;
-
+  &.isDark {
+    background: #262a2e;
+    .item {
+      a {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
+      .btn {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
+    }
+  }
   .item {
     margin-right: 20px;
 

@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
-    <div class="themeList">
+    <div class="themeList" :class="{ isDark: isDark }">
       <div
         class="themeItem"
         v-for="item in themeAllList"
@@ -39,6 +39,7 @@ const props = defineProps({
 
 const store = useStore()
 const activeSidebar = computed(() => store.state.activeSidebar)
+const isDark = computed(() => store.state.isDark)
 const sidebar = ref(null)
 const theme = ref('')
 const themeAllList = ref([...themeList].reverse())
@@ -75,6 +76,11 @@ const useTheme = item => {
 <style lang="less" scoped>
 .themeList {
   padding: 20px;
+  &.isDark {
+    .name {
+      color: #fff;
+    }
+  }
   .themeItem {
     width: 100%;
     cursor: pointer;
