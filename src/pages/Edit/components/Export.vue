@@ -9,7 +9,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <div>
+    <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
         <el-input style="width: 300px" v-model="fileName" size="small"></el-input>
@@ -78,6 +78,7 @@ const paddingX = ref(10)
 const paddingY = ref(10)
 
 const openNodeRichText = computed(() => store.state.localConfig.openNodeRichText)
+const isDark = computed(() => store.state.isDark)
 const downTypeList2 = computed(() => downTypeList[t.locale] || downTypeList.zh)
 
 onMounted(() => {
@@ -142,6 +143,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.exportContainer {
+  &.isDark {
+    .downloadTypeList {
+      .downloadTypeItem {
+        background-color: #363b3f;
+        .info {
+          .name {
+            color: hsla(0, 0%, 100%, 0.9);
+          }
+        }
+      }
+    }
+  }
+}
+
 .nodeDialog {
   .nameInputBox {
     margin-bottom: 20px;

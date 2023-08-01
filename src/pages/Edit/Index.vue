@@ -143,6 +143,30 @@ body {
         background-color: #409eff;
       }
     }
+    /* el-dialog */
+    .el-dialog {
+      background-color: #262a2e;
+      .el-dialog__header {
+        border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+      }
+      .el-dialog__title {
+        color: hsla(0, 0%, 100%, 0.9);
+      }
+      .el-dialog__body {
+        background-color: #262a2e;
+      }
+      .el-dialog__footer {
+        border-top: 1px solid hsla(0, 0%, 100%, 0.1);
+      }
+    }
+    /* el-upload */
+    .el-upload__tip {
+      color: #999;
+    }
+    /* 富文本编辑器 */
+    .toastui-editor-main-container {
+      background-color: #fff;
+    }
   }
 }
 </style>
