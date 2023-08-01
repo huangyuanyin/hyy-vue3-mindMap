@@ -1,8 +1,15 @@
 <template>
   <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeImage.title')">
-    <ImgUpload ref="imgUpload" @changeImg="onchange" :value="img"></ImgUpload>
-    <div class="imgTitleBox">
-      <span class="title">{{ $t('nodeImage.imgTitle') }}</span>
+    <div class="title">方式一</div>
+    <ImgUpload ref="ImgUploadRef" v-model="img" style="margin-bottom: 12px"></ImgUpload>
+    <div class="title">方式二</div>
+    <div class="inputBox">
+      <span class="label">请输入图片地址</span>
+      <el-input v-model="imgUrl" size="small" placeholder="http://xxx.com/xx.jpg"></el-input>
+    </div>
+    <div class="title">可选</div>
+    <div class="inputBox">
+      <span class="label">{{ $t('nodeImage.imgTitle') }}</span>
       <el-input v-model="imgTitle" size="small"></el-input>
     </div>
     <template #footer>
@@ -21,27 +28,35 @@
  */
 import { onMounted, ref } from 'vue'
 import ImgUpload from '@/components/ImgUpload'
+import { getImageSize } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
 
 const dialogVisible = ref(false)
 const img = ref('')
+const imgUrl = ref('')
 const imgTitle = ref('')
 const activeNodes = ref(null)
-const imgUpload = ref(null)
+const ImgUploadRef = ref(null)
 
 onMounted(() => {
   bus.on('node_active', args => {
     activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      img.value = firstNode.getData('image')
-      imgTitle.value = firstNode.getData('imageTitle')
-    } else {
-      img.value = ''
-      imgTitle.value = ''
-    }
   })
   bus.on('showNodeImage', () => {
+    reset()
+    if (activeNodes.value.length > 0) {
+      let firstNode = activeNodes.value[0]
+      let img = firstNode.getData('image')
+      console.log(`output->firstNode`, firstNode, img)
+      if (img) {
+        if (/^https?:\/\//.test(img)) {
+          imgUrl.value = img
+        } else {
+          img.value = img
+        }
+      }
+      imgTitle.value = firstNode.getData('imageTitle')
+    }
     dialogVisible.value = true
   })
 })
@@ -57,6 +72,13 @@ const onchange = src => {
 const cancel = () => {
   dialogVisible.value = false
   img.value = ''
+  reset()
+}
+
+const reset = () => {
+  img.value = ''
+  imgTitle.value = ''
+  imgUrl.value = ''
 }
 
 /**
@@ -65,13 +87,22 @@ const cancel = () => {
  */
 const confirm = async () => {
   try {
-    let { width, height } = await imgUpload.value.getSize()
+    if (!img.value && !imgUrl.value) return
+    let res = null
+    let img = ''
+    if (img.value) {
+      img = img.value
+      res = await ImgUploadRef.value.getSize()
+    } else if (imgUrl.value) {
+      img = imgUrl.value
+      res = await getImageSize(img)
+    }
     activeNodes.value.forEach(node => {
       node.setImage({
-        url: img.value || 'none',
+        url: img || 'none',
         title: imgTitle.value,
-        width,
-        height
+        width: res.width,
+        height: res.height
       })
     })
     cancel()
@@ -89,13 +120,16 @@ export default {
 
 <style lang="less" scoped>
 .nodeDialog {
-  .imgTitleBox {
+  .title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .inputBox {
     display: flex;
     align-items: center;
-    margin-top: 10px;
-
-    .title {
-      width: 100px;
+    margin-bottom: 10px;
+    .label {
+      width: 150px;
     }
   }
 }
