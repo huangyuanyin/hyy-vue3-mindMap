@@ -2,27 +2,26 @@
 
 ## 项目预览
 ### 项目地址：[思维导图](https://huangyuanyin.gitee.io/hyy-vue3-mindmap/#/)
-![image](https://user-images.githubusercontent.com/42410679/219315595-5b948055-ebe9-45c0-a2ab-e640d4a09feb.png)
-![image](https://user-images.githubusercontent.com/42410679/208390826-60ded4ce-ad48-46da-ab84-c66c3ef29885.png)
-![image](https://user-images.githubusercontent.com/42410679/208390888-401d8c91-f76b-4c3b-a095-24daccae8404.png)
+![image](https://github.com/huangyuanyin/hyy-vue3-mindMap/assets/42410679/de1f7a5c-b9a8-443c-ada7-ba85728f6760)
+![image](https://github.com/huangyuanyin/hyy-vue3-mindMap/assets/42410679/ba50db92-df06-4ff0-8621-ab089c685fba)
+![image](https://github.com/huangyuanyin/hyy-vue3-mindMap/assets/42410679/3fda4eb2-f473-40b3-afcd-bd10bbcee52c)
+
 
 
 
 ## 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积
-- [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构
-- [x] 内置多种主题，允许高度自定义样式
-- [x] 支持快捷键
-- [x] 节点内容支持图片、图标、超链接、备注、标签、概要
-- [x] 支持前进后退
-- [x] 支持拖动、缩放
+- [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图、时间轴（横向、竖向）、鱼骨图等结构
+- [x] 内置多种主题，允许高度自定义样式，支持注册新主题
+- [x] 节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要
+- [x] 支持画布拖动、缩放
 - [x] 支持右键按住多选
-- [x] 支持节点自由拖拽、拖拽调整
-- [x] 支持多种节点形状
-- [x] 支持导出为`json`、`png`、`svg`、`pdf`，支持从`json`、`xmind`导入
-- [x] 支持小地图
-- [x] 支持小地图、支持水印
+- [x] 节点支持拖拽（拖拽移动、自由调整）、多种节点形状，支持使用 DDM 完全自定义节点内容
+- [x] 支持鼠标按键拖动选择和Ctrl+左键两种多选节点方式
+- [x] 支持导出为json、png、svg、pdf、markdown、xmind，支持从json、xmind、markdown导入
+- [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印
+- [x] 提供丰富的配置，满足各种场景各种使用习惯
 
 ## 工具库介绍
 1.`simple-mind-map`
