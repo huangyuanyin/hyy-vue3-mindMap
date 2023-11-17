@@ -155,8 +155,8 @@ export default {
     bus.off('node_click', this.hide)
     bus.off('draw_click', this.hide)
     bus.off('expand_btn_click', this.hide)
-    bus.on('svg_mousedown', this.onMousedown)
-    bus.on('mouseup', this.onMouseup)
+    bus.off('svg_mousedown', this.onMousedown)
+    bus.off('mouseup', this.onMouseup)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),

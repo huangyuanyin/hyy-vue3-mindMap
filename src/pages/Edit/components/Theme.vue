@@ -74,6 +74,10 @@ onMounted(async () => {
   await initGroup()
   theme.value = props.mindMap.getTheme()
   handleDark()
+  props.mindMap.on('view_theme_change', function () {
+    props.theme = props.mindMap.getTheme()
+    props.handleDark()
+  })
 })
 
 const initGroup = () => {
