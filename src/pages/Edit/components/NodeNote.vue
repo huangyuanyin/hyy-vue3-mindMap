@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, onBeforeMount } from 'vue'
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import bus from '@/utils/bus.js'
@@ -34,23 +34,32 @@ const editor = ref(null)
 const noteEditor = ref(null)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      note.value = firstNode.getData('note')
-    } else {
-      note.value = ''
-    }
-  })
-  bus.on('showNodeNote', () => {
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-    nextTick(() => {
-      initEditor()
-    })
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeNote', handleShowNodeNote)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeNote', handleShowNodeNote)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = args[1]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    note.value = firstNode.getData('note')
+  } else {
+    note.value = ''
+  }
+}
+
+const handleShowNodeNote = () => {
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+  nextTick(() => {
+    initEditor()
+  })
+}
 
 /**
  * @Author: 黄原寅

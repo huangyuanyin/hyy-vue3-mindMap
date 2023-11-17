@@ -26,7 +26,7 @@
  * @Author: 黄原寅
  * @Desc: 节点图片内容设置
  */
-import { onMounted, ref } from 'vue'
+import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
 import ImgUpload from '@/components/ImgUpload'
 import { getImageSize } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
@@ -39,27 +39,37 @@ const activeNodes = ref(null)
 const ImgUploadRef = ref(null)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-  })
-  bus.on('showNodeImage', () => {
-    reset()
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      let img = firstNode.getData('image')
-      console.log(`output->firstNode`, firstNode, img)
-      if (img) {
-        if (/^https?:\/\//.test(img)) {
-          imgUrl.value = img
-        } else {
-          img.value = img
-        }
-      }
-      imgTitle.value = firstNode.getData('imageTitle')
-    }
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeImage', handleShowNodeImage)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeImage', handleShowNodeImage)
+})
+
+const handleNodeActive = args => {
+  console.log(`output->args`, [])
+  activeNodes.value = args[1]
+}
+
+const handleShowNodeImage = () => {
+  reset()
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    let img = firstNode.getData('image')
+    console.log(`output->firstNode`, firstNode, img)
+    if (img) {
+      if (/^https?:\/\//.test(img)) {
+        imgUrl.value = img
+      } else {
+        img.value = img
+      }
+    }
+    imgTitle.value = firstNode.getData('imageTitle')
+  }
+  dialogVisible.value = true
+}
 
 const onchange = src => {
   img.value = src

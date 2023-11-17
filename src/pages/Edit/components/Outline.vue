@@ -71,39 +71,45 @@ const isOutlineEdit = computed(() => store.state.isOutlineEdit)
 onMounted(() => {
   window.addEventListener('keydown', onKeyDown())
   refresh()
-  bus.on('data_change', () => {
-    // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
-    if (notHandleDataChange.value) {
-      notHandleDataChange.value = false
-      return
-    }
-    if (isAfterCreateNewNode.value) {
-      isAfterCreateNewNode.value = false
-      return
-    }
-    refresh()
-  })
-  bus.on('node_tree_render_end', () => {
-    // 当前存在未完成的节点插入操作
-    if (insertType.value) {
-      // this[this.insertType]()
-      insertType.value = ''
-      return
-    }
-    // 插入了新节点后需要做一些操作
-    if (handleNodeTreeRenderEnd.value) {
-      handleNodeTreeRenderEnd.value = false
-      refresh()
-      nextTick(() => {
-        afterCreateNewNode()
-      })
-    }
-  })
+  bus.on('data_change', handleDataChange())
+  bus.on('node_tree_render_end', handleNodeTreeRenderEnd2())
 })
 
 onBeforeMount(() => {
   window.removeEventListener('keydown', onKeyDown())
+  bus.off('data_change', handleDataChange())
+  bus.off('node_tree_render_end', handleNodeTreeRenderEnd2())
 })
+
+const handleDataChange = () => {
+  // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
+  if (notHandleDataChange.value) {
+    notHandleDataChange.value = false
+    return
+  }
+  if (isAfterCreateNewNode.value) {
+    isAfterCreateNewNode.value = false
+    return
+  }
+  refresh()
+}
+
+const handleNodeTreeRenderEnd2 = () => {
+  // 当前存在未完成的节点插入操作
+  if (insertType.value) {
+    // this[this.insertType]()
+    insertType.value = ''
+    return
+  }
+  // 插入了新节点后需要做一些操作
+  if (handleNodeTreeRenderEnd.value) {
+    handleNodeTreeRenderEnd.value = false
+    refresh()
+    nextTick(() => {
+      afterCreateNewNode()
+    })
+  }
+}
 
 // 刷新树数据
 const refresh = () => {

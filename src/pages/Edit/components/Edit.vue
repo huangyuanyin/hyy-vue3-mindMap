@@ -144,28 +144,32 @@ export default {
   mounted() {
     showLoading()
     // this.showNewFeatureInfo()
+    this.getData()
     this.init()
     bus.on('execCommand', this.execCommand)
     bus.on('paddingChange', this.onPaddingChange)
     bus.on('export', this.export)
     bus.on('setData', this.setData)
-    bus.on('startTextEdit', () => {
-      this.mindMap.renderer.startTextEdit()
-    })
-    bus.on('endTextEdit', () => {
-      this.mindMap.renderer.endTextEdit()
-    })
-    bus.on('createAssociativeLine', () => {
-      this.mindMap.associativeLine.createLineFromActiveNode()
-    })
-    bus.on('startPainter', () => {
-      this.mindMap.painter.startPainter()
-    })
+    bus.on('startTextEdit', this.handleStartTextEdit)
+    bus.on('endTextEdit', this.handleEndTextEdit)
+    bus.on('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    bus.on('startPainter', this.handleStartPainter)
     bus.on('node_tree_render_end', this.handleHideLoading)
     bus.on('showLoading', this.handleShowLoading)
-    window.addEventListener('resize', () => {
-      this.mindMap.resize()
-    })
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    bus.off('execCommand', this.execCommand)
+    bus.off('paddingChange', this.onPaddingChange)
+    bus.off('export', this.export)
+    bus.off('setData', this.setData)
+    bus.off('startTextEdit', this.handleStartTextEdit)
+    bus.off('endTextEdit', this.handleEndTextEdit)
+    bus.off('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    bus.off('startPainter', this.handleStartPainter)
+    bus.off('node_tree_render_end', this.handleHideLoading)
+    bus.off('showLoading', this.handleShowLoading)
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     // 显示loading

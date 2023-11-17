@@ -85,8 +85,15 @@ export default {
     }
   },
   created() {
-    bus.on('node_active', args => {
-      console.log(`output->args`, args)
+    bus.on('node_active', this.handleNodeActive)
+    bus.on('showNodeIcon', this.handleShowNodeIcon)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.handleNodeActive)
+    bus.off('showNodeIcon', this.handleShowNodeIcon)
+  },
+  methods: {
+    handleNodeActive(args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -96,12 +103,11 @@ export default {
         this.iconList = []
         this.nodeImage = ''
       }
-    })
-    bus.on('showNodeIcon', () => {
+    },
+
+    handleShowNodeIcon() {
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
     // 获取图标渲染方式
     getHtml(icon) {
       return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`

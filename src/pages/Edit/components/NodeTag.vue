@@ -38,7 +38,7 @@
  * @Author: 黄原寅
  * @Desc: 节点标签内容设置
  */
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { tagColorList } from 'simple-mind-map/src/constants/constant'
 import bus from '@/utils/bus.js'
 
@@ -49,21 +49,30 @@ const activeNodes = ref([])
 const max = ref(5)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      tagArr.value = firstNode.getData('tag') || []
-    } else {
-      tagArr.value = []
-      tag.value = ''
-    }
-  })
-  bus.on('showNodeTag', () => {
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeTag', handleShowNodeTag)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeTag', handleShowNodeTag)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = args[1]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    tagArr.value = firstNode.getData('tag') || []
+  } else {
+    tagArr.value = []
+    tag.value = ''
+  }
+}
+
+const handleShowNodeTag = () => {
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+}
 
 /**
  * @Author: 黄原寅

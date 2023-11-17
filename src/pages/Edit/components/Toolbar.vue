@@ -268,7 +268,7 @@ export default {
     bus.off('node_active', this.onNodeActive)
     bus.off('back_forward', this.onBackForward)
     bus.off('write_local_file', this.onWriteLocalFile)
-    bus.on('painter_start', this.onPainterStart)
+    bus.off('painter_start', this.onPainterStart)
     bus.off('painter_end', this.onPainterEnd)
   },
   methods: {

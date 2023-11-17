@@ -27,7 +27,7 @@
  * @Author: 黄原寅
  * @Desc: 导入功能
  */
-import { onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import bus from '@/utils/bus.js'
 import { ElMessage } from 'element-plus'
 // import MindMap from 'simple-mind-map'
@@ -51,10 +51,16 @@ watch(
 )
 
 onMounted(() => {
-  bus.on('showImport', () => {
-    dialogVisible.value = true
-  })
+  bus.on('showImport', handleShowImport)
 })
+
+onBeforeMount(() => {
+  bus.off('showImport', handleShowImport)
+})
+
+const handleShowImport = () => {
+  dialogVisible.value = true
+}
 
 /**
  * @Author: 黄原寅

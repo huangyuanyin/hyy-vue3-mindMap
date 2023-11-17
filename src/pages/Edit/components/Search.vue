@@ -82,15 +82,21 @@ export default {
   },
   created() {
     bus.on('show_search', this.showSearch)
-    this.mindMap.on('search_info_change', data => {
-      this.currentIndex = data.currentIndex + 1
-      this.total = data.total
-      this.showSearchInfo = true
-    })
+    this.mindMap.on('search_info_change', this.handleSearchInfoChange)
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
+  },
+  beforeDestroy() {
+    bus.off('show_search', this.showSearch)
+    this.mindMap.off('search_info_change', this.handleSearchInfoChange)
+    this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
   },
   methods: {
     isUndef,
+    handleSearchInfoChange(data) {
+      this.currentIndex = data.currentIndex + 1
+      this.total = data.total
+      this.showSearchInfo = true
+    },
     showSearch() {
       bus.emit('closeSideBar')
       this.show = true

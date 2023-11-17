@@ -37,7 +37,15 @@ export default {
     }
   },
   created() {
-    bus.on('node_active', args => {
+    bus.on('node_active', this.handleNodeActive)
+    bus.on('showNodeIcon', this.handleShowNodeIcon)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.handleNodeActive)
+    bus.off('showNodeIcon', this.handleShowNodeIcon)
+  },
+  methods: {
+    handleNodeActive(args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -45,12 +53,11 @@ export default {
       } else {
         this.iconList = []
       }
-    })
-    bus.on('showNodeIcon', () => {
+    },
+
+    handleShowNodeIcon() {
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
     getHtml(icon) {
       return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`
     },

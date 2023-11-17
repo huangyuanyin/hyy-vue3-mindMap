@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeMount } from 'vue'
 import bus from '@/utils/bus.js'
 /**
  * @Author: 黄原寅
@@ -30,23 +30,32 @@ const linkTitle = ref('')
 const activeNodes = ref([])
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      link.value = firstNode.getData('hyperlink')
-      linkTitle.value = firstNode.getData('hyperlinkTitle')
-    } else {
-      link.value = ''
-      linkTitle.value = ''
-    }
-  })
-  bus.on('showNodeLink', () => {
-    activeNodes.value[0].mindMap.keyCommand.pause()
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeLink', handleShowNodeLink)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeLink', handleShowNodeLink)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = args[1]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    link.value = firstNode.getData('hyperlink')
+    linkTitle.value = firstNode.getData('hyperlinkTitle')
+  } else {
+    link.value = ''
+    linkTitle.value = ''
+  }
+}
+
+const handleShowNodeLink = () => {
+  activeNodes.value[0].mindMap.keyCommand.pause()
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+}
 
 /**
  * @Author: 黄原寅

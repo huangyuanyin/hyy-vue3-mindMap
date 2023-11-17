@@ -58,7 +58,7 @@
  * @Author: 黄原寅
  * @Desc: 导出功能
  */
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, onBeforeMount } from 'vue'
 import bus from '@/utils/bus.js'
 import { ElNotification } from 'element-plus'
 import { mapState, useStore } from 'vuex'
@@ -82,10 +82,16 @@ const isDark = computed(() => store.state.isDark)
 const downTypeList2 = computed(() => downTypeList[t.locale] || downTypeList.zh)
 
 onMounted(() => {
-  bus.on('showExport', () => {
-    dialogVisible.value = true
-  })
+  bus.on('showExport', handleShowExport)
 })
+
+onBeforeMount(() => {
+  bus.off('showExport', handleShowExport)
+})
+
+const handleShowExport = () => {
+  dialogVisible.value = true
+}
 
 const onPaddingChange = () => {
   bus.emit('paddingChange', {
