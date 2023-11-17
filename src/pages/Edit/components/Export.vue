@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    custom-class="nodeDialog"
+    custom-class="nodeExportDialog"
     v-model="dialogVisible"
     :title="$t('export.title')"
     width="700px"
@@ -158,7 +158,7 @@ export default {
   }
 }
 
-.nodeDialog {
+.nodeExportDialog {
   .nameInputBox {
     margin-bottom: 20px;
 
@@ -236,7 +236,7 @@ export default {
 </style>
 
 <style lang="less">
-.nodeDialog {
+.nodeExportDialog {
   .el-dialog__body {
     background-color: #f2f4f7 !important;
   }

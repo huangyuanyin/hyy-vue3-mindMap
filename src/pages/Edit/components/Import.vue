@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="importNodeDialog" v-model="dialogVisible" :title="$t('import.title')" width="600px">
+  <el-dialog custom-class="nodeImportDialog" v-model="dialogVisible" :title="$t('import.title')" width="600px">
     <el-upload
       ref="upload"
       action="x"

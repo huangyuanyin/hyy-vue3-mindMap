@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeNote.title')">
+  <el-dialog custom-class="nodeNoteDialog" v-model="dialogVisible" :title="$t('nodeNote.title')">
     <!-- <el-input
       type="textarea"
       :autosize="{ minRows: 3, maxRows: 5 }"
@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeNoteDialog {
   .tip {
     margin-top: 5px;
     color: #dcdfe6;

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
+  <el-dialog custom-class="nodeHyperlinkDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.link') }}</span>
       <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>
@@ -80,7 +80,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeHyperlinkDialog {
   .item {
     display: flex;
     align-items: center;

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeIcon.title')">
+  <el-dialog custom-class="nodeIconDialog" v-model="dialogVisible" :title="$t('nodeIcon.title')">
     <div class="item" v-for="item in nodeIconList" :key="item.name">
       <div class="title">{{ item.name }}</div>
       <div class="list">
@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeIconDialog {
   /deep/ .el-dialog__body {
     padding: 0 20px;
   }

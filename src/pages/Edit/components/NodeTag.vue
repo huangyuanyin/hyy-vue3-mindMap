@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeTag.title')">
+  <el-dialog custom-class="nodeTagDialog" v-model="dialogVisible" :title="$t('nodeTag.title')">
     <el-input
       v-model="tag"
       @keyup.native.enter="add"
@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeTagDialog {
   .tagList {
     display: flex;
     flex-wrap: wrap;
