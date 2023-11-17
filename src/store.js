@@ -13,7 +13,8 @@ const store = createStore({
       useLeftKeySelectionRightKeyDrag: false // 鼠标行为
     },
     activeSidebar: '', // 当前显示的侧边栏
-    isDark: false // 是否是暗黑模式
+    isDark: false, // 是否是暗黑模式
+    isOutlineEdit: false // 是否是大纲编辑模式
   },
   mutations: {
     /**
@@ -54,6 +55,13 @@ const store = createStore({
      */
     setIsDark(state, data) {
       state.isDark = data
+    },
+    /**
+     * @Author: 黄原寅
+     * @Desc: 设置大纲编辑模式
+     */
+    setIsOutlineEdit(state, data) {
+      state.isOutlineEdit = data
     }
   },
   actions: {

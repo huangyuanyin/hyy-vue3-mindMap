@@ -6,7 +6,7 @@
     <div class="sidebarHeader" v-if="title">
       {{ title }}
     </div>
-    <div class="sidebarContent">
+    <div class="sidebarContent" ref="sidebarContent">
       <slot></slot>
     </div>
   </div>
@@ -59,6 +59,9 @@ export default {
     close() {
       this.show = false
       this.setActiveSidebar('')
+    },
+    getEl() {
+      return this.$refs.sidebarContent
     }
   }
 }

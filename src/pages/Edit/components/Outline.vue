@@ -1,29 +1,36 @@
 <template>
-  <Sidebar ref="sidebar" :title="$t('outline.title')">
-    <el-tree
-      class="outlineTree"
-      :class="{ isDark: isDark }"
-      :data="data"
-      :props="defaultProps"
-      :expand-on-click-node="false"
-      default-expand-all
-    >
-      <template #default="{ node }">
-        <span class="customNode" slot-scope="{ node, data }" @click="onClick($event, node)">
-          <span
-            class="nodeEdit"
-            :key="getKey()"
-            contenteditable="true"
-            @keydown.stop="onKeydown($event, node)"
-            @keyup.stop
-            @blur="onBlur($event, node)"
-            @paste="onPaste($event, node)"
-            v-html="node.label"
-          ></span>
-        </span>
-      </template>
-    </el-tree>
-  </Sidebar>
+  <el-tree
+    ref="tree"
+    class="outlineTree"
+    node-key="uid"
+    draggable
+    :class="{ isDark: isDark }"
+    :data="data"
+    :props="defaultProps"
+    :highlight-current="true"
+    :expand-on-click-node="false"
+    default-expand-all
+    :allow-drag="checkAllowDrag"
+    @node-drop="onNodeDrop"
+    @current-change="onCurrentChange"
+    @mouseenter.native="isInTreArea = true"
+    @mouseleave.native="isInTreArea = false"
+  >
+    <template #default="{ node, data }">
+      <span class="customNode" :data-id="data.uid" @click="onClick(data)">
+        <span
+          class="nodeEdit"
+          contenteditable="true"
+          :key="getKey()"
+          @keydown.stop="onNodeInputKeydown($event, node)"
+          @keyup.stop
+          @blur="onBlur($event, node)"
+          @paste="onPaste($event, node)"
+          v-html="node.label"
+        ></span>
+      </span>
+    </template>
+  </el-tree>
 </template>
 
 <script setup>
@@ -31,10 +38,9 @@
  * @Author: 黄原寅
  * @Desc: 大纲内容
  */
-import { onMounted, ref, watch, computed } from 'vue'
-import Sidebar from './Sidebar'
+import { onMounted, ref, watch, computed, nextTick, onBeforeMount } from 'vue'
 import { mapState, useStore } from 'vuex'
-import { nodeRichTextToTextWithWrap, textToNodeRichTextWithWrap, getTextFromHtml } from 'simple-mind-map/src/utils'
+import { nodeRichTextToTextWithWrap, textToNodeRichTextWithWrap, getTextFromHtml, createUid } from 'simple-mind-map/src/utils'
 import bus from '@/utils/bus.js'
 
 const props = defineProps({
@@ -44,53 +50,136 @@ const props = defineProps({
 })
 
 const store = useStore()
+const tree = ref(null)
 const sidebar = ref(null)
 const data = ref([])
 const defaultProps = ref({
-  label(data) {
-    const text = (data.data.richText ? nodeRichTextToTextWithWrap(data.data.text) : data.data.text).replaceAll(/\n/g, '<br>')
-    data.data.textCache = text
-    return text
-  }
+  label: 'label'
 })
 const notHandleDataChange = ref(false)
+const currentData = ref(null)
+const handleNodeTreeRenderEnd = ref(false)
+const beInsertNodeUid = ref('')
+const insertType = ref('')
+const isInTreArea = ref(false)
+const isAfterCreateNewNode = ref(false)
 
 const activeSidebar = computed(() => store.state.activeSidebar)
 const isDark = computed(() => store.state.isDark)
-
-watch(
-  () => activeSidebar.value,
-  val => {
-    if (val === 'outline') {
-      sidebar.value.show = true
-    } else {
-      sidebar.value.show = false
-    }
-  }
-)
+const isOutlineEdit = computed(() => store.state.isOutlineEdit)
 
 onMounted(() => {
-  bus.on('data_change', data2 => {
-    // 激活节点会让当前大纲失去焦点
+  window.addEventListener('keydown', onKeyDown())
+  refresh()
+  bus.on('data_change', () => {
+    // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
     if (notHandleDataChange.value) {
       notHandleDataChange.value = false
       return
     }
-    data.value = [props.mindMap.renderer.renderTree]
+    if (isAfterCreateNewNode.value) {
+      isAfterCreateNewNode.value = false
+      return
+    }
+    refresh()
+  })
+  bus.on('node_tree_render_end', () => {
+    // 当前存在未完成的节点插入操作
+    if (insertType.value) {
+      // this[this.insertType]()
+      insertType.value = ''
+      return
+    }
+    // 插入了新节点后需要做一些操作
+    if (handleNodeTreeRenderEnd.value) {
+      handleNodeTreeRenderEnd.value = false
+      refresh()
+      nextTick(() => {
+        afterCreateNewNode()
+      })
+    }
   })
 })
 
+onBeforeMount(() => {
+  window.removeEventListener('keydown', onKeyDown())
+})
+
+// 刷新树数据
+const refresh = () => {
+  data.value = props.mindMap.getData()
+  data.value.root = true // 标记根节点
+  let walk = root => {
+    const text = (root.data.richText ? nodeRichTextToTextWithWrap(root.data.text) : root.data.text).replaceAll(/\n/g, '<br>')
+    root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
+    root.label = text
+    root.uid = root.data.uid
+    if (root.children && root.children.length > 0) {
+      root.children.forEach(item => {
+        walk(item)
+      })
+    }
+  }
+  walk(data.value)
+  data.value = [data.value]
+}
+
+// 插入了新节点之后
+const afterCreateNewNode = () => {
+  // 如果是新插入节点，那么需要手动高亮该节点、定位该节点及聚焦
+  let id = beInsertNodeUid.value
+  if (id && tree.value) {
+    try {
+      isAfterCreateNewNode.value = true
+      // 高亮树节点
+      tree.value.setCurrentKey(id)
+      let node = tree.value.getNode(id)
+      onCurrentChange(node.data)
+      // 定位该节点
+      onClick(node.data)
+      // 聚焦该树节点的编辑框
+      const el = document.querySelector(`.customNode[data-id="${id}"] .nodeEdit`)
+      if (el) {
+        let selection = window.getSelection()
+        let range = document.createRange()
+        range.selectNodeContents(el)
+        selection.removeAllRanges()
+        selection.addRange(range)
+        let offsetTop = el.offsetTop
+        emit('scrollTo', offsetTop)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  beInsertNodeUid.value = ''
+}
+
+// 根节点不允许拖拽
+const checkAllowDrag = node => {
+  return !node.data.root
+}
+
+// 失去焦点更新节点文本
 const onBlur = (e, node) => {
-  if (node.data.data.textCache === e.target.innerHTML) {
+  // 节点数据没有修改
+  if (node.data.textCache === e.target.innerHTML) {
+    // 如果存在未执行的插入新节点操作，那么直接执行
+    if (insertType.value) {
+      // this[this.insertType]()
+      insertType.value = ''
+    }
     return
   }
-  delete node.data.data.textCache
+  // 否则插入新节点操作需要等待当前修改事件渲染完成后再执行
   const richText = node.data.data.richText
   const text = richText ? e.target.innerHTML : e.target.innerText
+  const targetNode = props.mindMap.renderer.findNodeByUid(node.data.uid)
+  if (!targetNode) return
   if (richText) {
-    node.data._node.setText(textToNodeRichTextWithWrap(text), true, true)
+    targetNode.setText(textToNodeRichTextWithWrap(text), true, true)
   } else {
-    node.data._node.setText(text)
+    targetNode.setText(text)
   }
 }
 
@@ -110,42 +199,98 @@ const onPaste = e => {
   selection.collapseToEnd()
 }
 
+// 生成唯一的key
 const getKey = () => {
   return Math.random()
 }
 
-const onKeydown = (e, node) => {
+// 节点输入区域按键事件
+const onNodeInputKeydown = (e, node) => {
   if (e.keyCode === 13 && !e.shiftKey) {
     e.preventDefault()
-    insertNode()
+    insertType.value = insertNode
+    e.target.blur()
   }
   if (e.keyCode === 9) {
     e.preventDefault()
-    insertChildNode()
+    insertType.value = insertChildNode
+    e.target.blur()
   }
 }
 
 // 插入兄弟节点
 const insertNode = () => {
-  notHandleDataChange.value = false
-  props.mindMap.execCommand('INSERT_NODE', false)
+  notHandleDataChange.value = true
+  handleNodeTreeRenderEnd.value = true
+  beInsertNodeUid.value = createUid()
+  props.mindMap.execCommand('INSERT_NODE', false, [], {
+    uid: beInsertNodeUid.value
+  })
 }
 
 // 插入下级节点
 const insertChildNode = () => {
-  notHandleDataChange.value = false
-  props.mindMap.execCommand('INSERT_CHILD_NODE', false)
+  notHandleDataChange.value = true
+  handleNodeTreeRenderEnd.value = true
+  beInsertNodeUid.value = createUid()
+  props.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+    uid: beInsertNodeUid.value
+  })
 }
 
 // 激活当前节点且移动当前节点到画布中间
-const onClick = (e, node) => {
+const onClick = data => {
   notHandleDataChange.value = true
-  let targetNode = node.data._node
+  const targetNode = props.mindMap.renderer.findNodeByUid(data.uid)
   if (targetNode && targetNode.nodeData.data.isActive) return
   props.mindMap.renderer.textEdit.stopFocusOnNodeActive()
-  props.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid, () => {
+  props.mindMap.execCommand('GO_TARGET_NODE', data.uid, () => {
     props.mindMap.renderer.textEdit.openFocusOnNodeActive()
+    notHandleDataChange.value = false
   })
+}
+
+// 拖拽结束事件
+const onNodeDrop = (data, target, postion) => {
+  notHandleDataChange.value = true
+  const node = props.mindMap.renderer.findNodeByUid(data.data.uid)
+  const targetNode = props.mindMap.renderer.findNodeByUid(target.data.uid)
+  if (!node || !targetNode) {
+    return
+  }
+  switch (postion) {
+    case 'before':
+      props.mindMap.execCommand('INSERT_BEFORE', node, targetNode)
+      break
+    case 'after':
+      props.mindMap.execCommand('INSERT_AFTER', node, targetNode)
+      break
+    case 'inner':
+      props.mindMap.execCommand('MOVE_NODE_TO', node, targetNode)
+      break
+    default:
+      break
+  }
+}
+
+// 当前选中的树节点变化事件
+const onCurrentChange = data => {
+  currentData.value = data
+}
+
+// 删除节点
+const onKeyDown = e => {
+  if (!isInTreArea.value) return
+  if ([46, 8].includes(e.keyCode) && currentData.value) {
+    e.stopPropagation()
+    props.mindMap.renderer.textEdit.hideEditTextBox()
+    const node = props.mindMap.renderer.findNodeByUid(currentData.value.uid)
+    if (node && !node.isRoot) {
+      notHandleDataChange.value = true
+      tree.value.remove(currentData.value)
+      props.mindMap.execCommand('REMOVE_NODE', [node])
+    }
+  }
 }
 </script>
 
@@ -154,22 +299,10 @@ const onClick = (e, node) => {
   width: 100%;
   color: rgba(0, 0, 0, 0.85);
   font-weight: bold;
-  &::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 7px;
-    background-color: rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: none;
-    background: transparent;
-    display: none;
-  }
   .nodeEdit {
     outline: none;
+    white-space: normal;
+    padding-right: 20px;
   }
 }
 .outlineTree {

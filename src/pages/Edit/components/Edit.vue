@@ -4,7 +4,7 @@
     <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
-    <Outline :mindMap="mindMap"></Outline>
+    <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
@@ -18,6 +18,7 @@
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
+    <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
   </div>
 </template>
 
@@ -38,7 +39,7 @@ import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
-import Outline from './Outline'
+import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
 import Theme from './Theme'
@@ -66,6 +67,7 @@ import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
+import OutlineEdit from './OutlineEdit.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -94,7 +96,7 @@ customThemeList.forEach(item => {
 export default {
   name: 'Edit',
   components: {
-    Outline,
+    OutlineSidebar,
     Style,
     BaseStyle,
     Theme,
@@ -110,7 +112,8 @@ export default {
     SidebarTrigger,
     Search,
     NodeIconSidebar,
-    NodeIconToolbar
+    NodeIconToolbar,
+    OutlineEdit
   },
   data() {
     return {
