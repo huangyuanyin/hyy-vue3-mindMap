@@ -1,5 +1,5 @@
 <template>
-  <div class="contextmenuContainer listBox" v-if="isShow" :style="{ left: left + 'px', top: top + 'px' }">
+  <div class="contextmenuContainer listBox" v-if="isShow" :style="{ left: left + 'px', top: top + 'px' }" :class="{ isDark: isDark }">
     <template v-if="type === 'node'">
       <div class="item" @click="exec('INSERT_NODE', insertNodeBtnDisabled)" :class="{ disabled: insertNodeBtnDisabled }">
         {{ $t('contextmenu.insertSiblingNode') }}
@@ -51,7 +51,7 @@
       </div>
       <div class="item">
         {{ $t('contextmenu.expandTo') }}
-        <div class="subItems listBox">
+        <div class="subItems listBox" :class="{ isDark: isDark }">
           <div class="item" v-for="(item, index) in expandList" :key="item" @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)">
             {{ item }}
           </div>
@@ -101,7 +101,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isZenMode: state => state.localConfig.isZenMode
+      isZenMode: state => state.localConfig.isZenMode,
+      isDark: state => state.isDark
     }),
     expandList() {
       return [
@@ -271,6 +272,9 @@ export default {
   border-radius: 4px;
   padding-top: 16px;
   padding-bottom: 16px;
+  &.isDark {
+    background: #363b3f;
+  }
 }
 
 .contextmenuContainer {
@@ -279,6 +283,14 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #1a1a1a;
+  &.isDark {
+    color: #fff;
+    .item {
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
 
   .item {
     position: relative;

@@ -1,5 +1,12 @@
 <template>
-  <div class="richTextToolbar" ref="richTextToolbar" :style="style" @click.stop.passive v-show="showRichTextToolbar">
+  <div
+    class="richTextToolbar"
+    ref="richTextToolbar"
+    :style="style"
+    :class="{ isDark: isDark }"
+    @click.stop.passive
+    v-show="showRichTextToolbar"
+  >
     <el-tooltip content="加粗" placement="top">
       <div class="btn" :class="{ active: formatInfo.bold }" @click="toggleBold">
         <span class="icon iconfont iconzitijiacu"></span>
@@ -27,7 +34,7 @@
             <span class="icon iconfont iconxingzhuang-wenzi"></span>
           </div>
         </template>
-        <div class="fontOptionsList">
+        <div class="fontOptionsList" :class="{ isDark: isDark }">
           <div
             class="fontOptionItem"
             v-for="item in fontFamilyList"
@@ -48,7 +55,7 @@
             <span class="icon iconfont iconcase fontColor"></span>
           </div>
         </template>
-        <div class="fontOptionsList">
+        <div class="fontOptionsList" :class="{ isDark: isDark }">
           <div
             class="fontOptionItem"
             v-for="item in fontSizeList"
@@ -94,6 +101,7 @@
 import { fontFamilyList, fontSizeList } from '@/config'
 import Color from './Color'
 import bus from '@/utils/bus.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'RichTextToolbar',
@@ -119,6 +127,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isDark']),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
     }
@@ -209,6 +218,15 @@ export default {
   display: flex;
   align-items: center;
   transform: translateX(-50%);
+  &.isDark {
+    background: #363b3f;
+    .btn {
+      color: #fff;
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
   .btn {
     width: 55px;
     height: 55px;
@@ -232,6 +250,15 @@ export default {
 }
 .fontOptionsList {
   width: 150px;
+  &.isDark {
+    .fontOptionItem {
+      color: #fff;
+      &:hover {
+        background-color: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
+
   .fontOptionItem {
     height: 30px;
     width: 100%;
