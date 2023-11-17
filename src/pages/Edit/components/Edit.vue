@@ -119,7 +119,8 @@ export default {
     return {
       mindMapData: {},
       mindMap: null,
-      prevImg: ''
+      prevImg: '',
+      storeConfigTimer: null
     }
   },
   computed: {
@@ -188,9 +189,12 @@ export default {
         storeData(data)
       })
       bus.on('view_data_change', data => {
-        storeConfig({
-          view: data
-        })
+        clearTimeout(storeConfigTimer.value)
+        storeConfigTimer.value = setTimeout(() => {
+          storeConfig({
+            view: data
+          })
+        }, 1000)
       })
     },
 
