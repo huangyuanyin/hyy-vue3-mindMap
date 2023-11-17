@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('outline.title')">
-    <div class="changeBtn" @click="onChangeToOutlineEdit">
+    <div class="changeBtn" :class="{ isDark: isDark }" @click="onChangeToOutlineEdit">
       <span class="icon iconfont iconquanping1"></span>
     </div>
     <Outline :mindMap="mindMap" v-if="activeSidebar === 'outline'" @scrollTo="onScrollTo"></Outline>
@@ -25,7 +25,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isOutlineEdit'])
+    ...mapState(['activeSidebar', 'isOutlineEdit', 'isDark'])
   },
   watch: {
     activeSidebar(val) {
@@ -62,5 +62,8 @@ export default {
   right: 50px;
   top: 12px;
   cursor: pointer;
+  &.isDark {
+    color: #fff;
+  }
 }
 </style>
