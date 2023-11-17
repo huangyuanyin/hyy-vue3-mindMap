@@ -815,6 +815,7 @@ export default {
         this.style[key] = value
       }
       this.data.theme.config[key] = value
+      bus.emit('showLoading')
       this.mindMap.setThemeConfig(this.data.theme.config)
       storeConfig({
         theme: {

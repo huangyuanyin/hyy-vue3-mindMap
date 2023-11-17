@@ -68,6 +68,7 @@ import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
 import OutlineEdit from './OutlineEdit.vue'
+import { showLoading, hideLoading } from '@/utils/loading'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -117,6 +118,7 @@ export default {
   },
   data() {
     return {
+      enableShowLoading: true,
       mindMapData: {},
       mindMap: null,
       prevImg: '',
@@ -140,6 +142,7 @@ export default {
     }
   },
   mounted() {
+    showLoading()
     // this.showNewFeatureInfo()
     this.init()
     bus.on('execCommand', this.execCommand)
@@ -158,11 +161,25 @@ export default {
     bus.on('startPainter', () => {
       this.mindMap.painter.startPainter()
     })
+    bus.on('node_tree_render_end', this.handleHideLoading)
+    bus.on('showLoading', this.handleShowLoading)
     window.addEventListener('resize', () => {
       this.mindMap.resize()
     })
   },
   methods: {
+    // 显示loading
+    handleShowLoading() {
+      this.enableShowLoading = true
+      showLoading()
+    },
+    // 渲染结束后关闭loading
+    handleHideLoading() {
+      if (this.enableShowLoading) {
+        this.enableShowLoading = false
+        hideLoading()
+      }
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 获取思维导图数据，实际应该调接口获取
@@ -189,8 +206,8 @@ export default {
         storeData(data)
       })
       bus.on('view_data_change', data => {
-        clearTimeout(storeConfigTimer.value)
-        storeConfigTimer.value = setTimeout(() => {
+        clearTimeout(this.storeConfigTimer)
+        this.storeConfigTimer = setTimeout(() => {
           storeConfig({
             view: data
           })
@@ -307,6 +324,7 @@ export default {
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
+      this.handleShowLoading()
       // this.mindMap.setData(data)
       if (data.root) {
         this.getMindMap().setFullData(data)
