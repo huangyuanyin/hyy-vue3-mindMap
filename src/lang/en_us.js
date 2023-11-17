@@ -202,7 +202,8 @@ export default {
     import: 'Import',
     export: 'Export',
     shortcutKey: 'Shortcut key',
-    associativeLine: 'Associative line'
+    associativeLine: 'Associative line',
+    painter: 'Painter'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

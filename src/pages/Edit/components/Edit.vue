@@ -37,6 +37,7 @@ import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
+import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -79,6 +80,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
+  .usePlugin(Painter)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -148,6 +150,9 @@ export default {
     })
     bus.on('createAssociativeLine', () => {
       this.mindMap.associativeLine.createLineFromActiveNode()
+    })
+    bus.on('startPainter', () => {
+      this.mindMap.painter.startPainter()
     })
     window.addEventListener('resize', () => {
       this.mindMap.resize()
@@ -274,7 +279,9 @@ export default {
         'node_tree_render_end',
         'rich_text_selection_change',
         'transforming-dom-to-images',
-        'generalization_node_contextmenu'
+        'generalization_node_contextmenu',
+        'painter_start',
+        'painter_end'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
           if (['node_contextmenu', 'node_active', 'rich_text_selection_change'].includes(event)) {

@@ -26,6 +26,17 @@
         <div
           class="toolbarBtn"
           :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization,
+            active: isInPainter
+          }"
+          @click="emit('startPainter')"
+        >
+          <span class="icon iconfont iconjiedian"></span>
+          <span class="text">{{ $t('toolbar.painter') }}</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
             disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
           }"
           @click="emit('execCommand', 'INSERT_NODE')"
@@ -218,7 +229,8 @@ export default {
       forwardEnd: true,
       readonly: false,
       isFullDataFile: false,
-      timer: null
+      timer: null,
+      isInPainter: false
     }
   },
   computed: {
@@ -248,12 +260,16 @@ export default {
     bus.on('node_active', this.onNodeActive)
     bus.on('back_forward', this.onBackForward)
     bus.on('write_local_file', this.onWriteLocalFile)
+    bus.on('painter_start', this.onPainterStart)
+    bus.on('painter_end', this.onPainterEnd)
   },
   beforeDestroy() {
     bus.off('mode_change', this.onModeChange)
     bus.off('node_active', this.onNodeActive)
     bus.off('back_forward', this.onBackForward)
     bus.off('write_local_file', this.onWriteLocalFile)
+    bus.on('painter_start', this.onPainterStart)
+    bus.off('painter_end', this.onPainterEnd)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -332,6 +348,14 @@ export default {
           duration: 1000
         })
       }
+    },
+
+    onPainterStart() {
+      this.isInPainter = true
+    },
+
+    onPainterEnd() {
+      this.isInPainter = false
     },
 
     /**
@@ -531,6 +555,12 @@ export default {
           .icon {
             background: #f5f5f5;
           }
+        }
+      }
+
+      &.active {
+        .icon {
+          background: #f5f5f5;
         }
       }
 
