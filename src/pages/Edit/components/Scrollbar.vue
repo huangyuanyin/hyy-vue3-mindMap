@@ -1,12 +1,12 @@
 <template>
   <div class="scrollbarContainer" :class="{ isDark: isDark }">
     <!-- 竖向 -->
-    <div class="scrollbar verticalScrollbar" ref="verticalScrollbarRef">
-      <div class="scrollbarInner" :style="verticalScrollbarStyle" @mousedown="onVerticalScrollbarMousedown"></div>
+    <div class="scrollbar verticalScrollbar" ref="verticalScrollbarRef" @click="onVerticalScrollbarClick">
+      <div class="scrollbarInner" :style="verticalScrollbarStyle" @click.stop @mousedown="onVerticalScrollbarMousedown"></div>
     </div>
     <!-- 横向 -->
-    <div class="scrollbar horizontalScrollbar" ref="horizontalScrollbarRef">
-      <div class="scrollbarInner" :style="horizontalScrollbarStyle" @mousedown="onHorizontalScrollbarMousedown"></div>
+    <div class="scrollbar horizontalScrollbar" ref="horizontalScrollbarRef" @click="onHorizontalScrollbarClick">
+      <div class="scrollbarInner" :style="horizontalScrollbarStyle" @click.stop @mousedown="onHorizontalScrollbarMousedown"></div>
     </div>
   </div>
 </template>
@@ -55,8 +55,7 @@ export default {
       }, 300)
     },
     // 调用插件方法更新滚动条位置和大小
-    updateScrollbar() {
-      const { vertical, horizontal } = this.mindMap.scrollbar.calculationScrollbar()
+    updateScrollbar({ vertical, horizontal }) {
       this.verticalScrollbarStyle = {
         top: vertical.top + '%',
         height: vertical.height + '%'
@@ -70,9 +69,17 @@ export default {
     onVerticalScrollbarMousedown(e) {
       this.mindMap.scrollbar.onMousedown(e, 'vertical')
     },
+    // 垂直滚动条点击事件调用插件方法
+    onVerticalScrollbarClick(e) {
+      this.mindMap.scrollbar.onClick(e, 'vertical')
+    },
     // 水平滚动条按下事件调用插件方法
     onHorizontalScrollbarMousedown(e) {
       this.mindMap.scrollbar.onMousedown(e, 'horizontal')
+    },
+    // 水平滚动条点击事件调用插件方法
+    onHorizontalScrollbarClick(e) {
+      this.mindMap.scrollbar.onClick(e, 'horizontal')
     }
   }
 }
