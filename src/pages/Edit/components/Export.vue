@@ -25,6 +25,9 @@
         <el-checkbox v-show="['png'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
           $t('export.isTransparent')
         }}</el-checkbox>
+        <el-checkbox v-show="['pdf'].includes(exportType)" v-model="useMultiPageExport" style="margin-left: 12px">{{
+          $t('export.useMultiPageExport')
+        }}</el-checkbox>
       </div>
       <div class="downloadTypeList">
         <div
@@ -76,6 +79,7 @@ const loading = ref(false)
 const loadingText = ref('')
 const paddingX = ref(10)
 const paddingY = ref(10)
+const useMultiPageExport = ref(false)
 
 const openNodeRichText = computed(() => store.state.localConfig.openNodeRichText)
 const isDark = computed(() => store.state.isDark)
@@ -130,6 +134,8 @@ const confirm = () => {
     bus.emit('export', exportType.value, true, fileName.value, widthConfig.value)
   } else if (exportType.value === 'png') {
     bus.emit('export', exportType.value, true, fileName.value, isTransparent.value)
+  } else if (exportType.value === 'pdf') {
+    bus.emit('export', exportType.value, true, fileName.value, useMultiPageExport.value)
   } else {
     bus.emit('export', exportType.value, true, fileName.value)
   }
