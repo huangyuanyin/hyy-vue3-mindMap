@@ -1,13 +1,13 @@
 //  布局结构图片映射
 export const layoutImgMap = {
-  logicalStructure: require('../assets/img/logicalStructure.png'),
-  mindMap: require('../assets/img/mindMap.png'),
-  organizationStructure: require('../assets/img/organizationStructure.png'),
-  catalogOrganization: require('../assets/img/catalogOrganization.png'),
-  timeline: require('../assets/img/timeline.png'),
-  timeline2: require('../assets/img/timeline2.png'),
-  fishbone: require('../assets/img/fishbone.png'),
-  verticalTimeline: require('../assets/img/verticalTimeline.png')
+  logicalStructure: require('../assets/img/structures/logicalStructure.png'),
+  mindMap: require('../assets/img/structures/mindMap.png'),
+  organizationStructure: require('../assets/img/structures/organizationStructure.png'),
+  catalogOrganization: require('../assets/img/structures/catalogOrganization.png'),
+  timeline: require('../assets/img/structures/timeline.png'),
+  timeline2: require('../assets/img/structures/timeline2.png'),
+  fishbone: require('../assets/img/structures/fishbone.png'),
+  verticalTimeline: require('../assets/img/structures/verticalTimeline.png')
 }
 
 //  主题图片映射
