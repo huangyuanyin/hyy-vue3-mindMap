@@ -146,7 +146,8 @@ export default {
     addTip: 'Press Enter to add'
   },
   outline: {
-    title: 'Outline'
+    title: 'Outline',
+    nodeDefaultText: 'Branch node'
   },
   scale: {
     zoomIn: 'Zoom in',
