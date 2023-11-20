@@ -102,12 +102,7 @@ const confirm = async () => {
     if (!img.value && !imgUrl.value) {
       cancel()
       activeNodes.value.forEach(node => {
-        node.setImage({
-          url: '',
-          title: '',
-          width: 0,
-          height: 0
-        })
+        node.setImage(null)
       })
       return
     }
