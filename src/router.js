@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import EditPage from '@/pages/Edit/Index'
 import IndexPage from '@/pages/Index/Index'
 
 const routes = [
@@ -8,7 +7,7 @@ const routes = [
     name: 'Index',
     component: IndexPage
   },
-  { path: '/', name: 'Edit', component: EditPage }
+  { path: '/', name: 'Edit', component: () => import(`./pages/Edit/Index.vue`) }
 ]
 
 const router = createRouter({
