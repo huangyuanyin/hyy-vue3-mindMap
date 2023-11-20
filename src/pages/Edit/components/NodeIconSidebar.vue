@@ -53,6 +53,7 @@ import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
 import { mapState } from 'vuex'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+import { mergerIconList } from 'simple-mind-map/src/utils/index'
 import icon from '@/config/icon'
 import image from '@/config/image'
 import bus from '@/utils/bus.js'
@@ -65,7 +66,7 @@ export default {
   data() {
     return {
       activeName: 'icon',
-      nodeIconList: [...nodeIconList, ...icon],
+      nodeIconList: mergerIconList([...nodeIconList, ...icon]),
       nodeImageList: [...image],
       iconList: [],
       nodeImage: '',
