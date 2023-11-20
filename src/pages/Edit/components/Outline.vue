@@ -249,9 +249,7 @@ const onClick = data => {
   notHandleDataChange.value = true
   const targetNode = props.mindMap.renderer.findNodeByUid(data.uid)
   if (targetNode && targetNode.nodeData.data.isActive) return
-  props.mindMap.renderer.textEdit.stopFocusOnNodeActive()
   props.mindMap.execCommand('GO_TARGET_NODE', data.uid, () => {
-    props.mindMap.renderer.textEdit.openFocusOnNodeActive()
     notHandleDataChange.value = false
   })
 }
