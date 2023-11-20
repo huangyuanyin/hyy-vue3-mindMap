@@ -28,6 +28,7 @@
  * @Desc: 导入功能
  */
 import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { route } from 'vue-router'
 import bus from '@/utils/bus.js'
 import { ElMessage } from 'element-plus'
 // import MindMap from 'simple-mind-map'
@@ -52,14 +53,45 @@ watch(
 
 onMounted(() => {
   bus.on('showImport', handleShowImport)
+  bus.on('handle_file_url', handleFileURL)
 })
 
 onBeforeMount(() => {
   bus.off('showImport', handleShowImport)
+  bus.off('handle_file_url', handleFileURL)
 })
 
 const handleShowImport = () => {
   dialogVisible.value = true
+}
+
+// 检查url中是否操作需要打开的文件
+const handleFileURL = async () => {
+  try {
+    const fileURL = route.query.fileURL
+    if (!fileURL) return
+    const macth = /\.(smm|json|xmind|md|xlsx)$/.exec(fileURL)
+    if (!macth) {
+      return
+    }
+    const type = macth[1]
+    const res = await fetch(fileURL)
+    const file = await res.blob()
+    const data = {
+      raw: file
+    }
+    if (type === 'smm' || type === 'json') {
+      handleSmm(data)
+    } else if (type === 'xmind') {
+      handleXmind(data)
+    } else if (type === 'xlsx') {
+      handleExcel(data)
+    } else if (type === 'md') {
+      handleMd(data)
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 /**

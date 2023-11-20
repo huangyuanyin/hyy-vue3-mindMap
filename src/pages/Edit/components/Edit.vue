@@ -73,6 +73,7 @@ import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
 import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
+import exampleData from 'simple-mind-map/example/exampleData'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -246,7 +247,20 @@ export default {
      * @Desc: 初始化
      */
     init() {
+      let hasFileURL = this.hasFileURL()
       let { root, layout, theme, view, config } = this.getData()
+      // 如果url中存在要打开的文件，那么思维导图数据、主题、布局都使用默认的
+      if (hasFileURL) {
+        root = {
+          data: {
+            text: '根节点'
+          },
+          children: []
+        }
+        layout = exampleData.layout
+        theme = exampleData.theme
+        view = null
+      }
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
@@ -331,6 +345,17 @@ export default {
       })
       this.bindSaveEvent()
       window.mindMap = this.mindMap
+      // 解析url中的文件
+      if (hasFileURL) {
+        bus.emit('handle_file_url')
+      }
+    },
+
+    // url中是否存在要打开的文件
+    hasFileURL() {
+      const fileURL = this.$route.query.fileURL
+      if (!fileURL) return false
+      return /\.(smm|json|xmind|md|xlsx)$/.test(fileURL)
     },
 
     /**
