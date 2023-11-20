@@ -15,8 +15,7 @@
         v-for="(item, index) in tagArr"
         :key="index"
         :style="{
-          backgroundColor: tagColorList[index].background,
-          color: tagColorList[index].color
+          backgroundColor: generateColorByContent(item)
         }"
       >
         {{ item }}
@@ -40,7 +39,7 @@
  * @Desc: 节点标签内容设置
  */
 import { onBeforeMount, onMounted, ref } from 'vue'
-import { tagColorList } from 'simple-mind-map/src/constants/constant'
+import { generateColorByContent } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
 
 const dialogVisible = ref(false)
@@ -131,6 +130,7 @@ export default {
       padding: 3px 5px;
       margin-right: 5px;
       margin-bottom: 5px;
+      color: #fff;
 
       .delBtn {
         position: absolute;
