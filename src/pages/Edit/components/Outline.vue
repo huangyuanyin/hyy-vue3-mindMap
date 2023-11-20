@@ -58,7 +58,7 @@ const defaultProps = ref({
 })
 const notHandleDataChange = ref(false)
 const currentData = ref(null)
-const handleNodeTreeRenderEnd = ref(false)
+const isHandleNodeTreeRenderEnd = ref(false)
 const beInsertNodeUid = ref('')
 const insertType = ref('')
 const isInTreArea = ref(false)
@@ -102,8 +102,8 @@ const handleNodeTreeRenderEnd2 = () => {
     return
   }
   // 插入了新节点后需要做一些操作
-  if (handleNodeTreeRenderEnd.value) {
-    handleNodeTreeRenderEnd.value = false
+  if (isHandleNodeTreeRenderEnd.value) {
+    isHandleNodeTreeRenderEnd.value = false
     refresh()
     nextTick(() => {
       afterCreateNewNode()
@@ -227,7 +227,7 @@ const onNodeInputKeydown = (e, node) => {
 // 插入兄弟节点
 const insertNode = () => {
   notHandleDataChange.value = true
-  handleNodeTreeRenderEnd.value = true
+  isHandleNodeTreeRenderEnd.value = true
   beInsertNodeUid.value = createUid()
   props.mindMap.execCommand('INSERT_NODE', false, [], {
     uid: beInsertNodeUid.value
@@ -237,7 +237,7 @@ const insertNode = () => {
 // 插入下级节点
 const insertChildNode = () => {
   notHandleDataChange.value = true
-  handleNodeTreeRenderEnd.value = true
+  isHandleNodeTreeRenderEnd.value = true
   beInsertNodeUid.value = createUid()
   props.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
     uid: beInsertNodeUid.value
