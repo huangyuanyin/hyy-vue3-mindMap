@@ -73,13 +73,22 @@ onMounted(() => {
   refresh()
   bus.on('data_change', handleDataChange())
   bus.on('node_tree_render_end', handleNodeTreeRenderEnd2())
+  bus.on('hide_text_edit', handleHideTextEdit)
 })
 
 onBeforeMount(() => {
   window.removeEventListener('keydown', onKeyDown())
   bus.off('data_change', handleDataChange())
   bus.off('node_tree_render_end', handleNodeTreeRenderEnd2())
+  bus.off('hide_text_edit', handleHideTextEdit)
 })
+
+const handleHideTextEdit = () => {
+  if (notHandleDataChange.value) {
+    notHandleDataChange.value = false
+    refresh()
+  }
+}
 
 const handleDataChange = () => {
   // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
@@ -182,6 +191,7 @@ const onBlur = (e, node) => {
   const text = richText ? e.target.innerHTML : e.target.innerText
   const targetNode = props.mindMap.renderer.findNodeByUid(node.data.uid)
   if (!targetNode) return
+  notHandleDataChange.value = true
   if (richText) {
     targetNode.setText(textToNodeRichTextWithWrap(text), true, true)
   } else {
