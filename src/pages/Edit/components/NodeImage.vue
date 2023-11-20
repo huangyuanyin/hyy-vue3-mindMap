@@ -49,8 +49,8 @@ onBeforeMount(() => {
 })
 
 const handleNodeActive = args => {
-  console.log(`output->args`, [])
   activeNodes.value = args[1]
+  console.log(`output->activeNodes.value`, activeNodes.value)
 }
 
 const handleShowNodeImage = () => {
@@ -96,8 +96,21 @@ const reset = () => {
  * @Desc:  确定
  */
 const confirm = async () => {
+  console.log(`output->img.value`, img.value)
   try {
-    if (!img.value && !imgUrl.value) return
+    // 删除图片
+    if (!img.value && !imgUrl.value) {
+      cancel()
+      activeNodes.value.forEach(node => {
+        node.setImage({
+          url: '',
+          title: '',
+          width: 0,
+          height: 0
+        })
+      })
+      return
+    }
     let res = null
     let img = ''
     if (img.value) {
@@ -117,7 +130,7 @@ const confirm = async () => {
     })
     cancel()
   } catch (error) {
-    console.log(error)
+    console.log(`output->error`, error)
   }
 }
 </script>
