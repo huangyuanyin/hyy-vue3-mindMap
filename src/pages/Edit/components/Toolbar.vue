@@ -26,6 +26,17 @@
         <div
           class="toolbarBtn"
           :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization,
+            active: isInPainter
+          }"
+          @click="emit('startPainter')"
+        >
+          <span class="icon iconfont iconjiedian"></span>
+          <span class="text">{{ $t('toolbar.painter') }}</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
             disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
           }"
           @click="emit('execCommand', 'INSERT_NODE')"
@@ -123,6 +134,16 @@
           <span class="icon iconfont iconlianjiexian"></span>
           <span class="text">{{ $t('toolbar.associativeLine') }}</span>
         </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization
+          }"
+          @click="showFormula"
+        >
+          <span class="icon iconfont icongongshi"></span>
+          <span class="text">{{ $t('toolbar.formula') }}</span>
+        </div>
       </div>
       <!-- 通用操作 -->
       <!-- <div class="toolbarBlock">
@@ -218,7 +239,8 @@ export default {
       forwardEnd: true,
       readonly: false,
       isFullDataFile: false,
-      timer: null
+      timer: null,
+      isInPainter: false
     }
   },
   computed: {
@@ -248,12 +270,16 @@ export default {
     bus.on('node_active', this.onNodeActive)
     bus.on('back_forward', this.onBackForward)
     bus.on('write_local_file', this.onWriteLocalFile)
+    bus.on('painter_start', this.onPainterStart)
+    bus.on('painter_end', this.onPainterEnd)
   },
   beforeDestroy() {
     bus.off('mode_change', this.onModeChange)
     bus.off('node_active', this.onNodeActive)
     bus.off('back_forward', this.onBackForward)
     bus.off('write_local_file', this.onWriteLocalFile)
+    bus.off('painter_start', this.onPainterStart)
+    bus.off('painter_end', this.onPainterEnd)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -261,6 +287,10 @@ export default {
       // this.$bus.$emit('showNodeIcon')
       bus.emit('close_node_icon_toolbar')
       this.setActiveSidebar('nodeIconSidebar')
+    },
+    // 打开公式侧边栏
+    showFormula() {
+      this.setActiveSidebar('formulaSidebar')
     },
     /**
      * @Author: 黄原寅
@@ -274,7 +304,7 @@ export default {
      * @Desc: 监听节点激活
      */
     onNodeActive(...args) {
-      this.activeNodes = args[0][1]
+      this.activeNodes = [...args[0][1]]
     },
     /**
      * @Author: 黄原寅
@@ -334,6 +364,14 @@ export default {
       }
     },
 
+    onPainterStart() {
+      this.isInPainter = true
+    },
+
+    onPainterEnd() {
+      this.isInPainter = false
+    },
+
     /**
      * @Author: 黄原寅
      * @Desc: 读取本地文件
@@ -349,7 +387,7 @@ export default {
           title: '提示',
           message: `当前正在编辑你本机的【${file.name}】文件`,
           duration: 0,
-          showClose: false
+          showClose: true
         })
       }
       fileReader.readAsText(file)
@@ -531,6 +569,12 @@ export default {
           .icon {
             background: #f5f5f5;
           }
+        }
+      }
+
+      &.active {
+        .icon {
+          background: #f5f5f5;
         }
       }
 

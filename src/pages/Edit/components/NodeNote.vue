@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeNote.title')">
+  <el-dialog custom-class="nodeNoteDialog" v-model="dialogVisible" :title="$t('nodeNote.title')">
     <!-- <el-input
       type="textarea"
       :autosize="{ minRows: 3, maxRows: 5 }"
@@ -7,7 +7,7 @@
       v-model="note"
     >
     </el-input> -->
-    <div class="noteEditor" ref="noteEditor" @keyup.stop></div>
+    <div class="noteEditor" ref="noteEditor" @keyup.stop @keydown.stop></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <template #footer>
       <span class="dialog-footer">
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, onBeforeMount } from 'vue'
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import bus from '@/utils/bus.js'
@@ -34,23 +34,32 @@ const editor = ref(null)
 const noteEditor = ref(null)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      note.value = firstNode.getData('note')
-    } else {
-      note.value = ''
-    }
-  })
-  bus.on('showNodeNote', () => {
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-    nextTick(() => {
-      initEditor()
-    })
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeNote', handleShowNodeNote)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeNote', handleShowNodeNote)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = [...args[1]]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    note.value = firstNode.getData('note')
+  } else {
+    note.value = ''
+  }
+}
+
+const handleShowNodeNote = () => {
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+  nextTick(() => {
+    initEditor()
+  })
+}
 
 /**
  * @Author: 黄原寅
@@ -97,7 +106,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeNoteDialog {
   .tip {
     margin-top: 5px;
     color: #dcdfe6;

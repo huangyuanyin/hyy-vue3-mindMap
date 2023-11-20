@@ -46,7 +46,12 @@ export default {
     associativeLineActiveColor: '激活颜色',
     mousewheelZoomActionReverse: '鼠标滚轮缩放',
     mousewheelZoomActionReverse1: '向前缩小向后放大',
-    mousewheelZoomActionReverse2: '向前放大向后缩小'
+    mousewheelZoomActionReverse2: '向前放大向后缩小',
+    rootStyle: '根节点',
+    associativeLineText: '关联线文字',
+    fontFamily: '字体',
+    fontSize: '字号',
+    isShowScrollbar: '是否显示滚动条'
   },
   color: {
     moreColor: '更多颜色'
@@ -73,7 +78,10 @@ export default {
     level5: '五级主题',
     level6: '六级主题',
     zenMode: '禅模式',
-    fitCanvas: '适应画布'
+    fitCanvas: '适应画布',
+    removeImage: '移除图片',
+    removeHyperlink: '移除超链接',
+    removeNote: '移除备注'
   },
   count: {
     words: '字数',
@@ -101,7 +109,8 @@ export default {
     notifyTitle: '消息',
     notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
     paddingX: '水平内边距',
-    paddingY: '垂直内边距'
+    paddingY: '垂直内边距',
+    useMultiPageExport: '是否多页导出'
   },
   fullscreen: {
     fullscreen: '全屏',
@@ -139,7 +148,8 @@ export default {
     addTip: '请按回车键添加'
   },
   outline: {
-    title: '大纲'
+    title: '大纲',
+    nodeDefaultText: '分支节点'
   },
   scale: {
     zoomIn: '放大',
@@ -163,6 +173,7 @@ export default {
     addFontWeight: '加粗',
     italic: '斜体',
     textDecoration: '划线',
+    none: '无',
     underline: '下划线',
     lineThrough: '中划线',
     overline: '上划线',
@@ -202,7 +213,9 @@ export default {
     import: '导入',
     export: '导出',
     shortcutKey: '快捷键',
-    associativeLine: '关联线'
+    associativeLine: '关联线',
+    painter: '格式刷',
+    formula: '公式'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
@@ -219,5 +232,16 @@ export default {
     replace: '替换',
     replaceAll: '全部替换',
     cancel: '取消'
+  },
+  nodeIconSidebar: {
+    title: '图标/贴纸',
+    icon: '图标',
+    sticker: '贴纸'
+  },
+  formulaSidebar: {
+    title: '公式',
+    placeholder: '请输入 LaText 语法',
+    confirm: '完成',
+    common: '常用公式'
   }
 }

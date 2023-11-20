@@ -1,5 +1,5 @@
 <template>
-  <div class="contextmenuContainer listBox" v-if="isShow" :style="{ left: left + 'px', top: top + 'px' }">
+  <div class="contextmenuContainer listBox" v-if="isShow" :style="{ left: left + 'px', top: top + 'px' }" :class="{ isDark: isDark }">
     <template v-if="type === 'node'">
       <div class="item" @click="exec('INSERT_NODE', insertNodeBtnDisabled)" :class="{ disabled: insertNodeBtnDisabled }">
         {{ $t('contextmenu.insertSiblingNode') }}
@@ -37,6 +37,12 @@
         {{ $t('contextmenu.pasteNode') }}
         <span class="desc">Ctrl + V</span>
       </div>
+      <div class="item" @click="exec('REMOVE_HYPERLINK')" v-if="hasHyperlink">
+        {{ $t('contextmenu.removeHyperlink') }}
+      </div>
+      <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
+        {{ $t('contextmenu.removeNote') }}
+      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -51,7 +57,7 @@
       </div>
       <div class="item">
         {{ $t('contextmenu.expandTo') }}
-        <div class="subItems listBox">
+        <div class="subItems listBox" :class="{ isDark: isDark }">
           <div class="item" v-for="(item, index) in expandList" :key="item" @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)">
             {{ item }}
           </div>
@@ -101,7 +107,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isZenMode: state => state.localConfig.isZenMode
+      isZenMode: state => state.localConfig.isZenMode,
+      isDark: state => state.isDark
     }),
     expandList() {
       return [
@@ -140,6 +147,12 @@ export default {
     },
     isGeneralization() {
       return this.node.isGeneralization
+    },
+    hasHyperlink() {
+      return !!this.node.getData('hyperlink')
+    },
+    hasNote() {
+      return !!this.node.getData('note')
     }
   },
   created() {
@@ -155,8 +168,8 @@ export default {
     bus.off('node_click', this.hide)
     bus.off('draw_click', this.hide)
     bus.off('expand_btn_click', this.hide)
-    bus.on('svg_mousedown', this.onMousedown)
-    bus.on('mouseup', this.onMouseup)
+    bus.off('svg_mousedown', this.onMousedown)
+    bus.off('mouseup', this.onMouseup)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -253,6 +266,12 @@ export default {
         case 'FIT_CANVAS':
           this.mindMap.view.fit()
           break
+        case 'REMOVE_HYPERLINK':
+          this.node.setHyperlink('', '')
+          break
+        case 'REMOVE_NOTE':
+          this.node.setNote('')
+          break
         default:
           bus.emit('execCommand', [key, ...args])
           break
@@ -271,6 +290,9 @@ export default {
   border-radius: 4px;
   padding-top: 16px;
   padding-bottom: 16px;
+  &.isDark {
+    background: #363b3f;
+  }
 }
 
 .contextmenuContainer {
@@ -279,6 +301,14 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #1a1a1a;
+  &.isDark {
+    color: #fff;
+    .item {
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
 
   .item {
     position: relative;

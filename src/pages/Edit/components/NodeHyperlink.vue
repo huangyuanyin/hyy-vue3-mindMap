@@ -1,12 +1,12 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
+  <el-dialog custom-class="nodeHyperlinkDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.link') }}</span>
-      <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>
+      <el-input v-model="link" size="small" placeholder="http://xxxx.com/" @keydown.native.stop></el-input>
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
-      <el-input v-model="linkTitle" size="small" @keyup.native.stop></el-input>
+      <el-input v-model="linkTitle" size="small" @keyup.native.stop @keydown.native.stop></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeMount } from 'vue'
 import bus from '@/utils/bus.js'
 /**
  * @Author: 黄原寅
@@ -30,23 +30,32 @@ const linkTitle = ref('')
 const activeNodes = ref([])
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      link.value = firstNode.getData('hyperlink')
-      linkTitle.value = firstNode.getData('hyperlinkTitle')
-    } else {
-      link.value = ''
-      linkTitle.value = ''
-    }
-  })
-  bus.on('showNodeLink', () => {
-    activeNodes.value[0].mindMap.keyCommand.pause()
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeLink', handleShowNodeLink)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeLink', handleShowNodeLink)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = [...args[1]]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    link.value = firstNode.getData('hyperlink')
+    linkTitle.value = firstNode.getData('hyperlinkTitle')
+  } else {
+    link.value = ''
+    linkTitle.value = ''
+  }
+}
+
+const handleShowNodeLink = () => {
+  activeNodes.value[0].mindMap.keyCommand.pause()
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+}
 
 /**
  * @Author: 黄原寅
@@ -80,7 +89,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeHyperlinkDialog {
   .item {
     display: flex;
     align-items: center;

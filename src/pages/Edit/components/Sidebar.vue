@@ -6,7 +6,7 @@
     <div class="sidebarHeader" v-if="title">
       {{ title }}
     </div>
-    <div class="sidebarContent">
+    <div class="sidebarContent" ref="sidebarContent">
       <slot></slot>
     </div>
   </div>
@@ -50,15 +50,22 @@ export default {
     }
   },
   created() {
-    bus.on('closeSideBar', () => {
-      this.close()
-    })
+    bus.on('closeSideBar', this.handleCloseSidebar)
+  },
+  beforeDestroy() {
+    bus.off('closeSideBar', this.handleCloseSidebar)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
+    handleCloseSidebar() {
+      this.close()
+    },
     close() {
       this.show = false
       this.setActiveSidebar('')
+    },
+    getEl() {
+      return this.$refs.sidebarContent
     }
   }
 }

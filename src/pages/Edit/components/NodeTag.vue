@@ -1,9 +1,10 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeTag.title')">
+  <el-dialog custom-class="nodeTagDialog" v-model="dialogVisible" :title="$t('nodeTag.title')">
     <el-input
       v-model="tag"
       @keyup.native.enter="add"
       @keyup.native.stop
+      @keydown.native.stop
       :disabled="tagArr.length >= max"
       :placeholder="$t('nodeTag.addTip')"
     >
@@ -14,8 +15,7 @@
         v-for="(item, index) in tagArr"
         :key="index"
         :style="{
-          backgroundColor: tagColorList[index].background,
-          color: tagColorList[index].color
+          backgroundColor: generateColorByContent(item)
         }"
       >
         {{ item }}
@@ -38,8 +38,8 @@
  * @Author: 黄原寅
  * @Desc: 节点标签内容设置
  */
-import { onMounted, ref } from 'vue'
-import { tagColorList } from 'simple-mind-map/src/constants/constant'
+import { onBeforeMount, onMounted, ref } from 'vue'
+import { generateColorByContent } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
 
 const dialogVisible = ref(false)
@@ -49,21 +49,30 @@ const activeNodes = ref([])
 const max = ref(5)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      tagArr.value = firstNode.getData('tag') || []
-    } else {
-      tagArr.value = []
-      tag.value = ''
-    }
-  })
-  bus.on('showNodeTag', () => {
-    bus.emit('startTextEdit')
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeTag', handleShowNodeTag)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeTag', handleShowNodeTag)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = [...args[1]]
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    tagArr.value = firstNode.getData('tag') || []
+  } else {
+    tagArr.value = []
+    tag.value = ''
+  }
+}
+
+const handleShowNodeTag = () => {
+  bus.emit('startTextEdit')
+  dialogVisible.value = true
+}
 
 /**
  * @Author: 黄原寅
@@ -110,7 +119,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeTagDialog {
   .tagList {
     display: flex;
     flex-wrap: wrap;
@@ -121,6 +130,7 @@ export default {
       padding: 3px 5px;
       margin-right: 5px;
       margin-bottom: 5px;
+      color: #fff;
 
       .delBtn {
         position: absolute;

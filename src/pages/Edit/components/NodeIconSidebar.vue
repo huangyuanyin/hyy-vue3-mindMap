@@ -1,9 +1,9 @@
 <template>
-  <Sidebar ref="sidebar" title="图标/贴纸">
+  <Sidebar ref="sidebar" :title="$t('nodeIconSidebar.title')">
     <div class="box" :class="{ isDark: isDark }">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="图标" name="icon"></el-tab-pane>
-        <el-tab-pane label="贴纸" name="image"></el-tab-pane>
+        <el-tab-pane :label="$t('nodeIconSidebar.icon')" name="icon"></el-tab-pane>
+        <el-tab-pane :label="$t('nodeIconSidebar.sticker')" name="image"></el-tab-pane>
       </el-tabs>
       <div class="boxContent">
         <!-- 图标 -->
@@ -53,6 +53,7 @@ import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
 import { mapState } from 'vuex'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+import { mergerIconList } from 'simple-mind-map/src/utils/index'
 import icon from '@/config/icon'
 import image from '@/config/image'
 import bus from '@/utils/bus.js'
@@ -65,7 +66,7 @@ export default {
   data() {
     return {
       activeName: 'icon',
-      nodeIconList: [...nodeIconList, ...icon],
+      nodeIconList: mergerIconList([...nodeIconList, ...icon]),
       nodeImageList: [...image],
       iconList: [],
       nodeImage: '',
@@ -85,9 +86,16 @@ export default {
     }
   },
   created() {
-    bus.on('node_active', args => {
-      console.log(`output->args`, args)
-      this.activeNodes = args[1]
+    bus.on('node_active', this.handleNodeActive)
+    bus.on('showNodeIcon', this.handleShowNodeIcon)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.handleNodeActive)
+    bus.off('showNodeIcon', this.handleShowNodeIcon)
+  },
+  methods: {
+    handleNodeActive(args) {
+      this.activeNodes = [...args[1]]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
         this.nodeImage = firstNode.getData('image')
@@ -96,12 +104,11 @@ export default {
         this.iconList = []
         this.nodeImage = ''
       }
-    })
-    bus.on('showNodeIcon', () => {
+    },
+
+    handleShowNodeIcon() {
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
     // 获取图标渲染方式
     getHtml(icon) {
       return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`

@@ -111,7 +111,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -129,7 +131,35 @@
               }
             "
           >
-            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+            <el-option
+              v-for="item in lineStyleList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+              class="lineStyleOption"
+              :class="{
+                isDark: isDark,
+                isSelected: style.lineStyle === item.value
+              }"
+              v-html="lineStyleMap[item.value]"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="rowItem" v-if="style.lineStyle === 'curve'">
+          <span class="name">{{ $t('baseStyle.rootStyle') }}</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.rootLineKeepSameInCurve"
+            placeholder=""
+            @change="
+              value => {
+                update('rootLineKeepSameInCurve', value)
+              }
+            "
+          >
+            <el-option v-for="item in rootLineKeepSameInCurveList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
           </el-select>
         </div>
       </div>
@@ -165,7 +195,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -201,7 +233,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"></el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -235,15 +269,17 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
       <!-- 关联线文字 -->
-      <div class="title noTop">关联线文字</div>
+      <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">字体</span>
+          <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
           <el-select
             size="small"
             v-model="style.associativeLineTextFontFamily"
@@ -263,7 +299,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <el-popover ref="popover6" placement="bottom" trigger="hover">
             <template #reference>
               <span class="block" v-popover:popover6 :style="{ backgroundColor: style.associativeLineTextColor }"></span>
@@ -279,7 +315,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">字号</span>
+          <span class="name">{{ $t('baseStyle.fontSize') }}</span>
           <el-select
             size="small"
             style="width: 80px"
@@ -436,7 +472,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkText') }}</span>
-            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig"></el-input>
+            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig" @keydown.native.stop></el-input>
           </div>
         </div>
         <!-- 水印文字颜色 -->
@@ -482,6 +518,7 @@
               :max="50"
               :step="1"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -496,6 +533,7 @@
               :max="90"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -508,6 +546,7 @@
               size="small"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -520,6 +559,7 @@
               size="small"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -588,6 +628,14 @@
           </el-select>
         </div>
       </div>
+      <!-- 是否显示滚动条 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox v-model="localConfigs.isShowScrollbar" @change="updateLocalConfig('isShowScrollbar', $event)">{{
+            $t('baseStyle.isShowScrollbar')
+          }}</el-checkbox>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -602,7 +650,9 @@ import {
   backgroundPositionList,
   backgroundSizeList,
   fontFamilyList,
-  fontSizeList
+  fontSizeList,
+  rootLineKeepSameInCurveList,
+  lineStyleMap
 } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
@@ -639,6 +689,7 @@ export default {
         lineColor: '',
         lineWidth: '',
         lineStyle: '',
+        rootLineKeepSameInCurve: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
         associativeLineColor: '',
@@ -678,13 +729,19 @@ export default {
         }
       },
       updateWatermarkTimer: null,
-      enableNodeRichText: true
+      enableNodeRichText: true,
+      localConfigs: {
+        isShowScrollbar: false
+      }
     }
   },
   computed: {
     ...mapState(['activeSidebar', 'localConfig', 'isDark']),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
+    },
+    rootLineKeepSameInCurveList() {
+      return rootLineKeepSameInCurveList[this.$i18n.locale] || rootLineKeepSameInCurveList.zh
     },
     backgroundRepeatList() {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
@@ -697,6 +754,9 @@ export default {
     },
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+    lineStyleMap() {
+      return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
     }
   },
   watch: {
@@ -712,11 +772,20 @@ export default {
     }
   },
   created() {
-    this.enableNodeRichText = this.localConfig.openNodeRichText
-    this.mousewheelAction = this.localConfig.mousewheelAction
+    this.initLoacalConfig()
+    bus.on('setData', this.onSetData)
+  },
+  beforeDestroy() {
+    bus.off('setData', this.onSetData)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
+    onSetData() {
+      if (this.activeSidebar !== 'baseStyle') return
+      setTimeout(() => {
+        this.initStyle()
+      }, 0)
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 初始样式
@@ -726,6 +795,7 @@ export default {
         'backgroundColor',
         'lineWidth',
         'lineStyle',
+        'rootLineKeepSameInCurve',
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',
@@ -762,6 +832,16 @@ export default {
       })
     },
 
+    // 初始化本地配置
+    initLoacalConfig() {
+      this.enableNodeRichText = this.localConfig.openNodeRichText
+      this.mousewheelAction = this.localConfig.mousewheelAction
+      this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
+      ;['isShowScrollbar'].forEach(key => {
+        this.localConfigs[key] = this.localConfig[key]
+      })
+    },
+
     // 初始化水印配置
     initWatermark() {
       let config = this.mindMap.getConfig('watermarkConfig')
@@ -793,6 +873,7 @@ export default {
         this.style[key] = value
       }
       this.data.theme.config[key] = value
+      bus.emit('showLoading')
       this.mindMap.setThemeConfig(this.data.theme.config)
       storeConfig({
         theme: {
@@ -868,12 +949,11 @@ export default {
       })
     },
 
-    // 切换鼠标滚轮的行为
-    mousewheelActionChange(e) {
+    // 本地配置
+    updateLocalConfig(key, value) {
       this.setLocalConfig({
-        mousewheelAction: e
+        [key]: value
       })
-      this.mindMap.updateConfig
     }
   }
 }
@@ -977,6 +1057,43 @@ export default {
         bottom: 0;
         height: 2px;
       }
+    }
+  }
+}
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
+  }
+}
+.lineStyleOption {
+  &.isDark {
+    svg {
+      path {
+        stroke: #fff;
+      }
+    }
+  }
+  &.isSelected {
+    svg {
+      path {
+        stroke: #409eff;
+      }
+    }
+  }
+  svg {
+    margin-top: 4px;
+    path {
+      stroke: #000;
     }
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
-    <Count v-if="!isZenMode"></Count>
+    <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
-    <Outline :mindMap="mindMap"></Outline>
+    <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
@@ -18,6 +18,9 @@
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
+    <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
+    <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
+    <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
   </div>
 </template>
 
@@ -37,7 +40,10 @@ import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
-import Outline from './Outline'
+import Painter from 'simple-mind-map/src/plugins/Painter.js'
+import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
+import Formula from 'simple-mind-map/src/plugins/Formula.js'
+import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
 import Theme from './Theme'
@@ -57,7 +63,7 @@ import { mapState } from 'vuex'
 import icon from '@/config/icon'
 import customThemeList from '@/customThemes'
 import CustomNodeContent from './CustomNodeContent.vue'
-import Color from './Color.vue'
+// import Color from './Color.vue'
 import Vue from 'vue'
 import router from '../../../router'
 import store from '../../../store'
@@ -65,6 +71,12 @@ import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
+import OutlineEdit from './OutlineEdit.vue'
+import { showLoading, hideLoading } from '@/utils/loading'
+import handleClipboardText from '@/utils/handleClipboardText'
+import Scrollbar from './Scrollbar.vue'
+import exampleData from 'simple-mind-map/example/exampleData'
+import FormulaSidebar from './FormulaSidebar.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -79,6 +91,9 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
+  .usePlugin(Painter)
+  .usePlugin(ScrollbarPlugin)
+  .usePlugin(Formula)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -92,7 +107,7 @@ customThemeList.forEach(item => {
 export default {
   name: 'Edit',
   components: {
-    Outline,
+    OutlineSidebar,
     Style,
     BaseStyle,
     Theme,
@@ -108,21 +123,26 @@ export default {
     SidebarTrigger,
     Search,
     NodeIconSidebar,
-    NodeIconToolbar
+    NodeIconToolbar,
+    OutlineEdit,
+    Scrollbar,
+    FormulaSidebar
   },
   data() {
     return {
+      enableShowLoading: true,
       mindMapData: {},
       mindMap: null,
       prevImg: '',
-      openTest: false
+      storeConfigTimer: null
     }
   },
   computed: {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag
+      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag,
+      isShowScrollbar: state => state.localConfig.isShowScrollbar
     })
   },
   watch: {
@@ -135,115 +155,68 @@ export default {
     }
   },
   mounted() {
+    showLoading()
     // this.showNewFeatureInfo()
+    this.getData()
     this.init()
     bus.on('execCommand', this.execCommand)
     bus.on('paddingChange', this.onPaddingChange)
     bus.on('export', this.export)
     bus.on('setData', this.setData)
-    bus.on('startTextEdit', () => {
-      this.mindMap.renderer.startTextEdit()
-    })
-    bus.on('endTextEdit', () => {
-      this.mindMap.renderer.endTextEdit()
-    })
-    bus.on('createAssociativeLine', () => {
-      this.mindMap.associativeLine.createLineFromActiveNode()
-    })
-    window.addEventListener('resize', () => {
-      this.mindMap.resize()
-    })
-    if (this.openTest) {
-      setTimeout(() => {
-        this.test()
-      }, 5000)
-    }
+    bus.on('startTextEdit', this.handleStartTextEdit)
+    bus.on('endTextEdit', this.handleEndTextEdit)
+    bus.on('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    bus.on('startPainter', this.handleStartPainter)
+    bus.on('node_tree_render_end', this.handleHideLoading)
+    bus.on('showLoading', this.handleShowLoading)
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    bus.off('execCommand', this.execCommand)
+    bus.off('paddingChange', this.onPaddingChange)
+    bus.off('export', this.export)
+    bus.off('setData', this.setData)
+    bus.off('startTextEdit', this.handleStartTextEdit)
+    bus.off('endTextEdit', this.handleEndTextEdit)
+    bus.off('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    bus.off('startPainter', this.handleStartPainter)
+    bus.off('node_tree_render_end', this.handleHideLoading)
+    bus.off('showLoading', this.handleShowLoading)
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    /**
-     * @Author: 王林25
-     * @Date: 2021-11-22 19:39:28
-     * @Desc: 数据更改测试
-     */
-    test() {
-      let nodeData = {
-        data: { text: '根节点', expand: true, isActive: false },
-        children: []
-      }
-      setTimeout(() => {
-        nodeData.data.text = '理想青年实验室'
-        this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-        setTimeout(() => {
-          nodeData.children.push({
-            data: { text: '网站', expand: true, isActive: false },
-            children: []
-          })
-          this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-          setTimeout(() => {
-            nodeData.children.push({
-              data: { text: '博客', expand: true, isActive: false },
-              children: []
-            })
-            this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-            setTimeout(() => {
-              let viewData = {
-                transform: {
-                  scaleX: 1,
-                  scaleY: 1,
-                  shear: 0,
-                  rotate: 0,
-                  translateX: 179,
-                  translateY: 0,
-                  originX: 0,
-                  originY: 0,
-                  a: 1,
-                  b: 0,
-                  c: 0,
-                  d: 1,
-                  e: 179,
-                  f: 0
-                },
-                state: { scale: 1, x: 179, y: 0, sx: 0, sy: 0 }
-              }
-              this.mindMap.view.setTransformData(viewData)
-
-              setTimeout(() => {
-                let viewData = {
-                  transform: {
-                    scaleX: 1.6000000000000005,
-                    scaleY: 1.6000000000000005,
-                    shear: 0,
-                    rotate: 0,
-                    translateX: -373.3000000000004,
-                    translateY: -281.10000000000025,
-                    originX: 0,
-                    originY: 0,
-                    a: 1.6000000000000005,
-                    b: 0,
-                    c: 0,
-                    d: 1.6000000000000005,
-                    e: -373.3000000000004,
-                    f: -281.10000000000025
-                  },
-                  state: {
-                    scale: 1.6000000000000005,
-                    x: 179,
-                    y: 0,
-                    sx: 0,
-                    sy: 0
-                  }
-                }
-                this.mindMap.view.setTransformData(viewData)
-              }, 1000)
-            }, 1000)
-          }, 1000)
-        }, 1000)
-      }, 1000)
+    handleStartTextEdit() {
+      this.mindMap.renderer.startTextEdit()
     },
 
+    handleEndTextEdit() {
+      this.mindMap.renderer.endTextEdit()
+    },
+
+    handleCreateLineFromActiveNode() {
+      this.mindMap.associativeLine.createLineFromActiveNode()
+    },
+
+    handleStartPainter() {
+      this.mindMap.painter.startPainter()
+    },
+
+    handleResize() {
+      this.mindMap.resize()
+    },
+
+    // 显示loading
+    handleShowLoading() {
+      this.enableShowLoading = true
+      showLoading()
+    },
+    // 渲染结束后关闭loading
+    handleHideLoading() {
+      if (this.enableShowLoading) {
+        this.enableShowLoading = false
+        hideLoading()
+      }
+    },
     /**
      * @Author: 黄原寅
      * @Desc: 获取思维导图数据，实际应该调接口获取
@@ -266,16 +239,16 @@ export default {
      * @Desc: 存储数据当数据有变时
      */
     bindSaveEvent() {
-      if (this.openTest) {
-        return
-      }
       bus.on('data_change', data => {
         storeData(data)
       })
       bus.on('view_data_change', data => {
-        storeConfig({
-          view: data
-        })
+        clearTimeout(this.storeConfigTimer)
+        this.storeConfigTimer = setTimeout(() => {
+          storeConfig({
+            view: data
+          })
+        }, 300)
       })
     },
 
@@ -284,9 +257,6 @@ export default {
      * @Desc: 手动保存
      */
     manualSave() {
-      if (this.openTest) {
-        return
-      }
       // let data = this.mindMap.command.getCopyData()
       // storeData(data)
       // let viewData = this.mindMap.view.getTransformData()
@@ -302,10 +272,24 @@ export default {
      * @Desc: 初始化
      */
     init() {
+      let hasFileURL = this.hasFileURL()
       let { root, layout, theme, view, config } = this.getData()
+      // 如果url中存在要打开的文件，那么思维导图数据、主题、布局都使用默认的
+      if (hasFileURL) {
+        root = {
+          data: {
+            text: '根节点'
+          },
+          children: []
+        }
+        layout = exampleData.layout
+        theme = exampleData.theme
+        view = null
+      }
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
+        fit: false,
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
@@ -321,8 +305,11 @@ export default {
           }
         },
         ...(config || {}),
-        iconList: icon,
-        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag
+        iconList: [...icon],
+        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
+        customInnerElsAppendTo: null,
+        enableAutoEnterTextEditWhenKeydown: true,
+        customHandleClipboardText: handleClipboardText
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -369,7 +356,10 @@ export default {
         'node_tree_render_end',
         'rich_text_selection_change',
         'transforming-dom-to-images',
-        'generalization_node_contextmenu'
+        'generalization_node_contextmenu',
+        'painter_start',
+        'painter_end',
+        'scrollbar_change'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
           if (['node_contextmenu', 'node_active', 'rich_text_selection_change'].includes(event)) {
@@ -380,7 +370,19 @@ export default {
         })
       })
       this.bindSaveEvent()
+      this.testDynamicCreateNodes()
+      // 解析url中的文件
+      if (hasFileURL) {
+        bus.emit('handle_file_url')
+      }
       window.mindMap = this.mindMap
+    },
+
+    // url中是否存在要打开的文件
+    hasFileURL() {
+      const fileURL = this.$route.query.fileURL
+      if (!fileURL) return false
+      return /\.(smm|json|xmind|md|xlsx)$/.test(fileURL)
     },
 
     /**
@@ -388,6 +390,7 @@ export default {
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
+      this.handleShowLoading()
       // this.mindMap.setData(data)
       if (data.root) {
         this.getMindMap().setFullData(data)
@@ -467,6 +470,112 @@ export default {
      */
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+    // 测试动态插入节点
+    testDynamicCreateNodes() {
+      return
+      setTimeout(() => {
+        // 动态给指定节点添加子节点
+        // this.mindMap.execCommand(
+        //   'INSERT_CHILD_NODE',
+        //   false,
+        //   this.mindMap.renderer.root,
+        //   {
+        //     text: '自定义内容'
+        //   },
+        //   [
+        //     {
+        //       data: {
+        //         text: '自定义子节点'
+        //       }
+        //     }
+        //   ]
+        // )
+        // 动态给指定节点添加同级节点
+        // this.mindMap.execCommand(
+        //   'INSERT_NODE',
+        //   false,
+        //   null,
+        //   {
+        //     text: '自定义内容'
+        //   },
+        //   [
+        //     {
+        //       data: {
+        //         text: '自定义同级节点'
+        //       },
+        //       children: [
+        //         {
+        //           data: {
+        //             text: '自定义同级节点2'
+        //           },
+        //           children: []
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // )
+        // 动态插入多个子节点
+        // this.mindMap.execCommand('INSERT_MULTI_CHILD_NODE', null, [
+        //   {
+        //     data: {
+        //       text: '自定义节点1'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点1-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     data: {
+        //       text: '自定义节点2'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点2-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   }
+        // ])
+        // 动态插入多个同级节点
+        // this.mindMap.execCommand('INSERT_MULTI_NODE', null, [
+        //   {
+        //     data: {
+        //       text: '自定义节点1'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点1-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     data: {
+        //       text: '自定义节点2'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点2-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   }
+        // ])
+        // 动态删除指定节点
+        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
+      }, 5000)
     }
   }
 }

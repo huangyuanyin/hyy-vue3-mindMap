@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeIcon.title')">
+  <el-dialog custom-class="nodeIconDialog" v-model="dialogVisible" :title="$t('nodeIcon.title')">
     <div class="item" v-for="item in nodeIconList" :key="item.name">
       <div class="title">{{ item.name }}</div>
       <div class="list">
@@ -37,20 +37,27 @@ export default {
     }
   },
   created() {
-    bus.on('node_active', args => {
-      this.activeNodes = args[1]
+    bus.on('node_active', this.handleNodeActive)
+    bus.on('showNodeIcon', this.handleShowNodeIcon)
+  },
+  beforeDestroy() {
+    bus.off('node_active', this.handleNodeActive)
+    bus.off('showNodeIcon', this.handleShowNodeIcon)
+  },
+  methods: {
+    handleNodeActive(args) {
+      this.activeNodes = [...args[1]]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
         this.iconList = firstNode.getData('icon') || []
       } else {
         this.iconList = []
       }
-    })
-    bus.on('showNodeIcon', () => {
+    },
+
+    handleShowNodeIcon() {
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
     getHtml(icon) {
       return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`
     },
@@ -87,7 +94,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeIconDialog {
   /deep/ .el-dialog__body {
     padding: 0 20px;
   }

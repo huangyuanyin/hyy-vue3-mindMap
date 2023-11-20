@@ -6,7 +6,13 @@
       </el-icon>
     </div>
     <div class="searchInputBox">
-      <el-input ref="searchInputRef" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
+      <el-input
+        ref="searchInputRef"
+        :placeholder="$t('search.searchPlaceholder')"
+        v-model="searchText"
+        @keyup.enter.stop="onSearchNext"
+        @keydown.native.stop
+      >
         <template #prefix>
           <el-icon><Search /></el-icon>
         </template>
@@ -24,6 +30,7 @@
       :placeholder="$t('search.replacePlaceholder')"
       v-model="replaceText"
       style="margin: 12px 0"
+      @keydown.native.stop
     >
       <template #prefix>
         <el-icon><EditPen /></el-icon>
@@ -82,15 +89,21 @@ export default {
   },
   created() {
     bus.on('show_search', this.showSearch)
-    this.mindMap.on('search_info_change', data => {
-      this.currentIndex = data.currentIndex + 1
-      this.total = data.total
-      this.showSearchInfo = true
-    })
+    this.mindMap.on('search_info_change', this.handleSearchInfoChange)
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
+  },
+  beforeDestroy() {
+    bus.off('show_search', this.showSearch)
+    this.mindMap.off('search_info_change', this.handleSearchInfoChange)
+    this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
   },
   methods: {
     isUndef,
+    handleSearchInfoChange(data) {
+      this.currentIndex = data.currentIndex + 1
+      this.total = data.total
+      this.showSearchInfo = true
+    },
     showSearch() {
       bus.emit('closeSideBar')
       this.show = true
@@ -114,7 +127,7 @@ export default {
       })
     },
     replace() {
-      this.mindMap.search.replace(this.replaceText)
+      this.mindMap.search.replace(this.replaceText, true)
     },
     replaceAll() {
       this.mindMap.search.replaceAll(this.replaceText)

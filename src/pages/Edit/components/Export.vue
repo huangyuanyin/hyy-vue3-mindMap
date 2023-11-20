@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    custom-class="nodeDialog"
+    custom-class="nodeExportDialog"
     v-model="dialogVisible"
     :title="$t('export.title')"
     width="700px"
@@ -12,18 +12,21 @@
     <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
-        <el-input style="width: 300px" v-model="fileName" size="small"></el-input>
+        <el-input style="width: 300px" v-model="fileName" size="small" @keydown.native.stop></el-input>
         <el-checkbox v-show="['smm', 'json'].includes(exportType)" v-model="widthConfig" style="margin-left: 12px">
           {{ $t('export.include') }}
         </el-checkbox>
       </div>
       <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
         <span class="name">{{ $t('export.paddingX') }}</span>
-        <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange"></el-input>
+        <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
         <span class="name" style="margin-left: 10px">{{ $t('export.paddingY') }}</span>
-        <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange"></el-input>
+        <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
         <el-checkbox v-show="['png'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
           $t('export.isTransparent')
+        }}</el-checkbox>
+        <el-checkbox v-show="['pdf'].includes(exportType)" v-model="useMultiPageExport" style="margin-left: 12px">{{
+          $t('export.useMultiPageExport')
         }}</el-checkbox>
       </div>
       <div class="downloadTypeList">
@@ -58,7 +61,7 @@
  * @Author: 黄原寅
  * @Desc: 导出功能
  */
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, onBeforeMount } from 'vue'
 import bus from '@/utils/bus.js'
 import { ElNotification } from 'element-plus'
 import { mapState, useStore } from 'vuex'
@@ -76,16 +79,23 @@ const loading = ref(false)
 const loadingText = ref('')
 const paddingX = ref(10)
 const paddingY = ref(10)
+const useMultiPageExport = ref(false)
 
 const openNodeRichText = computed(() => store.state.localConfig.openNodeRichText)
 const isDark = computed(() => store.state.isDark)
 const downTypeList2 = computed(() => downTypeList[t.locale] || downTypeList.zh)
 
 onMounted(() => {
-  bus.on('showExport', () => {
-    dialogVisible.value = true
-  })
+  bus.on('showExport', handleShowExport)
 })
+
+onBeforeMount(() => {
+  bus.off('showExport', handleShowExport)
+})
+
+const handleShowExport = () => {
+  dialogVisible.value = true
+}
 
 const onPaddingChange = () => {
   bus.emit('paddingChange', {
@@ -124,6 +134,8 @@ const confirm = () => {
     bus.emit('export', exportType.value, true, fileName.value, widthConfig.value)
   } else if (exportType.value === 'png') {
     bus.emit('export', exportType.value, true, fileName.value, isTransparent.value)
+  } else if (exportType.value === 'pdf') {
+    bus.emit('export', exportType.value, true, fileName.value, useMultiPageExport.value)
   } else {
     bus.emit('export', exportType.value, true, fileName.value)
   }
@@ -158,7 +170,7 @@ export default {
   }
 }
 
-.nodeDialog {
+.nodeExportDialog {
   .nameInputBox {
     margin-bottom: 20px;
 
@@ -236,7 +248,7 @@ export default {
 </style>
 
 <style lang="less">
-.nodeDialog {
+.nodeExportDialog {
   .el-dialog__body {
     background-color: #f2f4f7 !important;
   }

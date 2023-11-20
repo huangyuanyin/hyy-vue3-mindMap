@@ -82,7 +82,7 @@ const jumpDoc = () => {
     .picBox {
       width: 500px;
       height: 500px;
-      background-image: url('../../../assets/img/block4.png');
+      background-image: url('../../../assets/img/index/block4.png');
       flex-shrink: 0;
     }
 

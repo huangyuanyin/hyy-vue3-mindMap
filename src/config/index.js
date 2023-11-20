@@ -10,19 +10,23 @@ import {
   fontFamilyList as fontFamilyListZh,
   borderDasharrayList as borderDasharrayListZh,
   lineStyleList as lineStyleListZh,
+  rootLineKeepSameInCurveList as rootLineKeepSameInCurveListZh,
   backgroundRepeatList as backgroundRepeatListZh,
   backgroundPositionList as backgroundPositionListZh,
   shortcutKeyList as shortcutKeyListZh,
   shapeList as shapeListZh,
   sidebarTriggerList as sidebarTriggerListZh,
   backgroundSizeList as backgroundSizeListZh,
-  downTypeList as downTypeListZh
+  downTypeList as downTypeListZh,
+  shapeListMap as shapeListMapZh,
+  lineStyleMap as lineStyleMapZh
 } from './zh'
 
 import {
   fontFamilyList as fontFamilyListEn,
   borderDasharrayList as borderDasharrayListEn,
   lineStyleList as lineStyleListEn,
+  rootLineKeepSameInCurveList as rootLineKeepSameInCurveListEn,
   backgroundRepeatList as backgroundRepeatListEn,
   backgroundPositionList as backgroundPositionListEn,
   shortcutKeyList as shortcutKeyListEn,
@@ -44,6 +48,14 @@ const lineStyleList = {
   zh: lineStyleListZh,
   en: lineStyleListEn
 }
+const lineStyleMap = {
+  zh: lineStyleMapZh,
+  en: lineStyleMapZh
+}
+const rootLineKeepSameInCurveList = {
+  zh: rootLineKeepSameInCurveListZh,
+  en: rootLineKeepSameInCurveListEn
+}
 const backgroundRepeatList = {
   zh: backgroundRepeatListZh,
   en: backgroundRepeatListEn
@@ -63,6 +75,11 @@ const shortcutKeyList = {
 const shapeList = {
   zh: shapeListZh,
   en: shapeListEn
+}
+
+const shapeListMap = {
+  zh: shapeListMapZh,
+  en: shapeListMapZh
 }
 
 const sidebarTriggerList = {
@@ -87,11 +104,14 @@ export {
   fontFamilyList,
   borderDasharrayList,
   lineStyleList,
+  lineStyleMap,
+  rootLineKeepSameInCurveList,
   backgroundRepeatList,
   backgroundPositionList,
   backgroundSizeList,
   shortcutKeyList,
   shapeList,
+  shapeListMap,
   sidebarTriggerList,
   downTypeList
 }

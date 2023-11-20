@@ -1,16 +1,16 @@
 <template>
-  <el-dialog custom-class="nodeDialog" v-model="dialogVisible" :title="$t('nodeImage.title')">
+  <el-dialog custom-class="nodeImageDialog" v-model="dialogVisible" :title="$t('nodeImage.title')">
     <div class="title">方式一</div>
     <ImgUpload ref="ImgUploadRef" v-model="img" style="margin-bottom: 12px"></ImgUpload>
     <div class="title">方式二</div>
     <div class="inputBox">
       <span class="label">请输入图片地址</span>
-      <el-input v-model="imgUrl" size="small" placeholder="http://xxx.com/xx.jpg"></el-input>
+      <el-input v-model="imgUrl" size="small" placeholder="http://xxx.com/xx.jpg" @keydown.native.stop></el-input>
     </div>
     <div class="title">可选</div>
     <div class="inputBox">
       <span class="label">{{ $t('nodeImage.imgTitle') }}</span>
-      <el-input v-model="imgTitle" size="small"></el-input>
+      <el-input v-model="imgTitle" size="small" @keydown.native.stop></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -26,7 +26,7 @@
  * @Author: 黄原寅
  * @Desc: 节点图片内容设置
  */
-import { onMounted, ref } from 'vue'
+import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
 import ImgUpload from '@/components/ImgUpload'
 import { getImageSize } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
@@ -39,27 +39,37 @@ const activeNodes = ref(null)
 const ImgUploadRef = ref(null)
 
 onMounted(() => {
-  bus.on('node_active', args => {
-    activeNodes.value = args[1]
-  })
-  bus.on('showNodeImage', () => {
-    reset()
-    if (activeNodes.value.length > 0) {
-      let firstNode = activeNodes.value[0]
-      let img = firstNode.getData('image')
-      console.log(`output->firstNode`, firstNode, img)
-      if (img) {
-        if (/^https?:\/\//.test(img)) {
-          imgUrl.value = img
-        } else {
-          img.value = img
-        }
-      }
-      imgTitle.value = firstNode.getData('imageTitle')
-    }
-    dialogVisible.value = true
-  })
+  bus.on('node_active', handleNodeActive)
+  bus.on('showNodeImage', handleShowNodeImage)
 })
+
+onBeforeMount(() => {
+  bus.off('node_active', handleNodeActive)
+  bus.off('showNodeImage', handleShowNodeImage)
+})
+
+const handleNodeActive = args => {
+  activeNodes.value = [...args[1]]
+  console.log(`output->activeNodes.value`, activeNodes.value)
+}
+
+const handleShowNodeImage = () => {
+  reset()
+  if (activeNodes.value.length > 0) {
+    let firstNode = activeNodes.value[0]
+    let img = firstNode.getData('image')
+    console.log(`output->firstNode`, firstNode, img)
+    if (img) {
+      if (/^https?:\/\//.test(img)) {
+        imgUrl.value = img
+      } else {
+        img.value = img
+      }
+    }
+    imgTitle.value = firstNode.getData('imageTitle')
+  }
+  dialogVisible.value = true
+}
 
 const onchange = src => {
   img.value = src
@@ -86,8 +96,16 @@ const reset = () => {
  * @Desc:  确定
  */
 const confirm = async () => {
+  console.log(`output->img.value`, img.value)
   try {
-    if (!img.value && !imgUrl.value) return
+    // 删除图片
+    if (!img.value && !imgUrl.value) {
+      cancel()
+      activeNodes.value.forEach(node => {
+        node.setImage(null)
+      })
+      return
+    }
     let res = null
     let img = ''
     if (img.value) {
@@ -107,7 +125,7 @@ const confirm = async () => {
     })
     cancel()
   } catch (error) {
-    console.log(error)
+    console.log(`output->error`, error)
   }
 }
 </script>
@@ -119,7 +137,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeImageDialog {
   .title {
     font-size: 18px;
     margin-bottom: 12px;

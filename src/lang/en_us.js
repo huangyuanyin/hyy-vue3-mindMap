@@ -46,7 +46,12 @@ export default {
     associativeLineActiveColor: 'Active color',
     mousewheelZoomActionReverse: 'Mouse Wheel Zoom',
     mousewheelZoomActionReverse1: 'Zoom out forward and zoom in back',
-    mousewheelZoomActionReverse2: 'Zoom in forward and zoom out back'
+    mousewheelZoomActionReverse2: 'Zoom in forward and zoom out back',
+    rootStyle: 'Root Node',
+    associativeLineText: 'Associative line text',
+    fontFamily: 'Font family',
+    fontSize: 'Font size',
+    isShowScrollbar: 'Is show scrollbar'
   },
   color: {
     moreColor: 'More color'
@@ -73,7 +78,10 @@ export default {
     level5: 'Level5',
     level6: 'Level6',
     zenMode: 'Zen mode',
-    fitCanvas: 'Fit canvas'
+    fitCanvas: 'Fit canvas',
+    removeImage: 'Remove image',
+    removeHyperlink: 'Remove hyperlink',
+    removeNote: 'Remove note'
   },
   count: {
     words: 'Words',
@@ -101,7 +109,8 @@ export default {
     notifyTitle: 'Info',
     notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
     paddingX: 'Padding x',
-    paddingY: 'Padding y'
+    paddingY: 'Padding y',
+    useMultiPageExport: 'Export multi page'
   },
   fullscreen: {
     fullscreen: 'Fullscreen',
@@ -139,7 +148,8 @@ export default {
     addTip: 'Press Enter to add'
   },
   outline: {
-    title: 'Outline'
+    title: 'Outline',
+    nodeDefaultText: 'Branch node'
   },
   scale: {
     zoomIn: 'Zoom in',
@@ -164,6 +174,7 @@ export default {
     italic: 'Italic',
     textDecoration: 'Text decoration',
     underline: 'Underline',
+    none: 'None',
     lineThrough: 'Line through',
     overline: 'Overline',
     border: 'Border',
@@ -202,7 +213,9 @@ export default {
     import: 'Import',
     export: 'Export',
     shortcutKey: 'Shortcut key',
-    associativeLine: 'Associative line'
+    associativeLine: 'Associative line',
+    painter: 'Painter',
+    formula: 'Formula'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
@@ -219,5 +232,16 @@ export default {
     replace: 'Replace',
     replaceAll: 'Replace all',
     cancel: 'Cancel'
+  },
+  nodeIconSidebar: {
+    title: 'Icon/Sticker',
+    icon: 'Icon',
+    sticker: 'Sticker'
+  },
+  formulaSidebar: {
+    title: 'Formula',
+    placeholder: 'Please enter LaText syntax',
+    confirm: 'Confirm',
+    common: 'Common formulas'
   }
 }

@@ -25,7 +25,7 @@
  * @Author: 黄原寅寅
  * @Desc: 主题
  */
-import { ref, defineProps, onMounted, computed, watch } from 'vue'
+import { ref, defineProps, onMounted, computed, watch, onBeforeMount } from 'vue'
 import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
@@ -74,7 +74,17 @@ onMounted(async () => {
   await initGroup()
   theme.value = props.mindMap.getTheme()
   handleDark()
+  props.mindMap.on('view_theme_change', handleViewThemeChange)
 })
+
+onBeforeMount(() => {
+  props.mindMap.off('view_theme_change', handleViewThemeChange)
+})
+
+const handleViewThemeChange = () => {
+  theme.value = props.mindMap.getTheme()
+  handleDark()
+}
 
 const initGroup = () => {
   let baiduThemes = [
@@ -126,6 +136,7 @@ const initGroup = () => {
  * @Desc: 使用主题
  */
 const useTheme = item => {
+  if (theme.value === item.value) return
   theme.value = item.value
   handleDark()
   const customThemeConfig = props.mindMap.getCustomThemeConfig()
@@ -149,6 +160,7 @@ const useTheme = item => {
 }
 
 const changeTheme = (theme, config) => {
+  bus.emit('showLoading')
   props.mindMap.setTheme(theme.value)
   storeConfig({
     theme: {
