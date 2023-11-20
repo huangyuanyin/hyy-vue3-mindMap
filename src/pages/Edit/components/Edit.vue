@@ -357,11 +357,12 @@ export default {
         })
       })
       this.bindSaveEvent()
-      window.mindMap = this.mindMap
+      this.testDynamicCreateNodes()
       // 解析url中的文件
       if (hasFileURL) {
         bus.emit('handle_file_url')
       }
+      window.mindMap = this.mindMap
     },
 
     // url中是否存在要打开的文件
@@ -456,6 +457,112 @@ export default {
      */
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+    // 测试动态插入节点
+    testDynamicCreateNodes() {
+      return
+      setTimeout(() => {
+        // 动态给指定节点添加子节点
+        // this.mindMap.execCommand(
+        //   'INSERT_CHILD_NODE',
+        //   false,
+        //   this.mindMap.renderer.root,
+        //   {
+        //     text: '自定义内容'
+        //   },
+        //   [
+        //     {
+        //       data: {
+        //         text: '自定义子节点'
+        //       }
+        //     }
+        //   ]
+        // )
+        // 动态给指定节点添加同级节点
+        // this.mindMap.execCommand(
+        //   'INSERT_NODE',
+        //   false,
+        //   null,
+        //   {
+        //     text: '自定义内容'
+        //   },
+        //   [
+        //     {
+        //       data: {
+        //         text: '自定义同级节点'
+        //       },
+        //       children: [
+        //         {
+        //           data: {
+        //             text: '自定义同级节点2'
+        //           },
+        //           children: []
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // )
+        // 动态插入多个子节点
+        // this.mindMap.execCommand('INSERT_MULTI_CHILD_NODE', null, [
+        //   {
+        //     data: {
+        //       text: '自定义节点1'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点1-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     data: {
+        //       text: '自定义节点2'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点2-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   }
+        // ])
+        // 动态插入多个同级节点
+        // this.mindMap.execCommand('INSERT_MULTI_NODE', null, [
+        //   {
+        //     data: {
+        //       text: '自定义节点1'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点1-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     data: {
+        //       text: '自定义节点2'
+        //     },
+        //     children: [
+        //       {
+        //         data: {
+        //           text: '自定义节点2-1'
+        //         },
+        //         children: []
+        //       }
+        //     ]
+        //   }
+        // ])
+        // 动态删除指定节点
+        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
+      }, 5000)
     }
   }
 }
