@@ -31,11 +31,11 @@
 const dataList = [
   {
     icon: 'iconstar',
-    value: 'Github star数量450+'
+    value: 'Github star数量600+'
   },
   {
     icon: 'iconfork',
-    value: 'Github fork数量100+'
+    value: 'Github fork数量150+'
   },
   {
     icon: 'iconxiazai',
@@ -43,7 +43,7 @@ const dataList = [
   },
   {
     icon: 'iconteamwork',
-    value: '代码贡献者6+'
+    value: '代码贡献者8+'
   }
 ]
 const functionList = [
