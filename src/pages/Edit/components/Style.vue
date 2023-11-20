@@ -1,7 +1,7 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
     <div class="styleBox" :class="{ isDark: isDark }" v-if="activeNodes.length > 0">
-      <div class="sidebarContent" v-if="activeNodes.length > 0">
+      <div class="sidebarContent">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
@@ -73,7 +73,7 @@
             </el-tooltip>
             <el-tooltip :content="$t('style.textDecoration')" placement="bottom">
               <div>
-                <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
+                <el-popover placement="bottom" trigger="hover">
                   <template #reference>
                     <div
                       class="styleBtn u"
@@ -179,7 +179,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.color') }}</span>
-            <el-popover placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')" width="auto">
+            <el-popover placement="bottom" trigger="hover" width="auto">
               <template #reference>
                 <span class="block" :style="{ width: '80px', backgroundColor: style.lineColor }"></span>
               </template>
@@ -336,7 +336,7 @@ export default {
     onNodeActive(...args) {
       // if (this.$refs.sidebar) this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.activeNodes = args[0][1]
+        this.activeNodes = [...args[0][1]]
         // if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0
         this.initNodeStyle()
       })

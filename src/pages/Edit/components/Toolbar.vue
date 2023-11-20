@@ -290,7 +290,7 @@ export default {
      * @Desc: 监听节点激活
      */
     onNodeActive(...args) {
-      this.activeNodes = args[0][1]
+      this.activeNodes = [...args[0][1]]
     },
     /**
      * @Author: 黄原寅
