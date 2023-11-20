@@ -148,7 +148,19 @@
               :disabled="checkDisabled('borderDasharray')"
               @change="update('borderDasharray')"
             >
-              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value">
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="style.borderDasharray === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
+              </el-option>
             </el-select>
           </div>
         </div>
@@ -163,7 +175,9 @@
               :disabled="checkDisabled('borderWidth')"
               @change="update('borderWidth')"
             >
-              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
+              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item">
+                <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+              </el-option>
             </el-select>
           </div>
           <div class="rowItem">
@@ -210,7 +224,16 @@
               :disabled="checkDisabled('shape')"
               @change="update('shape')"
             >
-              <el-option v-for="item in shapeList" :key="item" :label="item.name" :value="item.value"> </el-option>
+              <el-option v-for="item in shapeList" :key="item" :label="item.name" :value="item.value">
+                <svg width="60" height="26" style="margin-top: 5px">
+                  <path
+                    :d="shapeListMap[item.value]"
+                    fill="none"
+                    :stroke="style.shape === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </el-option>
             </el-select>
           </div>
         </div>
@@ -240,7 +263,19 @@
               :disabled="checkDisabled('lineDasharray')"
               @change="update('lineDasharray')"
             >
-              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+              <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value">
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="style.lineDasharray === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
+              </el-option>
             </el-select>
           </div>
         </div>
@@ -255,7 +290,9 @@
               :disabled="checkDisabled('lineWidth')"
               @change="update('lineWidth')"
             >
-              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item"> </el-option>
+              <el-option v-for="item in borderWidthList" :key="item" :label="item" :value="item">
+                <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+              </el-option>
             </el-select>
           </div>
         </div>
@@ -295,7 +332,16 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { fontFamilyList, fontSizeList, borderWidthList, borderDasharrayList, borderRadiusList, lineHeightList, shapeList } from '@/config'
+import {
+  fontFamilyList,
+  fontSizeList,
+  borderWidthList,
+  borderDasharrayList,
+  borderRadiusList,
+  lineHeightList,
+  shapeList,
+  shapeListMap
+} from '@/config'
 import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 import bus from '@/utils/bus.js'
 import { mapState } from 'vuex'
@@ -350,6 +396,9 @@ export default {
     },
     shapeList() {
       return shapeList[this.$i18n.locale] || shapeList.zh
+    },
+    shapeListMap() {
+      return shapeListMap[this.$i18n.locale] || shapeListMap.zh
     }
   },
   watch: {
@@ -642,6 +691,21 @@ export default {
         height: 2px;
       }
     }
+  }
+}
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
   }
 }
 </style>

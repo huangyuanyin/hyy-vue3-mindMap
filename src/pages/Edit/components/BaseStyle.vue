@@ -111,7 +111,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -129,7 +131,19 @@
               }
             "
           >
-            <el-option v-for="item in lineStyleList" :key="item.value" :label="item.name" :value="item.value"> </el-option>
+            <el-option
+              v-for="item in lineStyleList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+              class="lineStyleOption"
+              :class="{
+                isDark: isDark,
+                isSelected: style.lineStyle === item.value
+              }"
+              v-html="lineStyleMap[item.value]"
+            >
+            </el-option>
           </el-select>
         </div>
         <div class="rowItem" v-if="style.lineStyle === 'curve'">
@@ -181,7 +195,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -217,7 +233,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"></el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -251,7 +269,9 @@
               }
             "
           >
-            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item"> </el-option>
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }" :style="{ height: item + 'px' }"></span>
+            </el-option>
           </el-select>
         </div>
       </div>
@@ -623,7 +643,8 @@ import {
   backgroundSizeList,
   fontFamilyList,
   fontSizeList,
-  rootLineKeepSameInCurveList
+  rootLineKeepSameInCurveList,
+  lineStyleMap
 } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
@@ -722,6 +743,9 @@ export default {
     },
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+    lineStyleMap() {
+      return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
     }
   },
   watch: {
@@ -1015,6 +1039,43 @@ export default {
         bottom: 0;
         height: 2px;
       }
+    }
+  }
+}
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
+  }
+}
+.lineStyleOption {
+  &.isDark {
+    svg {
+      path {
+        stroke: #fff;
+      }
+    }
+  }
+  &.isSelected {
+    svg {
+      path {
+        stroke: #409eff;
+      }
+    }
+  }
+  svg {
+    margin-top: 4px;
+    path {
+      stroke: #000;
     }
   }
 }
