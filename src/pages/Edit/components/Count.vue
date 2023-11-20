@@ -21,7 +21,11 @@ import { mapState } from 'vuex'
 let countEl = document.createElement('div')
 export default {
   name: 'Count',
-  props: {},
+  props: {
+    mindMap: {
+      type: Object
+    }
+  },
   data() {
     return {
       textStr: '',
@@ -34,6 +38,9 @@ export default {
   },
   created() {
     bus.on('data_change', this.onDataChange)
+    if (this.mindMap) {
+      this.onDataChange(this.mindMap.getData())
+    }
   },
   beforeDestroy() {
     bus.off('data_change', this.onDataChange)
