@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import bus from '@/utils/bus.js'
 export default {
   props: {
     mindMap: {
@@ -32,11 +33,11 @@ export default {
   },
   mounted() {
     this.setScrollBarWrapSize()
-    this.$bus.$on('scrollbar_change', this.updateScrollbar)
+    bus.on('scrollbar_change', this.updateScrollbar)
     window.addEventListener('resize', this.onResize)
   },
   beforeDestroy() {
-    this.$bus.$off('scrollbar_change', this.updateScrollbar)
+    bus.off('scrollbar_change', this.updateScrollbar)
     window.removeEventListener('resize', this.onResize)
   },
   methods: {
