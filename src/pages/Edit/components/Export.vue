@@ -12,16 +12,16 @@
     <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
-        <el-input style="width: 300px" v-model="fileName" size="small"></el-input>
+        <el-input style="width: 300px" v-model="fileName" size="small" @keydown.native.stop></el-input>
         <el-checkbox v-show="['smm', 'json'].includes(exportType)" v-model="widthConfig" style="margin-left: 12px">
           {{ $t('export.include') }}
         </el-checkbox>
       </div>
       <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
         <span class="name">{{ $t('export.paddingX') }}</span>
-        <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange"></el-input>
+        <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
         <span class="name" style="margin-left: 10px">{{ $t('export.paddingY') }}</span>
-        <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange"></el-input>
+        <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
         <el-checkbox v-show="['png'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
           $t('export.isTransparent')
         }}</el-checkbox>

@@ -2,11 +2,11 @@
   <el-dialog custom-class="nodeHyperlinkDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.link') }}</span>
-      <el-input v-model="link" size="small" placeholder="http://xxxx.com/"></el-input>
+      <el-input v-model="link" size="small" placeholder="http://xxxx.com/" @keydown.native.stop></el-input>
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
-      <el-input v-model="linkTitle" size="small" @keyup.native.stop></el-input>
+      <el-input v-model="linkTitle" size="small" @keyup.native.stop @keydown.native.stop></el-input>
     </div>
     <template #footer>
       <span class="dialog-footer">

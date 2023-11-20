@@ -452,7 +452,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkText') }}</span>
-            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig"></el-input>
+            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig" @keydown.native.stop></el-input>
           </div>
         </div>
         <!-- 水印文字颜色 -->
@@ -498,6 +498,7 @@
               :max="50"
               :step="1"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -512,6 +513,7 @@
               :max="90"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -524,6 +526,7 @@
               size="small"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>
@@ -536,6 +539,7 @@
               size="small"
               :step="10"
               @change="updateWatermarkConfig"
+              @keydown.native.stop
             ></el-input-number>
           </div>
         </div>

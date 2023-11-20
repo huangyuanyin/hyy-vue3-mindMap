@@ -7,7 +7,7 @@
       v-model="note"
     >
     </el-input> -->
-    <div class="noteEditor" ref="noteEditor" @keyup.stop></div>
+    <div class="noteEditor" ref="noteEditor" @keyup.stop @keydown.stop></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <template #footer>
       <span class="dialog-footer">

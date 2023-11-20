@@ -6,7 +6,13 @@
       </el-icon>
     </div>
     <div class="searchInputBox">
-      <el-input ref="searchInputRef" :placeholder="$t('search.searchPlaceholder')" v-model="searchText" @keyup.enter.stop="onSearchNext">
+      <el-input
+        ref="searchInputRef"
+        :placeholder="$t('search.searchPlaceholder')"
+        v-model="searchText"
+        @keyup.enter.stop="onSearchNext"
+        @keydown.native.stop
+      >
         <template #prefix>
           <el-icon><Search /></el-icon>
         </template>
@@ -24,6 +30,7 @@
       :placeholder="$t('search.replacePlaceholder')"
       v-model="replaceText"
       style="margin: 12px 0"
+      @keydown.native.stop
     >
       <template #prefix>
         <el-icon><EditPen /></el-icon>
