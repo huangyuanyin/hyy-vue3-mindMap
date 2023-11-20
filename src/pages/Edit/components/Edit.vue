@@ -185,6 +185,26 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    handleStartTextEdit() {
+      this.mindMap.renderer.startTextEdit()
+    },
+
+    handleEndTextEdit() {
+      this.mindMap.renderer.endTextEdit()
+    },
+
+    handleCreateLineFromActiveNode() {
+      this.mindMap.associativeLine.createLineFromActiveNode()
+    },
+
+    handleStartPainter() {
+      this.mindMap.painter.startPainter()
+    },
+
+    handleResize() {
+      this.mindMap.resize()
+    },
+
     // 显示loading
     handleShowLoading() {
       this.enableShowLoading = true
