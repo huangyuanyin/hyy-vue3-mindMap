@@ -168,6 +168,7 @@ export default {
     italic: 'Italic',
     textDecoration: 'Text decoration',
     underline: 'Underline',
+    none: 'None',
     lineThrough: 'Line through',
     overline: 'Overline',
     border: 'Border',

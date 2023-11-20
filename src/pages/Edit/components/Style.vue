@@ -112,6 +112,7 @@
                     </div>
                   </template>
                   <el-radio-group size="small" v-model="style.textDecoration" @change="update('textDecoration')">
+                    <el-radio-button label="none">{{ $t('style.none') }}</el-radio-button>
                     <el-radio-button label="underline">{{ $t('style.underline') }}</el-radio-button>
                     <el-radio-button label="line-through"> {{ $t('style.lineThrough') }} </el-radio-button>
                     <el-radio-button label="overline">{{ $t('style.overline') }}</el-radio-button>
