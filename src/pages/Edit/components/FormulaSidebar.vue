@@ -81,7 +81,7 @@ export default {
         }
       })
     },
-    handleNodeActive(...args) {
+    handleNodeActive(args) {
       this.activeNodes = [...args[1]]
       if (this.activeNodes.length <= 0) {
         this.setActiveSidebar(null)
