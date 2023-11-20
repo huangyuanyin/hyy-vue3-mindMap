@@ -1,7 +1,14 @@
 <template>
   <div class="colorContainer" :class="{ isDark: isDark }">
     <div class="colorList">
-      <span class="colorItem" v-for="item in colorList" :style="{ backgroundColor: item }" :key="item" @click="clickColorItem(item)"></span>
+      <span
+        class="colorItem iconfont"
+        v-for="item in colorList"
+        :style="{ backgroundColor: item }"
+        :class="{ icontouming: item === 'transparent' }"
+        :key="item"
+        @click="clickColorItem(item)"
+      ></span>
     </div>
     <div class="moreColor">
       <span>{{ $t('color.moreColor') }}</span>
@@ -73,9 +80,12 @@ export default {
 }
 .colorList {
   width: 240px;
-
+  display: flex;
+  flex-wrap: wrap;
   .colorItem {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 15px;
     height: 15px;
     margin-right: 5px;
