@@ -214,7 +214,8 @@ export default {
     export: 'Export',
     shortcutKey: 'Shortcut key',
     associativeLine: 'Associative line',
-    painter: 'Painter'
+    painter: 'Painter',
+    formula: 'Formula'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
@@ -231,5 +232,16 @@ export default {
     replace: 'Replace',
     replaceAll: 'Replace all',
     cancel: 'Cancel'
+  },
+  nodeIconSidebar: {
+    title: 'Icon/Sticker',
+    icon: 'Icon',
+    sticker: 'Sticker'
+  },
+  formulaSidebar: {
+    title: 'Formula',
+    placeholder: 'Please enter LaText syntax',
+    confirm: 'Confirm',
+    common: 'Common formulas'
   }
 }

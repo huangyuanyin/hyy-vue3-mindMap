@@ -214,7 +214,8 @@ export default {
     export: '导出',
     shortcutKey: '快捷键',
     associativeLine: '关联线',
-    painter: '格式刷'
+    painter: '格式刷',
+    formula: '公式'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
@@ -231,5 +232,16 @@ export default {
     replace: '替换',
     replaceAll: '全部替换',
     cancel: '取消'
+  },
+  nodeIconSidebar: {
+    title: '图标/贴纸',
+    icon: '图标',
+    sticker: '贴纸'
+  },
+  formulaSidebar: {
+    title: '公式',
+    placeholder: '请输入 LaText 语法',
+    confirm: '完成',
+    common: '常用公式'
   }
 }

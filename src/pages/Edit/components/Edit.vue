@@ -20,6 +20,7 @@
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
+    <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
   </div>
 </template>
 
@@ -41,6 +42,7 @@ import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
+import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -74,6 +76,7 @@ import { showLoading, hideLoading } from '@/utils/loading'
 import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
+import FormulaSidebar from './FormulaSidebar.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -90,6 +93,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(ScrollbarPlugin)
+  .usePlugin(Formula)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -121,7 +125,8 @@ export default {
     NodeIconSidebar,
     NodeIconToolbar,
     OutlineEdit,
-    Scrollbar
+    Scrollbar,
+    FormulaSidebar
   },
   data() {
     return {
