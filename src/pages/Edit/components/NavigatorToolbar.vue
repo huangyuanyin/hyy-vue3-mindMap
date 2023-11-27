@@ -139,7 +139,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 502px) {
+@media screen and (max-width: 590px) {
   .navigatorContainer {
     left: 20px;
     overflow-x: auto;
