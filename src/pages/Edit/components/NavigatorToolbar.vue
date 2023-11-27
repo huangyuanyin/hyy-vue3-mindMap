@@ -85,6 +85,7 @@ const onLangChange = lang => {
   i18n.locale = lang
   console.log('i18n', i18n)
   storeLang(lang)
+  bus.emit('lang_change')
 }
 
 const showSearch = () => {
