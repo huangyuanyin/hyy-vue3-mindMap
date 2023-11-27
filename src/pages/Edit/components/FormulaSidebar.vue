@@ -83,7 +83,7 @@ export default {
     },
     handleNodeActive(args) {
       this.activeNodes = [...args[1]]
-      if (this.activeNodes.length <= 0) {
+      if (this.activeNodes.length <= 0 && this.activeSidebar === 'formulaSidebar') {
         this.setActiveSidebar(null)
       }
     },
