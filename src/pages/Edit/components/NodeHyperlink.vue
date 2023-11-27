@@ -52,9 +52,9 @@ const handleNodeActive = args => {
   activeNodes.value = [...args[1]]
   if (activeNodes.value.length > 0) {
     let firstNode = activeNodes.value[0]
-    link.value = firstNode.getData('hyperlink')
+    link.value = firstNode.getData('hyperlink') || ''
     handleUrl(true)
-    linkTitle.value = firstNode.getData('hyperlinkTitle')
+    linkTitle.value = firstNode.getData('hyperlinkTitle') || ''
   } else {
     link.value = ''
     linkTitle.value = ''
