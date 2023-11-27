@@ -43,6 +43,7 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
+import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -94,6 +95,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
+  .usePlugin(Cooperate)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -473,7 +475,7 @@ export default {
     },
     // 测试动态插入节点
     testDynamicCreateNodes() {
-      return
+      // return
       setTimeout(() => {
         // 动态给指定节点添加子节点
         // this.mindMap.execCommand(
