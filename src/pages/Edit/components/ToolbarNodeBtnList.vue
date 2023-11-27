@@ -250,7 +250,8 @@ export default {
     // 打开公式侧边栏
     showFormula() {
       this.setActiveSidebar('formulaSidebar')
-    }
+    },
+    emit: (...agrs) => bus.emit(...agrs)
   }
 }
 </script>

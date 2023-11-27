@@ -280,7 +280,7 @@ export default {
       if (hasFileURL) {
         root = {
           data: {
-            text: '根节点'
+            text: this.$t('edit.root')
           },
           children: []
         }
@@ -311,7 +311,14 @@ export default {
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
-        customHandleClipboardText: handleClipboardText
+        customHandleClipboardText: handleClipboardText,
+        handleIsSplitByWrapOnPasteCreateNewNode: () => {
+          return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
+            confirmButtonText: this.$t('edit.yes'),
+            cancelButtonText: this.$t('edit.no'),
+            type: 'warning'
+          })
+        }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {

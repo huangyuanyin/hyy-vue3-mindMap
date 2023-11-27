@@ -211,7 +211,7 @@ export default {
         }
         fileHandle = _fileHandle
         if (fileHandle.kind === 'directory') {
-          this.$message.warning('请选择文件')
+          this.$message.warning(this.$t('toolbar.selectFileTip'))
           return
         }
         this.readFile()
@@ -220,11 +220,7 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message({
-          type: 'warning',
-          message: '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器',
-          duration: 1000
-        })
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
     },
 
@@ -248,8 +244,8 @@ export default {
         this.setData(fileReader.result)
         ElNotification.closeAll()
         ElNotification({
-          title: '提示',
-          message: `当前正在编辑你本机的【${file.name}】文件`,
+          title: this.$t('toolbar.tip'),
+          message: `${this.$t('toolbar.editingLocalFileTipFront')}${file.name}${this.$t('toolbar.editingLocalFileTipEnd')}`,
           duration: 0,
           showClose: true
         })
@@ -265,7 +261,7 @@ export default {
       try {
         let data = JSON.parse(str)
         if (typeof data !== 'object') {
-          throw new Error('文件内容有误')
+          throw new Error(this.$t('toolbar.fileContentError'))
         }
         if (data.root) {
           this.isFullDataFile = true
@@ -279,7 +275,7 @@ export default {
         bus.emit('setData', data)
       } catch (error) {
         console.log(error)
-        this.$message.error('文件打开失败')
+        this.$message.error(this.$t('toolbar.fileOpenFailed'))
       }
     },
 
@@ -329,14 +325,15 @@ export default {
               description: '',
               accept: { 'application/json': ['.smm'] }
             }
-          ]
+          ],
+          suggestedName: this.$t('toolbar.defaultFileName')
         })
         if (!_fileHandle) {
           return
         }
         const loading = this.$loading({
           lock: true,
-          text: '正在创建文件',
+          text: this.$t('toolbar.creatingTip'),
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
@@ -351,7 +348,7 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning('你的浏览器可能不支持，建议使用最新版本的Chrome浏览器')
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
     },
     emit: (...agrs) => bus.emit(...agrs)
