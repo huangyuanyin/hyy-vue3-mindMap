@@ -69,6 +69,8 @@ const handleUrl = setProtocolNoneIfNotExist => {
   const res = link.value.match(/^(https?):\/\//)
   if (res && res[1]) {
     protocol.value = res[1]
+  } else if (!link.value) {
+    protocol.value = 'https'
   } else if (setProtocolNoneIfNotExist) {
     protocol.value = 'none'
   }
