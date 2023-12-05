@@ -20,7 +20,7 @@
       <span class="customNode" :data-id="data.uid" @click="onClick(data)">
         <span
           class="nodeEdit"
-          contenteditable="true"
+          :contenteditable="!isReadonly"
           :key="getKey()"
           @keydown.stop="onNodeInputKeydown($event, node)"
           @keyup.stop
@@ -66,6 +66,7 @@ const isAfterCreateNewNode = ref(false)
 
 const activeSidebar = computed(() => store.state.activeSidebar)
 const isDark = computed(() => store.state.isDark)
+const isReadonly = computed(() => store.state.isReadonly)
 const isOutlineEdit = computed(() => store.state.isOutlineEdit)
 
 onMounted(() => {

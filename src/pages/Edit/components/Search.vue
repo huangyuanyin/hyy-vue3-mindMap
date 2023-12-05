@@ -40,8 +40,8 @@
       </template>
     </el-input>
     <div class="btnList" v-if="showReplaceInput">
-      <el-button @click="replace">{{ $t('search.replace') }}</el-button>
-      <el-button @click="replaceAll">{{ $t('search.replaceAll') }}</el-button>
+      <el-button :disabled="isReadonly" @click="replace">{{ $t('search.replace') }}</el-button>
+      <el-button :disabled="isReadonly" @click="replaceAll">{{ $t('search.replaceAll') }}</el-button>
     </div>
   </div>
 </template>
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark'])
+    ...mapState(['isDark', 'isReadonly'])
   },
   watch: {
     searchText() {
