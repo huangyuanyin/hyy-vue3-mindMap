@@ -57,6 +57,7 @@ export default {
     this.mindMap.on('svg_mousedown', this.close)
     this.mindMap.on('node_dblclick', this.close)
     this.mindMap.on('node_active', this.onNodeActive)
+    this.mindMap.on('scale', this.onScale)
     bus.on('close_node_icon_toolbar', this.close)
   },
   mounted() {
@@ -68,6 +69,7 @@ export default {
     this.mindMap.off('svg_mousedown', this.close)
     this.mindMap.off('node_dblclick', this.close)
     this.mindMap.off('node_active', this.onNodeActive)
+    this.mindMap.off('scale', this.onScale)
     bus.off('close_node_icon_toolbar', this.close)
   },
   methods: {
@@ -82,9 +84,7 @@ export default {
           return item.type === this.iconType
         }).list
       ]
-      let rect = node.group.rbox()
-      this.style.left = rect.x + 'px'
-      this.style.top = rect.y + rect.height + 'px'
+      this.updatePos()
       this.showNodeIconToolbar = true
       if (this.activeSidebar === 'nodeIconSidebar') {
         this.setActiveSidebar('')
@@ -99,6 +99,15 @@ export default {
       this.iconList = []
       this.style.left = 0
       this.style.top = 0
+    },
+    updatePos() {
+      if (!this.node) return
+      const rect = this.node.getRect()
+      this.style.left = rect.x + 'px'
+      this.style.top = rect.y + rect.height + 'px'
+    },
+    onScale() {
+      this.updatePos()
     },
     onNodeActive(node) {
       if (node === this.node) {

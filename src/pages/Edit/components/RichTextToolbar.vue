@@ -7,27 +7,27 @@
     @click.stop.passive
     v-show="showRichTextToolbar"
   >
-    <el-tooltip content="加粗" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.bold')" placement="top">
       <div class="btn" :class="{ active: formatInfo.bold }" @click="toggleBold">
         <span class="icon iconfont iconzitijiacu"></span>
       </div>
     </el-tooltip>
-    <el-tooltip content="斜体" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.italic')" placement="top">
       <div class="btn" :class="{ active: formatInfo.italic }" @click="toggleItalic">
         <span class="icon iconfont iconzitixieti"></span>
       </div>
     </el-tooltip>
-    <el-tooltip content="下划线" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.underline')" placement="top">
       <div class="btn" :class="{ active: formatInfo.underline }" @click="toggleUnderline">
         <span class="icon iconfont iconzitixiahuaxian"></span>
       </div>
     </el-tooltip>
-    <el-tooltip content="删除线" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.strike')" placement="top">
       <div class="btn" :class="{ active: formatInfo.strike }" @click="toggleStrike">
         <span class="icon iconfont iconshanchuxian"></span>
       </div>
     </el-tooltip>
-    <el-tooltip content="字体" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.fontFamily')" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
           <div class="btn">
@@ -48,7 +48,7 @@
         </div>
       </el-popover>
     </el-tooltip>
-    <el-tooltip content="字号" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.fontSize')" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
           <div class="btn">
@@ -69,7 +69,7 @@
         </div>
       </el-popover>
     </el-tooltip>
-    <el-tooltip content="字体颜色" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.color')" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
           <div class="btn" :style="{ color: formatInfo.color }">
@@ -79,7 +79,7 @@
         <Color :color="fontColor" @change="changeFontColor"></Color>
       </el-popover>
     </el-tooltip>
-    <el-tooltip content="背景颜色" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.backgroundColor')" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <template #reference>
           <div class="btn">
@@ -89,7 +89,7 @@
         <Color :color="fontBackgroundColor" @change="changeFontBackgroundColor"></Color>
       </el-popover>
     </el-tooltip>
-    <el-tooltip content="清除样式" placement="top">
+    <el-tooltip :content="$t('richTextToolbar.removeFormat')" placement="top">
       <div class="btn" @click="removeFormat">
         <span class="icon iconfont iconqingchu"></span>
       </div>

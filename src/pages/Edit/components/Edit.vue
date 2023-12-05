@@ -43,6 +43,7 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
+import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -94,6 +95,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
+// .usePlugin(Cooperate)// 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -278,7 +280,7 @@ export default {
       if (hasFileURL) {
         root = {
           data: {
-            text: '根节点'
+            text: this.$t('edit.root')
           },
           children: []
         }
@@ -297,8 +299,8 @@ export default {
         nodeTextEditZIndex: 1000,
         nodeNoteTooltipZIndex: 1000,
         customNoteContentShow: {
-          show: (content, left, top) => {
-            bus.emit('showNoteContent', [content, left, top])
+          show: (content, left, top, node) => {
+            bus.emit('showNoteContent', [content, left, top, node])
           },
           hide: () => {
             // bus.emit('hideNoteContent')
@@ -309,7 +311,14 @@ export default {
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
-        customHandleClipboardText: handleClipboardText
+        customHandleClipboardText: handleClipboardText,
+        handleIsSplitByWrapOnPasteCreateNewNode: () => {
+          return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
+            confirmButtonText: this.$t('edit.yes'),
+            cancelButtonText: this.$t('edit.no'),
+            type: 'warning'
+          })
+        }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -359,7 +368,8 @@ export default {
         'generalization_node_contextmenu',
         'painter_start',
         'painter_end',
-        'scrollbar_change'
+        'scrollbar_change',
+        'scale'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
           if (['node_contextmenu', 'node_active', 'rich_text_selection_change'].includes(event)) {
@@ -375,7 +385,19 @@ export default {
       if (hasFileURL) {
         bus.emit('handle_file_url')
       }
+      // 协同测试
+      this.cooperateTest()
       window.mindMap = this.mindMap
+      // 销毁
+      // setTimeout(() => {
+      //   console.log('销毁')
+      //   this.mindMap.destroy()
+      // }, 10000)
+      // 测试
+      // setTimeout(() => {
+      //   console.log(this.mindMap.renderer.root.getRect())
+      //   console.log(this.mindMap.renderer.root.getRectInSvg())
+      // }, 5000);
     },
 
     // url中是否存在要打开的文件
@@ -423,8 +445,11 @@ export default {
      */
     async export(args) {
       try {
-        this.mindMap.export(...args)
+        showLoading()
+        await this.mindMap.export(...args)
+        hideLoading()
       } catch (error) {
+        hideLoading()
         console.log(error)
       }
     },
@@ -473,7 +498,7 @@ export default {
     },
     // 测试动态插入节点
     testDynamicCreateNodes() {
-      return
+      // return
       setTimeout(() => {
         // 动态给指定节点添加子节点
         // this.mindMap.execCommand(
@@ -576,6 +601,25 @@ export default {
         // 动态删除指定节点
         // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
       }, 5000)
+    },
+
+    // 协同测试
+    cooperateTest() {
+      if (this.mindMap.cooperate && this.$route.query.userName) {
+        this.mindMap.cooperate.setProvider(null, {
+          roomName: 'demo-room',
+          signalingList: ['ws://192.168.3.125:4444']
+        })
+        this.mindMap.cooperate.setUserInfo({
+          id: Math.random(),
+          name: this.$route.query.userName,
+          color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'][Math.floor(Math.random() * 5)],
+          avatar:
+            Math.random() > 0.5
+              ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311'
+              : ''
+        })
+      }
     }
   }
 }

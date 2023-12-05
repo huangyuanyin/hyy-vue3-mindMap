@@ -66,13 +66,13 @@ const props = defineProps({
 })
 
 const store = useStore()
-const isReadonly = ref(false)
 const openMiniMap = ref(false)
 const lang = ref(getLang())
 const isDark = computed(() => store.state.isDark)
+const isReadonly = computed(() => store.state.isReadonly)
 
 const readonlyChange = () => {
-  isReadonly.value = !isReadonly.value
+  store.commit('setIsReadonly', !isReadonly.value)
   props.mindMap.setMode(isReadonly.value ? 'readonly' : 'edit')
 }
 
@@ -85,6 +85,7 @@ const onLangChange = lang => {
   i18n.locale = lang
   console.log('i18n', i18n)
   storeLang(lang)
+  bus.emit('lang_change')
 }
 
 const showSearch = () => {
@@ -138,7 +139,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 502px) {
+@media screen and (max-width: 590px) {
   .navigatorContainer {
     left: 20px;
     overflow-x: auto;

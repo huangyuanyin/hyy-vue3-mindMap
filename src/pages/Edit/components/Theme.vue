@@ -148,7 +148,7 @@ const useTheme = item => {
       type: 'warning'
     })
       .then(() => {
-        props.mindMap.setThemeConfig({})
+        props.mindMap.setThemeConfig({}, true)
         changeTheme(theme, {})
       })
       .catch(() => {

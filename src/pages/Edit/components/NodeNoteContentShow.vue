@@ -26,7 +26,8 @@ export default {
       editor: null,
       show: false,
       left: 0,
-      top: 0
+      top: 0,
+      node: null
     }
   },
   created() {
@@ -34,12 +35,16 @@ export default {
     bus.on('hideNoteContent', this.hideNoteContent)
     document.body.addEventListener('click', this.hideNoteContent)
     bus.on('node_active', this.hideNoteContent)
+    bus.on('scale', this.onScale)
+    bus.on('svg_mousedown', this.hideNoteContent)
   },
   beforeDestroy() {
     bus.off('showNoteContent', this.onShowNoteContent)
     bus.off('hideNoteContent', this.hideNoteContent)
     document.body.removeEventListener('click', this.hideNoteContent)
     bus.off('node_active', this.hideNoteContent)
+    bus.off('scale', this.onScale)
+    bus.off('svg_mousedown', this.hideNoteContent)
   },
   mounted() {
     this.initEditor()
@@ -49,12 +54,23 @@ export default {
      * @Author: 黄原寅
      * @Desc: 显示备注浮层
      */
-    onShowNoteContent([content, left, top]) {
+    onShowNoteContent([content, left, top, node]) {
+      this.node = node
       // mitt只支持传入一个参数
       this.editor.setMarkdown(content)
+      this.updateNoteContentPosition(left, top)
+      this.show = true
+    },
+    // 更新位置
+    updateNoteContentPosition(left, top) {
       this.left = left
       this.top = top
-      this.show = true
+    },
+    // 画布缩放事件
+    onScale() {
+      if (!this.node || !this.show) return
+      const { left, top } = this.node.getNoteContentPosition()
+      this.updateNoteContentPosition(left, top)
     },
     /**
      * @Author: 黄原寅

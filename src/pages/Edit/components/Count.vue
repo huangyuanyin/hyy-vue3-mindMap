@@ -108,7 +108,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 635px) {
+@media screen and (max-width: 740px) {
   .countContainer {
     display: none;
   }

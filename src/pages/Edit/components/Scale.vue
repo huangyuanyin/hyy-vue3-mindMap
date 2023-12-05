@@ -5,7 +5,7 @@
         <Minus />
       </el-icon>
     </el-tooltip>
-    <div class="scaleInfo">{{ scaleNum }}%</div>
+    <div class="scaleInfo"><input type="text" v-model="scaleNum" @change="onScaleNumChange" @focus="onScaleNumInputFocus" />%</div>
     <el-tooltip class="item" effect="dark" :content="$t('scale.zoomIn')" placement="top">
       <el-icon class="btn" @click="enlarge">
         <Plus />
@@ -32,6 +32,7 @@ const props = defineProps({
 })
 
 const scaleNum = ref(100)
+const cacheScaleNum = ref(0)
 
 watch(
   () => props.mindMap,
@@ -69,6 +70,23 @@ const narrow = () => {
 const enlarge = () => {
   props.mindMap.view.enlarge()
 }
+
+// 聚焦时缓存当前缩放倍数
+const onScaleNumInputFocus = () => {
+  cacheScaleNum.value = scaleNum.value
+}
+
+// 手动输入缩放倍数
+const onScaleNumChange = () => {
+  const scaleNum2 = Number(scaleNum.value)
+  if (Number.isNaN(scaleNum) || scaleNum2 <= 0) {
+    scaleNum.value = this.cacheScaleNum
+  } else {
+    const cx = props.mindMap.width / 2
+    const cy = props.mindMap.height / 2
+    props.mindMap.view.setScale(scaleNum.value / 100, cx, cy)
+  }
+}
 </script>
 
 <script>
@@ -87,6 +105,9 @@ export default {
     }
     .scaleInfo {
       color: hsla(0, 0%, 100%, 0.6);
+      input {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
     }
   }
   .btn {
@@ -94,9 +115,16 @@ export default {
   }
 
   .scaleInfo {
-    width: 40px;
-    text-align: center;
     margin: 0 5px;
+    display: flex;
+    align-items: center;
+    input {
+      width: 35px;
+      text-align: center;
+      background-color: transparent;
+      border: none;
+      outline: none;
+    }
   }
 }
 </style>

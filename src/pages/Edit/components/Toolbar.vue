@@ -1,149 +1,17 @@
 <template>
   <div class="toolbarContainer" :class="{ isDark: isDark }">
-    <div class="toolbar">
+    <div class="toolbar" ref="toolbarRef">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: readonly || backEnd
-          }"
-          @click="emit('execCommand', 'BACK')"
-        >
-          <span class="icon iconfont iconhoutui-shi"></span>
-          <span class="text">{{ $t('toolbar.undo') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: readonly || forwardEnd
-          }"
-          @click="emit('execCommand', 'FORWARD')"
-        >
-          <span class="icon iconfont iconqianjin1"></span>
-          <span class="text">{{ $t('toolbar.redo') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization,
-            active: isInPainter
-          }"
-          @click="emit('startPainter')"
-        >
-          <span class="icon iconfont iconjiedian"></span>
-          <span class="text">{{ $t('toolbar.painter') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
-          }"
-          @click="emit('execCommand', 'INSERT_NODE')"
-        >
-          <span class="icon iconfont iconjiedian"></span>
-          <span class="text">{{ $t('toolbar.insertSiblingNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="emit('execCommand', 'INSERT_CHILD_NODE')"
-        >
-          <span class="icon iconfont icontianjiazijiedian"></span>
-          <span class="text">{{ $t('toolbar.insertChildNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="emit('execCommand', 'REMOVE_NODE')"
-        >
-          <span class="icon iconfont iconshanchu"></span>
-          <span class="text">{{ $t('toolbar.deleteNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="emit('showNodeImage')"
-        >
-          <span class="icon iconfont iconimage"></span>
-          <span class="text">{{ $t('toolbar.image') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="showNodeIcon"
-        >
-          <span class="icon iconfont iconxiaolian"></span>
-          <span class="text">{{ $t('toolbar.icon') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="emit('showNodeLink')"
-        >
-          <span class="icon iconfont iconchaolianjie"></span>
-          <span class="text">{{ $t('toolbar.link') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="emit('showNodeNote')"
-        >
-          <span class="icon iconfont iconflow-Mark"></span>
-          <span class="text">{{ $t('toolbar.note') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="emit('showNodeTag')"
-        >
-          <span class="icon iconfont iconbiaoqian"></span>
-          <span class="text">{{ $t('toolbar.tag') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || !hasRoot || hasGeneralization
-          }"
-          @click="emit('execCommand', 'ADD_GENERALIZATION')"
-        >
-          <span class="icon iconfont icongaikuozonglan"></span>
-          <span class="text">{{ $t('toolbar.summary') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="emit('createAssociativeLine')"
-        >
-          <span class="icon iconfont iconlianjiexian"></span>
-          <span class="text">{{ $t('toolbar.associativeLine') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="showFormula"
-        >
-          <span class="icon iconfont icongongshi"></span>
-          <span class="text">{{ $t('toolbar.formula') }}</span>
-        </div>
+        <ToolbarNodeBtnList :list="horizontalList"></ToolbarNodeBtnList>
+        <!-- 更多 -->
+        <el-popover v-model="popoverShow" placement="bottom-end" width="120" trigger="hover" v-if="showMoreBtn" style="margin-left: 20px">
+          <ToolbarNodeBtnList dir="v" :list="verticalList" @click.native="popoverShow = false"></ToolbarNodeBtnList>
+          <div slot="reference" class="toolbarBtn">
+            <span class="icon iconfont icongongshi"></span>
+            <span class="text">{{ $t('toolbar.more') }}</span>
+          </div>
+        </el-popover>
       </div>
       <!-- 通用操作 -->
       <!-- <div class="toolbarBlock">
@@ -210,11 +78,13 @@ import NodeNote from './NodeNote'
 import NodeTag from './NodeTag'
 import Export from './Export'
 import Import from './Import'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { ElNotification } from 'element-plus'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
 import bus from '@/utils/bus.js'
+import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
+import { throttle } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 黄原寅
@@ -230,33 +100,35 @@ export default {
     NodeNote,
     NodeTag,
     Export,
-    Import
+    Import,
+    ToolbarNodeBtnList
   },
   data() {
     return {
-      activeNodes: [],
-      backEnd: false,
-      forwardEnd: true,
-      readonly: false,
-      isFullDataFile: false,
-      timer: null,
-      isInPainter: false
+      list: [
+        'back',
+        'forward',
+        'painter',
+        'siblingNode',
+        'childNode',
+        'deleteNode',
+        'image',
+        'icon',
+        'link',
+        'note',
+        'tag',
+        'summary',
+        'associativeLine',
+        'formula'
+      ],
+      horizontalList: [],
+      verticalList: [],
+      showMoreBtn: true,
+      popoverShow: false
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile', 'isDark']),
-    hasRoot() {
-      return this.activeNodes.findIndex(node => {
-        return node.isRoot
-      })
-    },
-    hasGeneralization() {
-      return (
-        this.activeNodes.findIndex(node => {
-          return node.isGeneralization
-        }) !== -1
-      )
-    }
+    ...mapState(['isHandleLocalFile', 'isDark'])
   },
   watch: {
     isHandleLocalFile(val) {
@@ -266,53 +138,45 @@ export default {
     }
   },
   created() {
-    bus.on('mode_change', this.onModeChange)
-    bus.on('node_active', this.onNodeActive)
-    bus.on('back_forward', this.onBackForward)
     bus.on('write_local_file', this.onWriteLocalFile)
-    bus.on('painter_start', this.onPainterStart)
-    bus.on('painter_end', this.onPainterEnd)
+  },
+  mounted() {
+    this.computeToolbarShow()
+    this.computeToolbarShowThrottle = throttle(this.computeToolbarShow, 300)
+    window.addEventListener('resize', this.computeToolbarShowThrottle)
+    bus.on('lang_change', this.computeToolbarShowThrottle)
   },
   beforeDestroy() {
-    bus.off('mode_change', this.onModeChange)
-    bus.off('node_active', this.onNodeActive)
-    bus.off('back_forward', this.onBackForward)
     bus.off('write_local_file', this.onWriteLocalFile)
-    bus.off('painter_start', this.onPainterStart)
-    bus.off('painter_end', this.onPainterEnd)
+    window.removeEventListener('resize', this.computeToolbarShowThrottle)
+    bus.off('lang_change', this.computeToolbarShowThrottle)
   },
   methods: {
-    ...mapMutations(['setActiveSidebar']),
-    showNodeIcon() {
-      // this.$bus.$emit('showNodeIcon')
-      bus.emit('close_node_icon_toolbar')
-      this.setActiveSidebar('nodeIconSidebar')
-    },
-    // 打开公式侧边栏
-    showFormula() {
-      this.setActiveSidebar('formulaSidebar')
-    },
-    /**
-     * @Author: 黄原寅
-     * @Desc: 监听模式切换
-     */
-    onModeChange(mode) {
-      this.readonly = mode === 'readonly'
-    },
-    /**
-     * @Author: 黄原寅
-     * @Desc: 监听节点激活
-     */
-    onNodeActive(...args) {
-      this.activeNodes = [...args[0][1]]
-    },
-    /**
-     * @Author: 黄原寅
-     * @Desc: 监听前进后退
-     */
-    onBackForward(index, len) {
-      this.backEnd = index <= 0
-      this.forwardEnd = index >= len - 1
+    // 计算工具按钮如何显示
+    computeToolbarShow() {
+      const windowWidth = window.innerWidth - 40
+      const all = [...this.list]
+      let index = 1
+      const loopCheck = () => {
+        if (index > all.length) return done()
+        this.horizontalList = all.slice(0, index)
+        this.$nextTick(() => {
+          const width = this.$refs.toolbarRef.getBoundingClientRect().width
+          if (width < windowWidth) {
+            index++
+            loopCheck()
+          } else if (index > 0 && width > windowWidth) {
+            index--
+            this.horizontalList = all.slice(0, index)
+            done()
+          }
+        })
+      }
+      const done = () => {
+        this.verticalList = all.slice(index)
+        this.showMoreBtn = this.verticalList.length > 0
+      }
+      loopCheck()
     },
     /**
      * @Author: 黄原寅
@@ -347,7 +211,7 @@ export default {
         }
         fileHandle = _fileHandle
         if (fileHandle.kind === 'directory') {
-          this.$message.warning('请选择文件')
+          this.$message.warning(this.$t('toolbar.selectFileTip'))
           return
         }
         this.readFile()
@@ -356,11 +220,7 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message({
-          type: 'warning',
-          message: '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器',
-          duration: 1000
-        })
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
     },
 
@@ -384,8 +244,8 @@ export default {
         this.setData(fileReader.result)
         ElNotification.closeAll()
         ElNotification({
-          title: '提示',
-          message: `当前正在编辑你本机的【${file.name}】文件`,
+          title: this.$t('toolbar.tip'),
+          message: `${this.$t('toolbar.editingLocalFileTipFront')}${file.name}${this.$t('toolbar.editingLocalFileTipEnd')}`,
           duration: 0,
           showClose: true
         })
@@ -401,7 +261,7 @@ export default {
       try {
         let data = JSON.parse(str)
         if (typeof data !== 'object') {
-          throw new Error('文件内容有误')
+          throw new Error(this.$t('toolbar.fileContentError'))
         }
         if (data.root) {
           this.isFullDataFile = true
@@ -415,7 +275,7 @@ export default {
         bus.emit('setData', data)
       } catch (error) {
         console.log(error)
-        this.$message.error('文件打开失败')
+        this.$message.error(this.$t('toolbar.fileOpenFailed'))
       }
     },
 
@@ -465,14 +325,15 @@ export default {
               description: '',
               accept: { 'application/json': ['.smm'] }
             }
-          ]
+          ],
+          suggestedName: this.$t('toolbar.defaultFileName')
         })
         if (!_fileHandle) {
           return
         }
         const loading = this.$loading({
           lock: true,
-          text: '正在创建文件',
+          text: this.$t('toolbar.creatingTip'),
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
@@ -487,7 +348,7 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning('你的浏览器可能不支持，建议使用最新版本的Chrome浏览器')
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
     },
     emit: (...agrs) => bus.emit(...agrs)
@@ -527,7 +388,6 @@ export default {
     transform: translateX(-50%);
     top: 20px;
     width: max-content;
-    max-width: 100%;
     display: flex;
     padding: 0 20px;
     padding-top: 20px;
@@ -536,7 +396,6 @@ export default {
     font-weight: 400;
     color: rgba(26, 26, 26, 0.8);
     z-index: 2;
-    overflow-x: auto;
 
     .toolbarBlock {
       display: flex;
@@ -599,17 +458,6 @@ export default {
       .text {
         margin-top: 3px;
       }
-    }
-  }
-}
-@media screen and (max-width: 1040px) {
-  .toolbarContainer {
-    .toolbar {
-      left: 20px;
-      right: 20px;
-      transform: translateX(0);
-      width: auto;
-      max-width: none;
     }
   }
 }

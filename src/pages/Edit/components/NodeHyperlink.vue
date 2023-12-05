@@ -2,7 +2,15 @@
   <el-dialog custom-class="nodeHyperlinkDialog" v-model="dialogVisible" :title="$t('nodeHyperlink.title')">
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.link') }}</span>
-      <el-input v-model="link" size="small" placeholder="http://xxxx.com/" @keydown.native.stop></el-input>
+      <el-input v-model="link" size="small" placeholder="http://xxxx.com/" @keyup.native.stop @keydown.native.stop @blur="handleUrl()">
+        <template #prepend>
+          <el-select v-model="protocol" slot="prepend" style="width: 80px">
+            <el-option label="https" value="https"></el-option>
+            <el-option label="http" value="http"></el-option>
+            <el-option label="无" value="none"></el-option>
+          </el-select>
+        </template>
+      </el-input>
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
@@ -28,6 +36,7 @@ const dialogVisible = ref(false)
 const link = ref('')
 const linkTitle = ref('')
 const activeNodes = ref([])
+const protocol = ref('https')
 
 onMounted(() => {
   bus.on('node_active', handleNodeActive)
@@ -43,12 +52,29 @@ const handleNodeActive = args => {
   activeNodes.value = [...args[1]]
   if (activeNodes.value.length > 0) {
     let firstNode = activeNodes.value[0]
-    link.value = firstNode.getData('hyperlink')
-    linkTitle.value = firstNode.getData('hyperlinkTitle')
+    link.value = firstNode.getData('hyperlink') || ''
+    handleUrl(true)
+    linkTitle.value = firstNode.getData('hyperlinkTitle') || ''
   } else {
     link.value = ''
     linkTitle.value = ''
   }
+}
+
+const removeProtocol = url => {
+  return url.replace(/^https?:\/\//, '')
+}
+
+const handleUrl = setProtocolNoneIfNotExist => {
+  const res = link.value.match(/^(https?):\/\//)
+  if (res && res[1]) {
+    protocol.value = res[1]
+  } else if (!link.value) {
+    protocol.value = 'https'
+  } else if (setProtocolNoneIfNotExist) {
+    protocol.value = 'none'
+  }
+  link.value = removeProtocol(link.value)
 }
 
 const handleShowNodeLink = () => {
@@ -77,6 +103,7 @@ const confirm = () => {
       link.value = `//${link.value}`
     }
     node.setHyperlink(link.value, linkTitle.value)
+    node.setHyperlink((protocol.value === 'none' ? '' : protocol.value + '://') + link.value, linkTitle.value)
     cancel()
   })
 }

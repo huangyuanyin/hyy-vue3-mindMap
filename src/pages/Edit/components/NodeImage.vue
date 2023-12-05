@@ -57,7 +57,7 @@ const handleShowNodeImage = () => {
   reset()
   if (activeNodes.value.length > 0) {
     let firstNode = activeNodes.value[0]
-    let img = firstNode.getData('image')
+    let img = firstNode.getData('image') || ''
     console.log(`output->firstNode`, firstNode, img)
     if (img) {
       if (/^https?:\/\//.test(img)) {
@@ -66,7 +66,7 @@ const handleShowNodeImage = () => {
         img.value = img
       }
     }
-    imgTitle.value = firstNode.getData('imageTitle')
+    imgTitle.value = firstNode.getData('imageTitle') || ''
   }
   dialogVisible.value = true
 }

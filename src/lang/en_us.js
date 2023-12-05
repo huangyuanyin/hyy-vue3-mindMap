@@ -59,14 +59,16 @@ export default {
   contextmenu: {
     insertSiblingNode: 'Insert sibling node',
     insertChildNode: 'Insert child node',
+    insertParentNode: 'Insert parent node',
     insertSummary: 'Insert summary',
     moveUpNode: 'Move up node',
     moveDownNode: 'Move down node',
     deleteNode: 'Delete node',
+    deleteCurrentNode: 'Only del cur node',
     copyNode: 'Copy node',
     cutNode: 'Cut node',
     pasteNode: 'Paste node',
-    backCenter: 'Back center',
+    backCenter: 'Back root node',
     expandAll: 'Expand all',
     unExpandAll: 'Un expand all',
     expandTo: 'Expand to',
@@ -110,7 +112,8 @@ export default {
     notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
     paddingX: 'Padding x',
     paddingY: 'Padding y',
-    useMultiPageExport: 'Export multi page'
+    useMultiPageExport: 'Export multi page',
+    defaultFileName: 'Mind map'
   },
   fullscreen: {
     fullscreen: 'Fullscreen',
@@ -120,7 +123,13 @@ export default {
   import: {
     title: 'Import',
     selectFile: 'Select file',
-    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file'
+    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file',
+    enableFileTip: 'Please select .smm、.json、.xmind、.xlsx、.md file',
+    maxFileNum: 'At most one file can be selected',
+    notSelectTip: 'Please select the file to import',
+    fileContentError: 'The file content is incorrect',
+    importSuccess: 'Import success',
+    fileParsingFailed: 'File parsing failed'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
@@ -189,13 +198,20 @@ export default {
     vertical: 'Vertical'
   },
   theme: {
-    title: 'Theme'
+    title: 'Theme',
+    classics: 'Classics',
+    dark: 'Darkness',
+    simple: 'Simple',
+    coverTip: 'You have currently customized the basic style, do you want to overwrite it?',
+    tip: 'Tip',
+    cover: 'Cover',
+    reserve: 'Reserve'
   },
   toolbar: {
     undo: 'Undo',
     redo: 'Redo',
-    insertSiblingNode: 'Insert sibling node',
-    insertChildNode: 'Insert child node',
+    insertSiblingNode: 'Sibling node',
+    insertChildNode: 'Child node',
     deleteNode: 'Delete node',
     image: 'Image',
     icon: 'Icon',
@@ -215,12 +231,27 @@ export default {
     shortcutKey: 'Shortcut key',
     associativeLine: 'Associative line',
     painter: 'Painter',
-    formula: 'Formula'
+    formula: 'Formula',
+    more: 'More',
+    selectFileTip: 'Please select a file',
+    notSupportTip: 'Your browser does not support this feature, or the current page is not using the HTTPS protocol',
+    tip: 'Tip',
+    editingLocalFileTipFront: 'Currently editing your local【',
+    editingLocalFileTipEnd: '】file',
+    fileContentError: 'File content error',
+    fileOpenFailed: 'File open failed',
+    defaultFileName: 'Mind map',
+    creatingTip: 'Creating file'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
     newFeatureNoticeMessage:
-      'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.'
+      'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.',
+    root: 'Root node',
+    splitByWrap: 'Is automatically split nodes based on line breaks?',
+    tip: 'Tip',
+    yes: 'Yes',
+    no: 'No'
   },
   mouseAction: {
     tip1: 'Current: Left click to drag the canvas, right click to box select nodes',
@@ -242,6 +273,21 @@ export default {
     title: 'Formula',
     placeholder: 'Please enter LaText syntax',
     confirm: 'Confirm',
-    common: 'Common formulas'
+    common: 'Common formulas',
+    tip: 'Inserting formulas is not supported in non rich text mode'
+  },
+  richTextToolbar: {
+    bold: 'Bold',
+    italic: 'Italic',
+    underline: 'Underline',
+    strike: 'Strike',
+    fontFamily: 'Font family',
+    fontSize: 'Font size',
+    color: 'Color',
+    backgroundColor: 'Background color',
+    removeFormat: 'Clear Style'
+  },
+  other: {
+    loading: 'Loading, please wait...'
   }
 }

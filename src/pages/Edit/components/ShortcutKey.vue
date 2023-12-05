@@ -6,8 +6,8 @@
         <div class="list" v-for="item2 in item.list" :key="item2.value">
           <div class="item">
             <span v-if="item2.icon" class="icon iconfont" :class="[item2.icon]"></span>
-            <span class="name">{{ item2.name }}</span>
-            <div class="value">{{ item2.value }}</div>
+            <span class="name" :title="item2.name">{{ item2.name }}</span>
+            <div class="value" :title="item2.value">{{ item2.value }}</div>
           </div>
         </div>
       </div>
@@ -116,11 +116,17 @@ export default {
 
       .name {
         color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .value {
         color: #909090;
         margin-left: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

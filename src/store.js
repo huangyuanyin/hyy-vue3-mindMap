@@ -15,7 +15,8 @@ const store = createStore({
     },
     activeSidebar: '', // 当前显示的侧边栏
     isDark: false, // 是否是暗黑模式
-    isOutlineEdit: false // 是否是大纲编辑模式
+    isOutlineEdit: false, // 是否是大纲编辑模式
+    isReadonly: false // 是否只读
   },
   mutations: {
     /**
@@ -63,6 +64,10 @@ const store = createStore({
      */
     setIsOutlineEdit(state, data) {
       state.isOutlineEdit = data
+    },
+    // 设置是否只读
+    setIsReadonly(state, data) {
+      state.isReadonly = data
     }
   },
   actions: {
