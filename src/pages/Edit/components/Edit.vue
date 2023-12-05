@@ -299,8 +299,8 @@ export default {
         nodeTextEditZIndex: 1000,
         nodeNoteTooltipZIndex: 1000,
         customNoteContentShow: {
-          show: (content, left, top) => {
-            bus.emit('showNoteContent', [content, left, top])
+          show: (content, left, top, node) => {
+            bus.emit('showNoteContent', [content, left, top, node])
           },
           hide: () => {
             // bus.emit('hideNoteContent')
@@ -368,7 +368,8 @@ export default {
         'generalization_node_contextmenu',
         'painter_start',
         'painter_end',
-        'scrollbar_change'
+        'scrollbar_change',
+        'scale'
       ].forEach(event => {
         this.getMindMap().on(event, (...args) => {
           if (['node_contextmenu', 'node_active', 'rich_text_selection_change'].includes(event)) {
