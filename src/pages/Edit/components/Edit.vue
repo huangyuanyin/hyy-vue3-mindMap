@@ -388,6 +388,16 @@ export default {
       // 协同测试
       this.cooperateTest()
       window.mindMap = this.mindMap
+      // 销毁
+      // setTimeout(() => {
+      //   console.log('销毁')
+      //   this.mindMap.destroy()
+      // }, 10000)
+      // 测试
+      // setTimeout(() => {
+      //   console.log(this.mindMap.renderer.root.getRect())
+      //   console.log(this.mindMap.renderer.root.getRectInSvg())
+      // }, 5000);
     },
 
     // url中是否存在要打开的文件
