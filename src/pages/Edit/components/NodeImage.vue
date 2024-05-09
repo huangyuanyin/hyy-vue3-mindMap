@@ -1,7 +1,7 @@
 <template>
   <el-dialog custom-class="nodeImageDialog" v-model="dialogVisible" :title="$t('nodeImage.title')">
     <div class="title">方式一</div>
-    <ImgUpload ref="ImgUploadRef" v-model="img" style="margin-bottom: 12px"></ImgUpload>
+    <ImgUpload ref="ImgUploadRef" @changeImg="onchange" :value="img" style="margin-bottom: 12px"></ImgUpload>
     <div class="title">方式二</div>
     <div class="inputBox">
       <span class="label">请输入图片地址</span>
@@ -26,7 +26,7 @@
  * @Author: 黄原寅
  * @Desc: 节点图片内容设置
  */
-import { nextTick, onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import ImgUpload from '@/components/ImgUpload'
 import { getImageSize } from 'simple-mind-map/src/utils/index'
 import bus from '@/utils/bus.js'
@@ -49,21 +49,19 @@ onBeforeMount(() => {
 })
 
 const handleNodeActive = args => {
-  activeNodes.value = [...args[1]]
-  console.log(`output->activeNodes.value`, activeNodes.value)
+  activeNodes.value = args[1]
 }
 
 const handleShowNodeImage = () => {
   reset()
   if (activeNodes.value.length > 0) {
     let firstNode = activeNodes.value[0]
-    let img = firstNode.getData('image') || ''
-    console.log(`output->firstNode`, firstNode, img)
-    if (img) {
-      if (/^https?:\/\//.test(img)) {
-        imgUrl.value = img
+    let imgSrc = firstNode.getData('image') || ''
+    if (imgSrc) {
+      if (/^https?:\/\//.test(imgSrc)) {
+        imgUrl.value = imgSrc
       } else {
-        img.value = img
+        img.value = imgSrc
       }
     }
     imgTitle.value = firstNode.getData('imageTitle') || ''
