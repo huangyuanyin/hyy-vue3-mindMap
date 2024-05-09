@@ -94,7 +94,7 @@ const reset = () => {
  * @Desc:  确定
  */
 const confirm = async () => {
-  console.log(`output->img.value`, img.value)
+  console.log(`output->img.value`, imgUrl.value)
   try {
     // 删除图片
     if (!img.value && !imgUrl.value) {
@@ -105,17 +105,17 @@ const confirm = async () => {
       return
     }
     let res = null
-    let img = ''
+    let imgSrc = ''
     if (img.value) {
-      img = img.value
+      imgSrc = img.value
       res = await ImgUploadRef.value.getSize()
     } else if (imgUrl.value) {
-      img = imgUrl.value
-      res = await getImageSize(img)
+      imgSrc = imgUrl.value
+      res = await getImageSize(imgSrc)
     }
     activeNodes.value.forEach(node => {
       node.setImage({
-        url: img || 'none',
+        url: imgSrc || 'none',
         title: imgTitle.value,
         width: res.width,
         height: res.height
