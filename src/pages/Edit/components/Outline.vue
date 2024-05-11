@@ -70,17 +70,17 @@ const isReadonly = computed(() => store.state.isReadonly)
 const isOutlineEdit = computed(() => store.state.isOutlineEdit)
 
 onMounted(() => {
-  window.addEventListener('keydown', onKeyDown())
+  window.addEventListener('keydown', onKeyDown)
   refresh()
-  bus.on('data_change', handleDataChange())
-  bus.on('node_tree_render_end', handleNodeTreeRenderEnd2())
+  bus.on('data_change', handleDataChange)
+  bus.on('node_tree_render_end', handleNodeTreeRenderEnd2)
   bus.on('hide_text_edit', handleHideTextEdit)
 })
 
 onBeforeMount(() => {
-  window.removeEventListener('keydown', onKeyDown())
-  bus.off('data_change', handleDataChange())
-  bus.off('node_tree_render_end', handleNodeTreeRenderEnd2())
+  window.removeEventListener('keydown', onKeyDown)
+  bus.off('data_change', handleDataChange)
+  bus.off('node_tree_render_end', handleNodeTreeRenderEnd2)
   bus.off('hide_text_edit', handleHideTextEdit)
 })
 
