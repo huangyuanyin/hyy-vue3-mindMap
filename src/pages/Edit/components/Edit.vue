@@ -185,6 +185,7 @@ export default {
     bus.off('node_tree_render_end', this.handleHideLoading)
     bus.off('showLoading', this.handleShowLoading)
     window.removeEventListener('resize', this.handleResize)
+    this.mindMap.destroy()
   },
   methods: {
     handleStartTextEdit() {
