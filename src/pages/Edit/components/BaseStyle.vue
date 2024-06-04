@@ -628,6 +628,27 @@
           </el-select>
         </div>
       </div>
+      <!-- 配置创建新节点时的行为 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.createNewNodeBehavior') }}</span>
+          <el-select
+            size="small"
+            style="width: 120px"
+            v-model="config.createNewNodeBehavior"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('createNewNodeBehavior', value)
+              }
+            "
+          >
+            <el-option :label="$t('baseStyle.default')" value="default"></el-option>
+            <el-option :label="$t('baseStyle.notActive')" value="notActive"></el-option>
+            <el-option :label="$t('baseStyle.activeOnly')" value="activeOnly"></el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 是否显示滚动条 -->
       <div class="row">
         <div class="rowItem">
