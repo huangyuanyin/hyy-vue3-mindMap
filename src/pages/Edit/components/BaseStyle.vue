@@ -163,6 +163,19 @@
           </el-select>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="style.showLineMarker"
+            @change="
+              value => {
+                update('showLineMarker', value)
+              }
+            "
+            >{{ $t('baseStyle.showArrow') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 概要连线 -->
       <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
@@ -716,6 +729,7 @@ export default {
         lineColor: '',
         lineWidth: '',
         lineStyle: '',
+        showLineMarker: '',
         rootLineKeepSameInCurve: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
@@ -823,6 +837,7 @@ export default {
         'backgroundColor',
         'lineWidth',
         'lineStyle',
+        'showLineMarker',
         'rootLineKeepSameInCurve',
         'lineColor',
         'generalizationLineWidth',
