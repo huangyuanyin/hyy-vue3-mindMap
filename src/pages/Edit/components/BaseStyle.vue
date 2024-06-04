@@ -118,7 +118,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="rowItem">
+        <div class="rowItem" v-if="lineStyleListShow.length > 1">
           <span class="name">{{ $t('baseStyle.style') }}</span>
           <el-select
             size="small"
@@ -132,7 +132,7 @@
             "
           >
             <el-option
-              v-for="item in lineStyleList"
+              v-for="item in lineStyleListShow"
               :key="item.value"
               :label="item.name"
               :value="item.value"
@@ -146,7 +146,23 @@
             </el-option>
           </el-select>
         </div>
-        <div class="rowItem" v-if="style.lineStyle === 'curve'">
+        <div class="rowItem" v-if="showLineRadius">
+          <span class="name">{{ $t('baseStyle.lineRadius') }}</span>
+          <el-select
+            size="small"
+            style="width: 80px"
+            v-model="style.lineRadius"
+            placeholder=""
+            @change="
+              value => {
+                update('lineRadius', value)
+              }
+            "
+          >
+            <el-option v-for="item in [0, 2, 5, 7, 10, 12, 15]" :key="item" :label="item" :value="item"> </el-option>
+          </el-select>
+        </div>
+        <div class="rowItem" v-if="style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts">
           <span class="name">{{ $t('baseStyle.rootStyle') }}</span>
           <el-select
             size="small"
@@ -341,21 +357,22 @@
         </div>
       </div>
       <!-- 节点边框风格 -->
-      <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
-      <div class="row">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="style.nodeUseLineStyle"
-            @change="
-              value => {
-                update('nodeUseLineStyle', value)
-              }
-            "
-          >
-            {{ $t('baseStyle.nodeUseLineStyle') }}
-          </el-checkbox>
+      <template v-if="showNodeUseLineStyle">
+        <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="style.nodeUseLineStyle"
+              @change="
+                value => {
+                  update('nodeUseLineStyle', value)
+                }
+              "
+              >{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox
+            >
+          </div>
         </div>
-      </div>
+      </template>
       <!-- 内边距 -->
       <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
@@ -698,6 +715,12 @@ import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import bus from '@/utils/bus.js'
 import { mapState, mapMutations } from 'vuex'
+import {
+  supportLineStyleLayoutsMap,
+  supportLineRadiusLayouts,
+  supportNodeUseLineStyleLayouts,
+  supportRootLineKeepSameInCurveLayouts
+} from '@/config/constant'
 /**
  * @Author: 黄原寅
  * @Desc: 基础样式
@@ -731,6 +754,7 @@ export default {
         lineStyle: '',
         showLineMarker: '',
         rootLineKeepSameInCurve: '',
+        lineRadius: 0,
         generalizationLineWidth: '',
         generalizationLineColor: '',
         associativeLineColor: '',
@@ -774,7 +798,8 @@ export default {
       enableNodeRichText: true,
       localConfigs: {
         isShowScrollbar: false
-      }
+      },
+      currentLayout: '' // 当前结构
     }
   },
   computed: {
@@ -799,6 +824,29 @@ export default {
     },
     lineStyleMap() {
       return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
+    },
+    showNodeUseLineStyle() {
+      return supportNodeUseLineStyleLayouts.includes(this.currentLayout)
+    },
+    showLineRadius() {
+      return this.style.lineStyle === 'straight' && supportLineRadiusLayouts.includes(this.currentLayout)
+    },
+    lineStyleListShow() {
+      const res = []
+      this.lineStyleList.forEach(item => {
+        const list = supportLineStyleLayoutsMap[item.value]
+        if (list) {
+          if (list.includes(this.currentLayout)) {
+            res.push(item)
+          }
+        } else {
+          res.push(item)
+        }
+      })
+      return res
+    },
+    showRootLineKeepSameInCurveLayouts() {
+      return supportRootLineKeepSameInCurveLayouts.includes(this.currentLayout)
     }
   },
   watch: {
@@ -808,8 +856,20 @@ export default {
         this.initStyle()
         this.initConfig()
         this.initWatermark()
+        this.currentLayout = this.mindMap.getLayout()
       } else {
         this.$refs.sidebar.show = false
+      }
+    },
+    lineStyleListShow: {
+      deep: true,
+      handler() {
+        const has = this.lineStyleListShow.find(item => {
+          return item.value === this.style.lineStyle
+        })
+        if (!has) {
+          this.style.lineStyle = this.lineStyleListShow[0].value
+        }
       }
     }
   },
@@ -839,6 +899,7 @@ export default {
         'lineStyle',
         'showLineMarker',
         'rootLineKeepSameInCurve',
+        'lineRadius',
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',

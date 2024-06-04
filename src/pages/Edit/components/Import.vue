@@ -153,6 +153,7 @@ const confirm = () => {
     handleMd(file)
   }
   cancel()
+  store.commit('setActiveSidebar', null)
 }
 /**
  * @Author: 黄原寅
