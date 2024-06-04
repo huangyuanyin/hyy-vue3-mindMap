@@ -93,7 +93,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
-  .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
 // .usePlugin(Cooperate)// 协同插件
 
@@ -143,8 +142,8 @@ export default {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag,
-      isShowScrollbar: state => state.localConfig.isShowScrollbar
+      isShowScrollbar: state => state.localConfig.isShowScrollbar,
+      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag
     })
   },
   watch: {
@@ -153,6 +152,13 @@ export default {
         this.addRichTextPlugin()
       } else {
         this.removeRichTextPlugin()
+      }
+    },
+    isShowScrollbar() {
+      if (this.isShowScrollbar) {
+        this.addScrollbarPlugin()
+      } else {
+        this.removeScrollbarPlugin()
       }
     }
   },
@@ -359,6 +365,7 @@ export default {
         // }
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
+      if (this.isShowScrollbar) this.addScrollbarPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
@@ -508,6 +515,15 @@ export default {
      */
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+    // 加载滚动条插件
+    addScrollbarPlugin() {
+      if (!this.mindMap) return
+      this.mindMap.addPlugin(ScrollbarPlugin)
+    },
+    // 移除滚动条插件
+    removeScrollbarPlugin() {
+      this.mindMap.removePlugin(ScrollbarPlugin)
     },
     // 测试动态插入节点
     testDynamicCreateNodes() {
