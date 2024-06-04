@@ -158,15 +158,7 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.gradientStyle') }}</span>
-            <div
-              class="styleBtn"
-              :class="{
-                actived: style.gradientStyle === true
-              }"
-              @click="toggleGradientStyle"
-            >
-              {{ style.gradientStyle ? '渐变' : '单一' }}
-            </div>
+            <el-checkbox v-model="style.gradientStyle" @change="update('gradientStyle')"></el-checkbox>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.startColor') }}</span>
@@ -482,18 +474,6 @@ export default {
     changeFillColor(color) {
       this.style.fillColor = color
       this.update('fillColor')
-    },
-    /**
-     * @Author: 黄原寅
-     * @Desc: 切换渐变背景
-     */
-    toggleGradientStyle() {
-      if (this.style.gradientStyle === false) {
-        this.style.gradientStyle = true
-      } else {
-        this.style.gradientStyle = false
-      }
-      this.update('gradientStyle')
     },
 
     /**

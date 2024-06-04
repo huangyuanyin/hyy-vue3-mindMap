@@ -201,7 +201,10 @@ export default {
     line: 'Line',
     nodePadding: 'Node padding',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    gradientStyle: 'Gradient',
+    startColor: 'Start',
+    endColor: 'End'
   },
   theme: {
     title: 'Theme',
