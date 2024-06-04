@@ -22,11 +22,8 @@
         <el-input style="width: 100px" v-model="paddingX" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
         <span class="name" style="margin-left: 10px">{{ $t('export.paddingY') }}</span>
         <el-input style="width: 100px" v-model="paddingY" size="small" @change="onPaddingChange" @keydown.native.stop></el-input>
-        <el-checkbox v-show="['png'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
+        <el-checkbox v-show="['png', 'pdf'].includes(exportType)" v-model="isTransparent" style="margin-left: 12px">{{
           $t('export.isTransparent')
-        }}</el-checkbox>
-        <el-checkbox v-show="['pdf'].includes(exportType)" v-model="useMultiPageExport" style="margin-left: 12px">{{
-          $t('export.useMultiPageExport')
         }}</el-checkbox>
       </div>
       <div class="downloadTypeList">
@@ -79,7 +76,6 @@ const loading = ref(false)
 const loadingText = ref('')
 const paddingX = ref(10)
 const paddingY = ref(10)
-const useMultiPageExport = ref(false)
 
 const openNodeRichText = computed(() => store.state.localConfig.openNodeRichText)
 const isDark = computed(() => store.state.isDark)
@@ -135,7 +131,7 @@ const confirm = () => {
   } else if (exportType.value === 'png') {
     bus.emit('export', exportType.value, true, fileName.value, isTransparent.value)
   } else if (exportType.value === 'pdf') {
-    bus.emit('export', exportType.value, true, fileName.value, useMultiPageExport.value)
+    bus.emit('export', exportType.value, true, fileName.value, isTransparent.value)
   } else {
     bus.emit('export', exportType.value, true, fileName.value)
   }
