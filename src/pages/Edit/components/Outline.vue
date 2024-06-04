@@ -40,7 +40,13 @@
  */
 import { onMounted, ref, watch, computed, nextTick, onBeforeMount } from 'vue'
 import { mapState, useStore } from 'vuex'
-import { nodeRichTextToTextWithWrap, textToNodeRichTextWithWrap, getTextFromHtml, createUid, htmlEscape } from 'simple-mind-map/src/utils'
+import {
+  nodeRichTextToTextWithWrap,
+  textToNodeRichTextWithWrap,
+  createUid,
+  htmlEscape,
+  handleInputPasteText
+} from 'simple-mind-map/src/utils'
 import bus from '@/utils/bus.js'
 
 const props = defineProps({
@@ -203,18 +209,7 @@ const onBlur = (e, node) => {
 
 // 拦截粘贴事件
 const onPaste = e => {
-  e.preventDefault()
-  const selection = window.getSelection()
-  if (!selection.rangeCount) return
-  selection.deleteFromDocument()
-  let text = (e.clipboardData || window.clipboardData).getData('text')
-  // 去除格式
-  text = getTextFromHtml(text)
-  // 去除换行
-  text = text.replaceAll(/\n/g, '')
-  const node = document.createTextNode(text)
-  selection.getRangeAt(0).insertNode(node)
-  selection.collapseToEnd()
+  handleInputPasteText(e)
 }
 
 // 生成唯一的key
