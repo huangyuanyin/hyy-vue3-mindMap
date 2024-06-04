@@ -313,6 +313,7 @@ export default {
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
+        defaultNodeImage: require('../../../assets/img/图片加载失败.svg'),
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
           return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
             confirmButtonText: this.$t('edit.yes'),
